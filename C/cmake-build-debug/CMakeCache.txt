@@ -226,6 +226,9 @@ ProcessorCount_cmd_nproc:FILEPATH=/usr/bin/nproc
 //Path to a program.
 ProcessorCount_cmd_sysctl:FILEPATH=/usr/sbin/sysctl
 
+//The directory containing a CMake configuration file for SDL2.
+SDL2_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/SDL2
+
 //Value Computed by CMake
 foo_BINARY_DIR:STATIC=/home/marcosrolando/CLionProjects/foo/C/cmake-build-debug
 

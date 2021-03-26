@@ -4,6 +4,7 @@
 
 #include "foo.h"
 #include <stdio.h>
+#include <SDL.h>
 
 int hello(int x) {
     printf("%d\n", x);
