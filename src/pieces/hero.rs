@@ -1,5 +1,4 @@
-use crate::pieces::piece;
-use piece::Piece;
+use crate::pieces::piece::Piece;
 
 /* This is the I piece */
 
@@ -8,8 +7,8 @@ pub struct Hero {
 }
 
 impl Piece for Hero {
-    fn print() {
-        println!("Hello, World!");
+    fn print(&self) {
+        println!("Hello, I am Hero!");
     }
 }
 

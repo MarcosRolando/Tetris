@@ -1,3 +1,5 @@
+use crate::pieces::piece::Piece;
+
 /* This represents the Tetris board, which in classic NES Tetris is 10x20 squares*/
 
 const BOARD_WIDTH: usize = 10;
@@ -18,5 +20,9 @@ pub struct Board {
 impl Board {
     pub fn new_default() -> Board {
         Board {board: [[SquareState::Free; BOARD_WIDTH]; BOARD_HEIGHT]}
+    }
+
+    pub fn check_collision(&self, piece: &impl Piece) {
+        piece.print();
     }
 }

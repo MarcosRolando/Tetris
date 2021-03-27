@@ -1,2 +1,3 @@
+pub mod piece;
 pub mod hero;
-mod piece;
+pub mod orange_ricky;

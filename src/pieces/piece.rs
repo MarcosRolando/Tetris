@@ -1,3 +1,3 @@
 pub trait Piece {
-    fn print();
+    fn print(&self);
 }
