@@ -3,7 +3,8 @@
 const BOARD_WIDTH: usize = 10;
 const BOARD_HEIGHT: usize = 20;
 
-#[derive(Clone, Copy)] //Esto como que genera automaticamente el impl de Clone y Copy para el enum
+#[derive(Clone, Copy, PartialEq)] //Automatically generates the impl of Clone, Copy and PartialEq
+                                    //for SquareState
 enum SquareState {
     Free,
     Taken,
