@@ -1,8 +1,9 @@
 mod view_unit;
 mod pieces;
+mod board;
 
 use view_unit::View_Unit;
-use pieces::hero::Hero;
+use board::Board;
 
 fn main() {
     /*unsafe {
@@ -11,5 +12,5 @@ fn main() {
         view_unit::view_unit_render(&view_unit);
         view_unit::view_unit_release(&mut view_unit);
     }*/
-    let x = Hero {x: 3};
+    let x = Board::new_default();
 }
