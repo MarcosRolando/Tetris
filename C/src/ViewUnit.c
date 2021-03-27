@@ -11,7 +11,7 @@
  * PUBLIC
  */
 
-int view_unit_init(View_Unit_t* this) {
+int viewUnit_init(ViewUnit_t* this) {
     this->viewer = calloc(1, sizeof(Viewer_t));
     if (!this->viewer) {
         fprintf(stderr, "Failed to allocate memory for the Viewer! Check you RAM usage or try running again\n");
@@ -22,10 +22,10 @@ int view_unit_init(View_Unit_t* this) {
     return s;
 }
 
-void view_unit_render(const View_Unit_t* this) {
+void viewUnit_render(const ViewUnit_t* this) {
     viewer_render_frame(this->viewer);
 }
 
-void view_unit_release(View_Unit_t* this) {
+void viewUnit_release(ViewUnit_t* this) {
     free(this->viewer);
 }

@@ -12,18 +12,18 @@
 
 struct Viewer;
 
-typedef struct View_Unit {
+typedef struct ViewUnit {
     struct Viewer* viewer; //It's a pointer because if not then bindgen breaks when trying to translae ViewUnit.h to
                         //view_unit.rs because I would have to include Viewer.h which also includes SDL.
-} View_Unit_t;
+} ViewUnit_t;
 
 /* Constructor */
-int view_unit_init(View_Unit_t* this);
+int viewUnit_init(ViewUnit_t* this);
 
 /* Renders the frame based on the current state of the game */
-void view_unit_render(const View_Unit_t* this);
+void viewUnit_render(const ViewUnit_t* this);
 
 /* Destructor */
-void view_unit_release(View_Unit_t* this);
+void viewUnit_release(ViewUnit_t* this);
 
 #endif //TETRIS_VIEWUNIT_H

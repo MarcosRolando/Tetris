@@ -3,13 +3,19 @@
 const BOARD_WIDTH: usize = 10;
 const BOARD_HEIGHT: usize = 20;
 
+#[derive(Clone, Copy)] //Esto como que genera automaticamente el impl de Clone y Copy para el enum
+enum SquareState {
+    Free,
+    Taken,
+}
+
 pub struct Board {
-    board: [[i32; BOARD_HEIGHT]; BOARD_WIDTH], //An array of arrays (Rust doesn't have matrices) of
+    board: [[SquareState; BOARD_WIDTH]; BOARD_HEIGHT], //An array of arrays (Rust doesn't have matrices) of
                                                 //size 10x20
 }
 
 impl Board {
     pub fn new_default() -> Board {
-        Board {board: [[0; BOARD_HEIGHT]; BOARD_WIDTH]}
+        Board {board: [[SquareState::Free; BOARD_WIDTH]; BOARD_HEIGHT]}
     }
 }

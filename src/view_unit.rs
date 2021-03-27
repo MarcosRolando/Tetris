@@ -7,39 +7,39 @@ pub struct Viewer {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct View_Unit {
+pub struct ViewUnit {
     pub viewer: *mut Viewer,
 }
 #[test]
-fn bindgen_test_layout_View_Unit() {
+fn bindgen_test_layout_ViewUnit() {
     assert_eq!(
-        ::std::mem::size_of::<View_Unit>(),
+        ::std::mem::size_of::<ViewUnit>(),
         8usize,
-        concat!("Size of: ", stringify!(View_Unit))
+        concat!("Size of: ", stringify!(ViewUnit))
     );
     assert_eq!(
-        ::std::mem::align_of::<View_Unit>(),
+        ::std::mem::align_of::<ViewUnit>(),
         8usize,
-        concat!("Alignment of ", stringify!(View_Unit))
+        concat!("Alignment of ", stringify!(ViewUnit))
     );
     assert_eq!(
-        unsafe { &(*(::std::ptr::null::<View_Unit>())).viewer as *const _ as usize },
+        unsafe { &(*(::std::ptr::null::<ViewUnit>())).viewer as *const _ as usize },
         0usize,
         concat!(
             "Offset of field: ",
-            stringify!(View_Unit),
+            stringify!(ViewUnit),
             "::",
             stringify!(viewer)
         )
     );
 }
-pub type View_Unit_t = View_Unit;
+pub type ViewUnit_t = ViewUnit;
 extern "C" {
-    pub fn view_unit_init(this: *mut View_Unit_t) -> ::std::os::raw::c_int;
+    pub fn viewUnit_init(this: *mut ViewUnit_t) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn view_unit_render(this: *const View_Unit_t);
+    pub fn viewUnit_render(this: *const ViewUnit_t);
 }
 extern "C" {
-    pub fn view_unit_release(this: *mut View_Unit_t);
+    pub fn viewUnit_release(this: *mut ViewUnit_t);
 }
