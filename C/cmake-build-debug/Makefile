@@ -131,17 +131,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named foo
+# Target rules for targets named viewer
 
 # Build rule for target.
-foo: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 foo
-.PHONY : foo
+viewer: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 viewer
+.PHONY : viewer
 
 # fast build rule for target.
-foo/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/build
-.PHONY : foo/fast
+viewer/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/build
+.PHONY : viewer/fast
 
 src/Viewer.o: src/Viewer.c.o
 
@@ -149,7 +149,7 @@ src/Viewer.o: src/Viewer.c.o
 
 # target to build an object file
 src/Viewer.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/src/Viewer.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/src/Viewer.c.o
 .PHONY : src/Viewer.c.o
 
 src/Viewer.i: src/Viewer.c.i
@@ -158,7 +158,7 @@ src/Viewer.i: src/Viewer.c.i
 
 # target to preprocess a source file
 src/Viewer.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/src/Viewer.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/src/Viewer.c.i
 .PHONY : src/Viewer.c.i
 
 src/Viewer.s: src/Viewer.c.s
@@ -167,7 +167,7 @@ src/Viewer.s: src/Viewer.c.s
 
 # target to generate assembly for a file
 src/Viewer.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/src/Viewer.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/src/Viewer.c.s
 .PHONY : src/Viewer.c.s
 
 # Help Target
@@ -178,7 +178,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... foo"
+	@echo "... viewer"
 	@echo "... src/Viewer.o"
 	@echo "... src/Viewer.i"
 	@echo "... src/Viewer.s"

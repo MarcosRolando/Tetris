@@ -73,7 +73,7 @@ CMAKE_BINARY_DIR = /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/foo.dir/all
+all: CMakeFiles/viewer.dir/all
 
 .PHONY : all
 
@@ -83,36 +83,36 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/foo.dir/clean
+clean: CMakeFiles/viewer.dir/clean
 
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/foo.dir
+# Target rules for target CMakeFiles/viewer.dir
 
 # All Build rule for target.
-CMakeFiles/foo.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target foo"
-.PHONY : CMakeFiles/foo.dir/all
+CMakeFiles/viewer.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target viewer"
+.PHONY : CMakeFiles/viewer.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/foo.dir/rule: cmake_check_build_system
+CMakeFiles/viewer.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/foo.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/viewer.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles 0
-.PHONY : CMakeFiles/foo.dir/rule
+.PHONY : CMakeFiles/viewer.dir/rule
 
 # Convenience name for target.
-foo: CMakeFiles/foo.dir/rule
+viewer: CMakeFiles/viewer.dir/rule
 
-.PHONY : foo
+.PHONY : viewer
 
 # clean rule for target.
-CMakeFiles/foo.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/clean
-.PHONY : CMakeFiles/foo.dir/clean
+CMakeFiles/viewer.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/clean
+.PHONY : CMakeFiles/viewer.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

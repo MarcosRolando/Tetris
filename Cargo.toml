@@ -1,5 +1,5 @@
 [package]
-name = "foo"
+name = "tetris"
 version = "0.1.0"
 authors = ["Marcos Rolando <marcosrolando.mr@gmail.com>"]
 edition = "2018"
