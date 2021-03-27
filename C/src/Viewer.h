@@ -10,8 +10,10 @@
 #define SDL_MIXER_ERROR 3
 #define SDL_TTF_ERROR 4
 
+#include "Window.h"
+
 typedef struct Viewer {
-    int foo; //Relleno por ahora
+    Window_t window;
 } Viewer_t;
 
 /*
@@ -26,7 +28,7 @@ typedef struct Viewer {
  */
 int viewer_init(Viewer_t* this);
 
-void viewer_show_frame(Viewer_t* this);
+void viewer_render_frame(const Viewer_t* this);
 
 /* Destructor */
 void viewer_release(Viewer_t* this);

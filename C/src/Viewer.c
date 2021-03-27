@@ -85,13 +85,20 @@ static void _close_SDL(Viewer_t* this) {
  */
 
 int viewer_init(Viewer_t* this) {
-    return _initialize_SDL(this);
+    int s = _initialize_SDL(this);
+    if (s) return s;
+    s = window_init(&this->window);
+    if (s) _close_SDL(this);
+    return s;
 }
 
-void viewer_show_frame(Viewer_t* this) {
-    printf("Hello, Tetris!\n");
+void viewer_render_frame(const Viewer_t* this) {
+    //printf("Hello, Tetris!\n");
+    window_clear(&this->window);
+    window_show(&this->window);
 }
 
 void viewer_release(Viewer_t* this) {
+    window_release(&this->window);
     _close_SDL(this);
 }

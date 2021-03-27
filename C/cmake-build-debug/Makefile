@@ -143,6 +143,33 @@ viewer/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/build
 .PHONY : viewer/fast
 
+src/ViewUnit.o: src/ViewUnit.c.o
+
+.PHONY : src/ViewUnit.o
+
+# target to build an object file
+src/ViewUnit.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/src/ViewUnit.c.o
+.PHONY : src/ViewUnit.c.o
+
+src/ViewUnit.i: src/ViewUnit.c.i
+
+.PHONY : src/ViewUnit.i
+
+# target to preprocess a source file
+src/ViewUnit.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/src/ViewUnit.c.i
+.PHONY : src/ViewUnit.c.i
+
+src/ViewUnit.s: src/ViewUnit.c.s
+
+.PHONY : src/ViewUnit.s
+
+# target to generate assembly for a file
+src/ViewUnit.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/src/ViewUnit.c.s
+.PHONY : src/ViewUnit.c.s
+
 src/Viewer.o: src/Viewer.c.o
 
 .PHONY : src/Viewer.o
@@ -206,6 +233,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... viewer"
+	@echo "... src/ViewUnit.o"
+	@echo "... src/ViewUnit.i"
+	@echo "... src/ViewUnit.s"
 	@echo "... src/Viewer.o"
 	@echo "... src/Viewer.i"
 	@echo "... src/Viewer.s"

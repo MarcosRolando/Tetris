@@ -5,8 +5,8 @@
 #ifndef TETRIS_WINDOW_H
 #define TETRIS_WINDOW_H
 
-#include <SDL.h>
 #include <stdbool.h>
+#include <SDL.h>
 
 #define SDL_WINDOW_ERROR 1
 #define SDL_RENDERER_ERROR 2

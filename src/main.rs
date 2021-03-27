@@ -1,12 +1,12 @@
-use crate::viewer::Viewer;
+use crate::view_unit::View_Unit;
 
-mod viewer;
+mod view_unit;
 
 fn main() {
-    let mut x = Viewer {
-      foo: 3,
-    };
     unsafe {
-        viewer::viewer_show_frame( &mut x);
+        let mut view_unit = View_Unit {viewer: std::ptr::null_mut()};
+        view_unit::view_unit_init(&mut view_unit);
+        view_unit::view_unit_render(&view_unit);
+        view_unit::view_unit_release(&mut view_unit);
     }
 }
