@@ -14,8 +14,17 @@ typedef struct Viewer {
     int foo; //Relleno por ahora
 } Viewer_t;
 
-/* Constructor */
-Viewer_t* viewer_init(Viewer_t* this);
+/*
+ * Constructor
+ *
+ * If there is a graphics error it returns SDL_GRAPHICS_ERROR
+ * If there is an image loader error it returns SDL_IMG_ERROR
+ * If there is an audio error it returns SDL_MIXER_ERROR
+ * If there is a text font loader error it returns SDL_TTF_ERROR
+ * Otherwise returns 0
+ *
+ */
+int viewer_init(Viewer_t* this);
 
 void show_frame(Viewer_t* this);
 

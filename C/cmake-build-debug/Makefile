@@ -170,6 +170,33 @@ src/Viewer.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/src/Viewer.c.s
 .PHONY : src/Viewer.c.s
 
+src/Window.o: src/Window.c.o
+
+.PHONY : src/Window.o
+
+# target to build an object file
+src/Window.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/src/Window.c.o
+.PHONY : src/Window.c.o
+
+src/Window.i: src/Window.c.i
+
+.PHONY : src/Window.i
+
+# target to preprocess a source file
+src/Window.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/src/Window.c.i
+.PHONY : src/Window.c.i
+
+src/Window.s: src/Window.c.s
+
+.PHONY : src/Window.s
+
+# target to generate assembly for a file
+src/Window.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/viewer.dir/build.make CMakeFiles/viewer.dir/src/Window.c.s
+.PHONY : src/Window.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -182,6 +209,9 @@ help:
 	@echo "... src/Viewer.o"
 	@echo "... src/Viewer.i"
 	@echo "... src/Viewer.s"
+	@echo "... src/Window.o"
+	@echo "... src/Window.i"
+	@echo "... src/Window.s"
 .PHONY : help
 
 

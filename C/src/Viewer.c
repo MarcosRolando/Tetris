@@ -18,7 +18,6 @@
  * PRIVATE
  */
 
-
 /*
  * Starts SDL Systems
  * If there is a graphics error it returns SDL_GRAPHICS_ERROR
@@ -27,7 +26,7 @@
  * If there is a text font loader error it returns SDL_TTF_ERROR
  * Otherwise returns 0
  */
-int _initialize_SDL(Viewer_t* this) {
+static int _initialize_SDL(Viewer_t* this) {
     //Starts video and audio
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
         fprintf(stderr, "Graphics could not initialize! Graphics Error: %s\n", SDL_GetError());
@@ -72,7 +71,7 @@ int _initialize_SDL(Viewer_t* this) {
 }
 
 /* Releases SDL Systems */
-void _close_SDL(Viewer_t* this) {
+static void _close_SDL(Viewer_t* this) {
     TTF_Quit();
     Mix_CloseAudio();
     Mix_Quit();
@@ -85,15 +84,14 @@ void _close_SDL(Viewer_t* this) {
  * PUBLIC
  */
 
-Viewer_t* viewer_create(Viewer_t* this) {
-    _initialize_SDL(this);
-    return this;
+int viewer_init(Viewer_t* this) {
+    return _initialize_SDL(this);
 }
 
 void show_frame(Viewer_t* this) {
     printf("Hello, Tetris!\n");
 }
 
-void viewer_destroy(Viewer_t* this) {
+void viewer_release(Viewer_t* this) {
     _close_SDL(this);
 }
