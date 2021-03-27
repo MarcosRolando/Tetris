@@ -63,10 +63,10 @@ RM = /home/marcosrolando/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/marcosrolando/CLionProjects/foo/C
+CMAKE_SOURCE_DIR = /home/marcosrolando/CLionProjects/tetris/C
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/marcosrolando/CLionProjects/foo/C/cmake-build-debug
+CMAKE_BINARY_DIR = /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/foo.dir/depend.make
@@ -77,30 +77,30 @@ include CMakeFiles/foo.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/foo.dir/flags.make
 
-CMakeFiles/foo.dir/src/foo.c.o: CMakeFiles/foo.dir/flags.make
-CMakeFiles/foo.dir/src/foo.c.o: ../src/foo.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marcosrolando/CLionProjects/foo/C/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/foo.dir/src/foo.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/foo.dir/src/foo.c.o   -c /home/marcosrolando/CLionProjects/foo/C/src/foo.c
+CMakeFiles/foo.dir/src/Viewer.c.o: CMakeFiles/foo.dir/flags.make
+CMakeFiles/foo.dir/src/Viewer.c.o: ../src/Viewer.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/foo.dir/src/Viewer.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/foo.dir/src/Viewer.c.o   -c /home/marcosrolando/CLionProjects/tetris/C/src/Viewer.c
 
-CMakeFiles/foo.dir/src/foo.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/foo.dir/src/foo.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marcosrolando/CLionProjects/foo/C/src/foo.c > CMakeFiles/foo.dir/src/foo.c.i
+CMakeFiles/foo.dir/src/Viewer.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/foo.dir/src/Viewer.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/marcosrolando/CLionProjects/tetris/C/src/Viewer.c > CMakeFiles/foo.dir/src/Viewer.c.i
 
-CMakeFiles/foo.dir/src/foo.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/foo.dir/src/foo.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marcosrolando/CLionProjects/foo/C/src/foo.c -o CMakeFiles/foo.dir/src/foo.c.s
+CMakeFiles/foo.dir/src/Viewer.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/foo.dir/src/Viewer.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/marcosrolando/CLionProjects/tetris/C/src/Viewer.c -o CMakeFiles/foo.dir/src/Viewer.c.s
 
 # Object files for target foo
 foo_OBJECTS = \
-"CMakeFiles/foo.dir/src/foo.c.o"
+"CMakeFiles/foo.dir/src/Viewer.c.o"
 
 # External object files for target foo
 foo_EXTERNAL_OBJECTS =
 
-libfoo.a: CMakeFiles/foo.dir/src/foo.c.o
+libfoo.a: CMakeFiles/foo.dir/src/Viewer.c.o
 libfoo.a: CMakeFiles/foo.dir/build.make
 libfoo.a: CMakeFiles/foo.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marcosrolando/CLionProjects/foo/C/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libfoo.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libfoo.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/foo.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/foo.dir/link.txt --verbose=$(VERBOSE)
 
@@ -114,6 +114,6 @@ CMakeFiles/foo.dir/clean:
 .PHONY : CMakeFiles/foo.dir/clean
 
 CMakeFiles/foo.dir/depend:
-	cd /home/marcosrolando/CLionProjects/foo/C/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/marcosrolando/CLionProjects/foo/C /home/marcosrolando/CLionProjects/foo/C /home/marcosrolando/CLionProjects/foo/C/cmake-build-debug /home/marcosrolando/CLionProjects/foo/C/cmake-build-debug /home/marcosrolando/CLionProjects/foo/C/cmake-build-debug/CMakeFiles/foo.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/marcosrolando/CLionProjects/tetris/C /home/marcosrolando/CLionProjects/tetris/C /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles/foo.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/foo.dir/depend
 

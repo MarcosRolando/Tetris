@@ -1,0 +1,90 @@
+//
+// Created by marcosrolando on 3/26/21.
+//
+
+#include "Viewer.h"
+#include <stdio.h>
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_mixer.h>
+#include <SDL_ttf.h>
+
+/*The following macros where taken from one of my previous projects, and therefore
+ * I do not remember if their values matter or not. Probably not. */
+#define FREQUENCY 44100
+#define CHUNKSIZE 2048
+
+/*
+ * PUBLIC
+ */
+
+Viewer_t* viewer_create(Viewer_t* this) {
+    _initialize_SDL(this);
+    return this;
+}
+
+Viewer_t* show_frame(Viewer_t* this) {
+    printf("Hello, Tetris!\n");
+    return this;
+}
+
+void viewer_destroy(Viewer_t* this) {
+    _close_SDL(this);
+}
+
+/*
+ * PRIVATE
+ */
+
+int _initialize_SDL(Viewer_t* this) {
+    //Starts video and audio
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+        fprintf(stderr, "Graphics could not initialize! Graphics Error: %s\n", SDL_GetError());
+        return SDL_GRAPHICS_ERROR;
+    } else {
+        //Sets linear texture filtering
+        if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "MipmapLinearNearest")) {
+            fprintf(stderr, "Warning: Linear texture filtering not enabled!");
+        }
+        //Starts PNG loading
+        int imgFlags = IMG_INIT_PNG;
+        if (!(IMG_Init(imgFlags) & imgFlags)) {
+            SDL_Quit();
+            fprintf(stderr, "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+            return SDL_IMAGE_ERROR;
+        }
+    }
+    //Starts audio, allows MP3 files
+    if (Mix_Init(MIX_INIT_MP3) == 0) {
+        IMG_Quit();
+        SDL_Quit();
+        fprintf(stderr, "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+        return SDL_MIXER_ERROR;
+    }
+    //Starts audio player
+    if (Mix_OpenAudio(FREQUENCY, MIX_DEFAULT_FORMAT, 2, CHUNKSIZE) < 0) {
+        Mix_Quit();
+        IMG_Quit();
+        SDL_Quit();
+        fprintf(stderr, "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+        return SDL_MIXER_ERROR;
+    }
+    //Starts text font loader
+    if (TTF_Init() == -1) {
+        Mix_Quit();
+        IMG_Quit();
+        SDL_Quit();
+        fprintf(stderr, "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+        return SDL_TTF_ERROR;
+    }
+    return 0;
+}
+
+void _close_SDL(Viewer_t* this) {
+    TTF_Quit();
+    Mix_CloseAudio();
+    Mix_Quit();
+    IMG_Quit();
+    SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    SDL_Quit();
+}

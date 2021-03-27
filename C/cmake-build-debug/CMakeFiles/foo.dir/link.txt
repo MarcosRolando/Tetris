@@ -1,2 +1,2 @@
-/usr/bin/ar qc libfoo.a  CMakeFiles/foo.dir/src/foo.c.o
+/usr/bin/ar qc libfoo.a  CMakeFiles/foo.dir/src/Viewer.c.o
 /usr/bin/ranlib libfoo.a

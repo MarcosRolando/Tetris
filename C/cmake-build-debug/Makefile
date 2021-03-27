@@ -68,10 +68,10 @@ RM = /home/marcosrolando/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/203.7717
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/marcosrolando/CLionProjects/foo/C
+CMAKE_SOURCE_DIR = /home/marcosrolando/CLionProjects/tetris/C
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/marcosrolando/CLionProjects/foo/C/cmake-build-debug
+CMAKE_BINARY_DIR = /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -100,9 +100,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/marcosrolando/CLionProjects/foo/C/cmake-build-debug/CMakeFiles /home/marcosrolando/CLionProjects/foo/C/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/marcosrolando/CLionProjects/foo/C/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -143,32 +143,32 @@ foo/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/build
 .PHONY : foo/fast
 
-src/foo.o: src/foo.c.o
+src/Viewer.o: src/Viewer.c.o
 
-.PHONY : src/foo.o
+.PHONY : src/Viewer.o
 
 # target to build an object file
-src/foo.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/src/foo.c.o
-.PHONY : src/foo.c.o
+src/Viewer.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/src/Viewer.c.o
+.PHONY : src/Viewer.c.o
 
-src/foo.i: src/foo.c.i
+src/Viewer.i: src/Viewer.c.i
 
-.PHONY : src/foo.i
+.PHONY : src/Viewer.i
 
 # target to preprocess a source file
-src/foo.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/src/foo.c.i
-.PHONY : src/foo.c.i
+src/Viewer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/src/Viewer.c.i
+.PHONY : src/Viewer.c.i
 
-src/foo.s: src/foo.c.s
+src/Viewer.s: src/Viewer.c.s
 
-.PHONY : src/foo.s
+.PHONY : src/Viewer.s
 
 # target to generate assembly for a file
-src/foo.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/src/foo.c.s
-.PHONY : src/foo.c.s
+src/Viewer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/foo.dir/build.make CMakeFiles/foo.dir/src/Viewer.c.s
+.PHONY : src/Viewer.c.s
 
 # Help Target
 help:
@@ -179,9 +179,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... foo"
-	@echo "... src/foo.o"
-	@echo "... src/foo.i"
-	@echo "... src/foo.s"
+	@echo "... src/Viewer.o"
+	@echo "... src/Viewer.i"
+	@echo "... src/Viewer.s"
 .PHONY : help
 
 
