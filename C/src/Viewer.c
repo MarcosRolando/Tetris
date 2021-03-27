@@ -15,27 +15,18 @@
 #define CHUNKSIZE 2048
 
 /*
- * PUBLIC
- */
-
-Viewer_t* viewer_create(Viewer_t* this) {
-    _initialize_SDL(this);
-    return this;
-}
-
-Viewer_t* show_frame(Viewer_t* this) {
-    printf("Hello, Tetris!\n");
-    return this;
-}
-
-void viewer_destroy(Viewer_t* this) {
-    _close_SDL(this);
-}
-
-/*
  * PRIVATE
  */
 
+
+/*
+ * Starts SDL Systems
+ * If there is a graphics error it returns SDL_GRAPHICS_ERROR
+ * If there is an image loader error it returns SDL_IMG_ERROR
+ * If there is an audio error it returns SDL_MIXER_ERROR
+ * If there is a text font loader error it returns SDL_TTF_ERROR
+ * Otherwise returns 0
+ */
 int _initialize_SDL(Viewer_t* this) {
     //Starts video and audio
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
@@ -80,6 +71,7 @@ int _initialize_SDL(Viewer_t* this) {
     return 0;
 }
 
+/* Releases SDL Systems */
 void _close_SDL(Viewer_t* this) {
     TTF_Quit();
     Mix_CloseAudio();
@@ -87,4 +79,21 @@ void _close_SDL(Viewer_t* this) {
     IMG_Quit();
     SDL_QuitSubSystem(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     SDL_Quit();
+}
+
+/*
+ * PUBLIC
+ */
+
+Viewer_t* viewer_create(Viewer_t* this) {
+    _initialize_SDL(this);
+    return this;
+}
+
+void show_frame(Viewer_t* this) {
+    printf("Hello, Tetris!\n");
+}
+
+void viewer_destroy(Viewer_t* this) {
+    _close_SDL(this);
 }

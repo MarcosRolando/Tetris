@@ -7,3 +7,4 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
 add_library(foo src/Viewer.c src/Viewer.h)
+target_link_libraries(foo SDL2 SDL2_image SDL2_ttf SDL2_mixer)

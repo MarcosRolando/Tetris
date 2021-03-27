@@ -1,8 +1,12 @@
-mod foo;
+use crate::viewer::Viewer;
+
+mod viewer;
 
 fn main() {
-    let x = 3;
+    let mut x = Viewer {
+      foo: 3,
+    };
     unsafe {
-        println!("{}", foo::hello(x));
+        viewer::show_frame( &mut x);
     }
 }
