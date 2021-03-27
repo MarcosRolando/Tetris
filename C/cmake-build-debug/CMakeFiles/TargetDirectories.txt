@@ -1,3 +1,0 @@
-/home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/marcosrolando/CLionProjects/tetris/C/cmake-build-debug/CMakeFiles/viewer.dir
