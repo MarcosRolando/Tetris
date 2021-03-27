@@ -11,6 +11,9 @@
 #define SDL_WINDOW_ERROR 1
 #define SDL_RENDERER_ERROR 2
 
+#define DEFAULT_SCREEN_WIDTH 1280
+#define DEFAULT_SCREEN_HEIGHT 720
+
 typedef struct Window {
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -27,10 +30,13 @@ typedef struct Window {
 int window_init(Window_t* this);
 
 /* Cleans the current frame */
-void clear(const Window_t* this);
+void window_clear(const Window_t* this);
 
 /* Renders the next frame */
-void show(const Window_t* this);
+void window_show(const Window_t* this);
+
+/* Handles window's events, i.e. resizing or minimizing */
+bool window_handle_event(Window_t* this, SDL_Event* e);
 
 /* Destructor */
 void window_release(Window_t* this);

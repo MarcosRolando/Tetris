@@ -88,7 +88,7 @@ int viewer_init(Viewer_t* this) {
     return _initialize_SDL(this);
 }
 
-void show_frame(Viewer_t* this) {
+void viewer_show_frame(Viewer_t* this) {
     printf("Hello, Tetris!\n");
 }
 

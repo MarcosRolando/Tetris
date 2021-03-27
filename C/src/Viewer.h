@@ -26,7 +26,7 @@ typedef struct Viewer {
  */
 int viewer_init(Viewer_t* this);
 
-void show_frame(Viewer_t* this);
+void viewer_show_frame(Viewer_t* this);
 
 /* Destructor */
 void viewer_release(Viewer_t* this);

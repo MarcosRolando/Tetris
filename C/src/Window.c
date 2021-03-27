@@ -34,6 +34,34 @@ static int _create_renderer(Window_t* this) {
     return 0;
 }
 
+static void _handle_resize_event(Window_t* this, const SDL_Event* e, bool handled) {
+    if (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_F1) {
+        handled = true;
+        this->width = DEFAULT_SCREEN_WIDTH;
+        this->height = DEFAULT_SCREEN_HEIGHT;
+        if (this->fullscreen) {
+            SDL_SetWindowFullscreen(this->window, SDL_FALSE);
+            SDL_SetWindowSize(this->window, this->width, this->height);
+            this->fullscreen = false;
+        } else {
+            SDL_SetWindowFullscreen(this->window, SDL_TRUE);
+            this->width = 1920;
+            this->height = 1080;
+            SDL_SetWindowSize(this->window, this->width, this->height);
+            this->fullscreen = true;
+            this->minimized = false;
+        }
+    } else if (e->type == SDL_KEYDOWN && e->key.keysym.sym == SDLK_F2) {
+        handled = true;
+        SDL_SetWindowFullscreen(this->window, SDL_FALSE);
+        this->fullscreen = false;
+        this->width = DEFAULT_SCREEN_WIDTH;
+        this->height = DEFAULT_SCREEN_HEIGHT;
+        SDL_RestoreWindow(this->window);
+        SDL_SetWindowSize(this->window, this->width, this->height);
+    }
+}
+
 /*
  * PUBLIC
  */
@@ -51,18 +79,42 @@ int window_init(Window_t* this) {
     return s;
 }
 
-void clear(const Window_t* this) {
+void window_clear(const Window_t* this) {
     SDL_SetRenderDrawColor(this->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(this->renderer);
 }
 
-void show(const Window_t* this) {
+void window_show(const Window_t* this) {
     if (!this->minimized) {
-        float x_scale = (float)this->width/(float)DEFAULT_SCREEN_WIDTH;
-        float y_scale = (float)this->height/(float)DEFAULT_SCREEN_HEIGHT;
+        float x_scale = (float)this->width / (float)DEFAULT_SCREEN_WIDTH;
+        float y_scale = (float)this->height / (float)DEFAULT_SCREEN_HEIGHT;
         SDL_RenderSetScale(this->renderer, x_scale, y_scale);
         SDL_RenderPresent(this->renderer);
     }
+}
+
+bool window_handle_event(Window_t* this, SDL_Event* e) {
+    bool handled = false;
+    if (e->type == SDL_WINDOWEVENT) {
+        switch (e->window.event) {
+            case SDL_WINDOWEVENT_SIZE_CHANGED:
+                this->width = e->window.data1;
+                this->height = e->window.data2;
+                window_show(this);
+                break;
+            case SDL_WINDOWEVENT_EXPOSED:
+                SDL_RenderPresent(this->renderer);
+                break;
+            case SDL_WINDOWEVENT_FOCUS_GAINED:
+            case SDL_WINDOWEVENT_MAXIMIZED:
+            case SDL_WINDOWEVENT_RESTORED:
+                this->minimized = false;
+                break;
+        }
+        handled = true;
+    }
+    _handle_resize_event(this, e, handled);
+    return handled;
 }
 
 void window_release(Window_t* this) {

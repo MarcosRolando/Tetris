@@ -37,7 +37,7 @@ extern "C" {
     pub fn viewer_init(this: *mut Viewer_t) -> *mut Viewer_t;
 }
 extern "C" {
-    pub fn show_frame(this: *mut Viewer_t);
+    pub fn viewer_show_frame(this: *mut Viewer_t);
 }
 extern "C" {
     pub fn viewer_release(this: *mut Viewer_t);

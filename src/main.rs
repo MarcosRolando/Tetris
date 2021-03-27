@@ -7,6 +7,6 @@ fn main() {
       foo: 3,
     };
     unsafe {
-        viewer::show_frame( &mut x);
+        viewer::viewer_show_frame( &mut x);
     }
 }
