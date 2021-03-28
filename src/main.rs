@@ -4,9 +4,9 @@ mod game;
 
 use view_unit::ViewUnit;
 use game::Game;
-use crate::pieces::orange_ricky::OrangeRicky;
+use crate::pieces::piece::{Piece, Position};
 use crate::pieces::hero::Hero;
-use crate::pieces::piece::Position;
+use crate::pieces::orange_ricky::OrangeRicky;
 
 fn main() {
     unsafe {
@@ -16,7 +16,6 @@ fn main() {
         view_unit::viewUnit_release(&mut view_unit);
     }
     let board = Game::new_default();
-    let ricky = OrangeRicky {pos: Position{x: 1, y: 2}};
-    let hero = Hero {pos: Position{x: 4, y: 6}};
-    //board.check_collision(&ricky);
+    let piece = Piece::new(Position {x:0,y:0}, Box::new(OrangeRicky{}));
+    piece.print();
 }

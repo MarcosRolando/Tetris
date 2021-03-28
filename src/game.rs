@@ -16,6 +16,7 @@ enum SquareState {
 pub struct Game {
     board: [[SquareState; BOARD_WIDTH]; BOARD_HEIGHT], //An array of arrays (Rust doesn't have matrices) of
                                                         //size 10x20
+    current_piece: Piece,
 }
 
 impl Game {
@@ -24,12 +25,15 @@ impl Game {
      */
 
     pub fn new_default() -> Game {
-        Game {board: [[SquareState::Free; BOARD_WIDTH]; BOARD_HEIGHT]}
+        Game {
+            board: [[SquareState::Free; BOARD_WIDTH]; BOARD_HEIGHT],
+            current_piece: Piece::new_default(),
+        }
     }
 
     /* Updates to next game state */
-    pub fn update(delta_time: i32) {
-
+    pub fn update(&self, delta_time: i32) {
+        self._check_collision();
     }
 
     /*
@@ -38,7 +42,6 @@ impl Game {
 
     /* Checks if the piece has collided with the board and if so, sets the tiles as taken*/
     fn _check_collision(&self) {
-
 
     }
 }

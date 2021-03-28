@@ -1,16 +1,14 @@
 use crate::pieces::piece;
-use piece::Piece;
-use piece::Position;
+use piece::PieceType;
 
 /* This is the I piece */
 
-pub struct Hero {
-    pub pos: Position,
-}
+pub struct Hero {}
 
-impl Piece for Hero {
-    fn get_position(&self) -> Position {
-        self.pos
+impl PieceType for Hero {
+    fn print(&self) {
+        println!("I am Hero!");
     }
 }
+
 
