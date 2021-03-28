@@ -1,4 +1,5 @@
-use crate::pieces::piece::Piece;
+use crate::pieces::piece;
+use piece::Piece;
 
 /* This represents the Tetris board, which in classic NES Tetris is 10x20 squares*/
 
@@ -12,18 +13,32 @@ enum SquareState {
     Taken,
 }
 
-pub struct Board {
+pub struct Game {
     board: [[SquareState; BOARD_WIDTH]; BOARD_HEIGHT], //An array of arrays (Rust doesn't have matrices) of
-                                                //size 10x20
+                                                        //size 10x20
 }
 
-impl Board {
-    pub fn new_default() -> Board {
-        Board {board: [[SquareState::Free; BOARD_WIDTH]; BOARD_HEIGHT]}
+impl Game {
+    /*
+    PUBLIC
+     */
+
+    pub fn new_default() -> Game {
+        Game {board: [[SquareState::Free; BOARD_WIDTH]; BOARD_HEIGHT]}
     }
 
+    /* Updates to next game state */
+    pub fn update(delta_time: i32) {
+
+    }
+
+    /*
+    PRIVATE
+     */
+
     /* Checks if the piece has collided with the board and if so, sets the tiles as taken*/
-    pub fn check_collision(&self, piece: &impl Piece) {
-        println!("{}", piece.get_position().x);
+    fn _check_collision(&self) {
+
+
     }
 }

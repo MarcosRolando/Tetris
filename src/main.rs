@@ -1,9 +1,9 @@
 mod view_unit;
 mod pieces;
-mod board;
+mod game;
 
 use view_unit::ViewUnit;
-use board::Board;
+use game::Game;
 use crate::pieces::orange_ricky::OrangeRicky;
 use crate::pieces::hero::Hero;
 use crate::pieces::piece::Position;
@@ -15,8 +15,8 @@ fn main() {
         view_unit::viewUnit_render(&view_unit);
         view_unit::viewUnit_release(&mut view_unit);
     }
-    let board = Board::new_default();
+    let board = Game::new_default();
     let ricky = OrangeRicky {pos: Position{x: 1, y: 2}};
     let hero = Hero {pos: Position{x: 4, y: 6}};
-    board.check_collision(&ricky);
+    //board.check_collision(&ricky);
 }
