@@ -1,5 +1,8 @@
 use crate::pieces::piece;
 use piece::Piece;
+use crate::pieces::piece::{Position, PieceType};
+use crate::pieces::hero::Hero;
+use crate::pieces::orange_ricky::OrangeRicky;
 
 /* This represents the Tetris board, which in classic NES Tetris is 10x20 squares*/
 
@@ -18,7 +21,7 @@ pub enum SquareState {
 pub struct Game {
     board: Board, //An array of arrays (Rust doesn't have matrices) of
                                                         //size 10x20
-    current_piece: Piece,
+    current_piece: Piece<dyn PieceType>,
 }
 
 impl Game {
@@ -29,7 +32,7 @@ impl Game {
     pub fn new_default() -> Game {
         Game {
             board: [[SquareState::Free; BOARD_WIDTH]; BOARD_HEIGHT],
-            current_piece: Piece::new_default(),
+            current_piece: Piece::new(Position{row:0,column:0}, Box::new(OrangeRicky{})),
         }
     }
 

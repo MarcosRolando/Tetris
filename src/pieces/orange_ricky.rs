@@ -7,9 +7,9 @@ pub struct OrangeRicky {}
 
 impl PieceType for OrangeRicky {
     fn check_straight_collision(&self, board: &Board, position: &Position) -> [Position; 4] {
-        if board[position.row - 1][position.column] == SquareState::Taken {
+        //if board[position.row - 1][position.column] == SquareState::Taken {
 
-        }
+        //}
         println!("hello orange ricky!");
         [Position{row:0, column:0}; 4]
     }

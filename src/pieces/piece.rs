@@ -1,8 +1,7 @@
 use crate::game::Board;
 use crate::pieces::piece::Orientation::Straight;
 use std::collections::HashMap;
-
-type CheckCollision = fn(board: &Board, position: &Position) -> [Position; 4];
+use crate::pieces::hero::Hero;
 
 #[derive(Copy, Clone, PartialEq)]
 pub struct Position {
@@ -25,30 +24,32 @@ pub trait PieceType {
     fn check_left_collision(&self, board: &Board, position: &Position) -> [Position; 4];
 }
 
-pub struct Piece {
+pub struct Piece<T: PieceType + ?Sized> {
     position: Position,
-    piece_type: Option<Box<dyn PieceType>>,
+    piece_type: Box<T>,
     orientation: Orientation,
-    collision_checkers: HashMap<Orientation, CheckCollision>,
+    collision_checkers: HashMap<Orientation, fn (&T, &Board, &Position) -> [Position; 4]>,
 }
 
-impl Piece {
-    pub fn new(position: Position, piece_type: Box<dyn PieceType>) -> Self {
+impl<T: PieceType + ?Sized> Piece<T> {
+    pub fn new(position: Position, piece_type: Box<T>) -> Self {
         let mut piece = Piece {
             position,
-            piece_type: Some(piece_type),
+            piece_type,
             orientation: Straight,
             collision_checkers: HashMap::new(),
         };
-        piece.collision_checkers.insert(Orientation::Straight,
-                                        PieceType::check_straight_collision);
+        piece.collision_checkers.insert(Orientation::Straight, PieceType::check_straight_collision);
+        piece.collision_checkers.insert(Orientation::Inverted, PieceType::check_inverted_collision);
+        piece.collision_checkers.insert(Orientation::Right, PieceType::check_right_collision);
+        piece.collision_checkers.insert(Orientation::Left, PieceType::check_left_collision);
         piece
     }
 
     pub fn check_collision(&self, board: &Board) {
-        match &self.piece_type {
-            Some(piece_type) => piece_type.check_collision(board, &self.position),
-            None => eprintln!("Tried to check collision with no piece!"),
+        match self.collision_checkers.get(&self.orientation) {
+            Some(f) => drop(f(&self.piece_type, board, &self.position)),
+            None => (),
         }
     }
 }
