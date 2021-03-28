@@ -32,7 +32,10 @@ impl Game {
     pub fn new_default() -> Game {
         Game {
             board: [[SquareState::Free; BOARD_WIDTH]; BOARD_HEIGHT],
-            current_piece: Piece::new(Position{row:0,column:0}, Box::new(OrangeRicky{})),
+            current_piece: Piece::new(
+                Position{row:0,column:0},
+                Box::new(Hero{})
+            ),
         }
     }
 

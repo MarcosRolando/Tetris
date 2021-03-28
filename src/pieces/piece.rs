@@ -1,5 +1,4 @@
 use crate::game::Board;
-use crate::pieces::piece::Orientation::Straight;
 use std::collections::HashMap;
 use crate::pieces::hero::Hero;
 
@@ -36,7 +35,7 @@ impl<T: PieceType + ?Sized> Piece<T> {
         let mut piece = Piece {
             position,
             piece_type,
-            orientation: Straight,
+            orientation: Orientation::Straight,
             collision_checkers: HashMap::new(),
         };
         piece.collision_checkers.insert(Orientation::Straight, PieceType::check_straight_collision);

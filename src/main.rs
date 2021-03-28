@@ -17,8 +17,9 @@ fn main() {
         view_unit::viewUnit_render(&view_unit);
         view_unit::viewUnit_release(&mut view_unit);
     }
-    let game = Game::new_default();
-    let piece = Piece::new(Position {row:0,column:0}, Box::new(OrangeRicky{}));
+    let mut game = Game::new_default();
+    let piece:Piece<OrangeRicky> = Piece::new(Position {row:0,column:0}, Box::new(OrangeRicky{}));
+    game.update(5);
     game.update(5);
 }
 

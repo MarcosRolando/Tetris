@@ -20,6 +20,7 @@ impl PieceType for Hero {
     }
 
     fn check_inverted_collision(&self, board: &Board, position: &Position) -> [Position; 4] {
+        println!("hello inverted hero!");
         [Position{row:0, column:0}; 4]
     }
 
