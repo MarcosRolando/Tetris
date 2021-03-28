@@ -2,7 +2,7 @@ use crate::pieces::piece::{PieceType, Position};
 use crate::game::{Board, TileState};
 
 /* This is the I piece */
-/* This piece position is fixed on the most left Tile on the Default rotation */
+/* This piece position is fixed on the left corner on the Default rotation */
 /*
 Default rotation
 
