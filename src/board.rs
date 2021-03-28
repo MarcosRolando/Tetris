@@ -22,7 +22,8 @@ impl Board {
         Board {board: [[SquareState::Free; BOARD_WIDTH]; BOARD_HEIGHT]}
     }
 
+    /* Checks if the piece has collided with the board and if so, sets the tiles as taken*/
     pub fn check_collision(&self, piece: &impl Piece) {
-        piece.print();
+        println!("{}", piece.get_position().x);
     }
 }

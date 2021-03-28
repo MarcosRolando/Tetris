@@ -1,14 +1,16 @@
-use crate::pieces::piece::Piece;
+use crate::pieces::piece;
+use piece::Piece;
+use piece::Position;
 
 /* This is the inversed L piece */
 
 pub struct OrangeRicky {
-    pub x: i32,
+    pub pos: Position,
 }
 
 impl Piece for OrangeRicky {
-    fn print(&self) {
-        println!("Hello, I am Orange Ricky!");
+    fn get_position(&self) -> Position {
+        self.pos
     }
 }
 
