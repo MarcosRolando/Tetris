@@ -9,39 +9,45 @@ pub struct Position {
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
-enum Orientation {
+enum Rotation {
     Straight, /*Default orientation*/
     Inverted, /*180 degree rotation*/
-    Right, /*-90 degree rotation*/
-    Left, /*90 degree rotation*/
+    Right, /*90 degree rotation*/
+    Left, /*-90 degree rotation*/
 }
 
 pub trait PieceType {
-    fn check_straight_collision(&self, board: &Board, position: &Position) -> [Position; 4];
-    fn check_inverted_collision(&self, board: &Board, position: &Position) -> [Position; 4];
-    fn check_right_collision(&self, board: &Board, position: &Position) -> [Position; 4];
-    fn check_left_collision(&self, board: &Board, position: &Position) -> [Position; 4];
+    /* The following functions return an array of 4 elements of Positions indicating which
+    board tiles have been taken if it collided, otherwise they return None */
+    fn check_straight_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
+    fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
+    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
+    fn check_left_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
 }
 
 pub struct Piece<T: PieceType + ?Sized> {
     position: Position,
     piece_type: Box<T>,
-    orientation: Orientation,
-    collision_checkers: HashMap<Orientation, fn (&T, &Board, &Position) -> [Position; 4]>,
+    orientation: Rotation,
+    collision_checkers: HashMap<Rotation, fn (&T, &Board, &Position) -> Option<[Position; 4]>>,
 }
 
 impl<T: PieceType + ?Sized> Piece<T> {
+    /*
+    PUBLIC
+     */
+
     pub fn new(position: Position, piece_type: Box<T>) -> Self {
         let mut piece = Piece {
             position,
             piece_type,
-            orientation: Orientation::Straight,
+            orientation: Rotation::Straight,
             collision_checkers: HashMap::new(),
         };
-        piece.collision_checkers.insert(Orientation::Straight, PieceType::check_straight_collision);
-        piece.collision_checkers.insert(Orientation::Inverted, PieceType::check_inverted_collision);
-        piece.collision_checkers.insert(Orientation::Right, PieceType::check_right_collision);
-        piece.collision_checkers.insert(Orientation::Left, PieceType::check_left_collision);
+        piece.collision_checkers.insert(Rotation::Straight, PieceType::check_straight_collision);
+        piece.collision_checkers.insert(Rotation::Inverted, PieceType::check_inverted_collision);
+        piece.collision_checkers.insert(Rotation::Right, PieceType::check_right_collision);
+        piece.collision_checkers.insert(Rotation::Left, PieceType::check_left_collision);
         piece
     }
 
