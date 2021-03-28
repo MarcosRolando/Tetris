@@ -10,7 +10,7 @@ pub struct Position {
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash)]
 enum Rotation {
-    Straight, /*Default orientation*/
+    Default, /*No rotation, default piece orientation*/
     Inverted, /*180 degree rotation*/
     Right, /*90 degree rotation*/
     Left, /*-90 degree rotation*/
@@ -19,7 +19,7 @@ enum Rotation {
 pub trait PieceType {
     /* The following functions return an array of 4 elements of Positions indicating which
     board tiles have been taken if it collided, otherwise they return None */
-    fn check_straight_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
+    fn check_default_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
     fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
     fn check_right_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
     fn check_left_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
@@ -41,10 +41,10 @@ impl<T: PieceType + ?Sized> Piece<T> {
         let mut piece = Piece {
             position,
             piece_type,
-            orientation: Rotation::Straight,
+            orientation: Rotation::Default,
             collision_checkers: HashMap::new(),
         };
-        piece.collision_checkers.insert(Rotation::Straight, PieceType::check_straight_collision);
+        piece.collision_checkers.insert(Rotation::Default, PieceType::check_default_collision);
         piece.collision_checkers.insert(Rotation::Inverted, PieceType::check_inverted_collision);
         piece.collision_checkers.insert(Rotation::Right, PieceType::check_right_collision);
         piece.collision_checkers.insert(Rotation::Left, PieceType::check_left_collision);
