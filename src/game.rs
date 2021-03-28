@@ -4,16 +4,16 @@ use crate::pieces::piece::{Position, PieceType};
 use crate::pieces::hero::Hero;
 use crate::pieces::orange_ricky::OrangeRicky;
 
-/* This represents the Tetris board, which in classic NES Tetris is 10x20 squares*/
+/* This represents the Tetris board, which in classic NES Tetris is 10x20 Tiles*/
 
 pub const BOARD_WIDTH: usize = 10;
 pub const BOARD_HEIGHT: usize = 20;
 
-pub type Board = [[SquareState; BOARD_WIDTH]; BOARD_HEIGHT];
+pub type Board = [[TileState; BOARD_WIDTH]; BOARD_HEIGHT];
 
 #[derive(Clone, Copy, PartialEq)] //Automatically generates the impl of Clone, Copy and PartialEq
-                                    //for SquareState
-pub enum SquareState {
+                                    //for TileState
+pub enum TileState {
     Free,
     Taken,
 }
@@ -31,7 +31,7 @@ impl Game {
 
     pub fn new_default() -> Game {
         Game {
-            board: [[SquareState::Free; BOARD_WIDTH]; BOARD_HEIGHT],
+            board: [[TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT],
             current_piece: Piece::new(
                 Position{row:0,column:0},
                 Box::new(Hero{})

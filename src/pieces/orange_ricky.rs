@@ -1,11 +1,13 @@
 use crate::pieces::piece::{PieceType, Position};
-use crate::game::{Board, SquareState};
+use crate::game::{Board, TileState};
 
-/* This is the inversed L piece */
-/* This piece position is fixed on the lower left square on the None rotation */
+/* This is the inverted L piece */
+/* This piece position is fixed on the upper left Tile on the Default rotation */
 /*
-Straight position
+Default rotation
 
+* * *
+*
 
  */
 
@@ -18,25 +20,45 @@ impl PieceType for OrangeRicky {
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
     fn check_default_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
-        for i in
-        if board[position.row - 1][position.column] == SquareState::Taken {
-            Some([*position,
-                Position{row:position.row+1,..*position},
-                Position{row:position.row+2,..*position},
-                Position{row:position.row+3,..*position},
-            ])
-        } else {
-            None
+        let r = Some([*position,
+            Position{column:position.column+1,..*position},
+            Position{column:position.column+2,..*position},
+            Position{row:position.row-1,..*position},
+        ]);
+        if board[position.row - 2][position.column] == TileState::Taken {
+            return r;
         }
+        for i in (position.column + 1)..(position.column + 3) {
+            if board[position.row - 1][i] == TileState::Taken {
+                return r;
+            }
+        }
+        None
     }
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
     fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
-        if board[position.row - 4][position.column] == SquareState::Taken {
+        for i in (position.column - 2)..(position.column + 1) {
+            if board[position.row - 1][i] == TileState::Taken {
+                return Some([*position,
+                    Position{column:position.column-1,..*position},
+                    Position{column:position.column-2,..*position},
+                    Position{row:position.row+1,..*position},
+                ]);
+            }
+        }
+        None
+    }
+
+    /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
+    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
+        if (board[position.row - 1][position.column - 1] == TileState::Taken) ||
+            (board[position.row - 3][position.column] == TileState::Taken) {
+
             Some([*position,
+                Position{column:position.column-1,..*position},
                 Position{row:position.row-1,..*position},
                 Position{row:position.row-2,..*position},
-                Position{row:position.row-3,..*position},
             ])
         } else {
             None
@@ -44,37 +66,18 @@ impl PieceType for OrangeRicky {
     }
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
-        for i in position.column..(position.column + 4) {
-            if board[position.row - 1][i] == SquareState::Taken {
-                let r = Some([*position,
-                    Position{column:position.column+1,..*position},
-                    Position{column:position.column+2,..*position},
-                    Position{column:position.column+3,..*position},
-                ]);
-                r; //Rust does not let me return by functional expression in an If if I don't
-                //define an else clause that return None for example, but then I would be
-                //exiting the function after just the first iteration. That is why I use r
-            }
-        }
-        None
-    }
-
-    /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
     fn check_left_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
-        for i in (position.column-3)..(position.column+1) {
-            if board[position.row - 1][i] == SquareState::Taken {
-                let r = Some([*position,
-                    Position{column:position.column-1,..*position},
-                    Position{column:position.column-2,..*position},
-                    Position{column:position.column-3,..*position},
-                ]);
-                r; //Rust does not let me return by functional expression in an If if I don't
-                //define an else clause that return None for example, but then I would be
-                //exiting the function after just the first iteration. That is why I use r
-            }
+        if (board[position.row - 1][position.column] == TileState::Taken) ||
+            (board[position.row - 1][position.column + 1] == TileState::Taken) {
+
+            Some([*position,
+                Position{column:position.column+1,..*position},
+                Position{row:position.row+1,..*position},
+                Position{row:position.row+2,..*position},
+            ])
+        } else {
+            None
         }
-        None
     }
 }
 
