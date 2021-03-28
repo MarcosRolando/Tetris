@@ -16,6 +16,5 @@ fn main() {
         view_unit::viewUnit_release(&mut view_unit);
     }
     let board = Game::new_default();
-    let piece = Piece::new(Position {x:0,y:0}, Box::new(OrangeRicky{}));
-    piece.print();
+    let piece = Piece::new(Position {row:0,column:0}, Box::new(OrangeRicky{}));
 }
