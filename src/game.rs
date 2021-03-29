@@ -1,24 +1,67 @@
 use crate::pieces::piece::{Piece, Rotation, TakenTiles, Movement};
 use crate::pieces::piece::{Position, PieceType};
 use crate::pieces::hero::Hero;
+use std::collections::HashMap;
+use rand::{
+    distributions::{Distribution, Standard},
+    Rng,
+};
 
 /* This represents the Tetris board, which in classic NES Tetris is 10x20 Tiles*/
 
-pub const BOARD_WIDTH: usize = 10;
-pub const BOARD_HEIGHT: usize = 20;
+const BOARD_WIDTH: usize = 10;
+const BOARD_HEIGHT: usize = 20;
+const BOARD_BASE: usize = 1; // Base row of the board,
+                            //this row is not visible and not part of the playable rows
+                            //This acts as a solid foundation
 
-pub type Board = [[TileState; BOARD_WIDTH]; BOARD_HEIGHT];
 
-#[derive(Clone, Copy, PartialEq)] //Automatically generates the impl of Clone, Copy and PartialEq
-                                    //for TileState
+pub type Board = [[TileState; BOARD_WIDTH]; BOARD_HEIGHT + BOARD_BASE];
+
+#[derive(Clone, Copy, Hash)]
+enum PieceTypeID {
+    Hero,
+    Smashboy,
+    Teewee,
+    OrangeRicky,
+    BlueRicky,
+    ClevelandZ,
+    RhodeIslandZ,
+}
+
+/* Returns a random PieceTypeID value, for selecting the next piece */
+impl Distribution<PieceTypeID> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> PieceTypeID {
+        match rng.gen_range(0..=6) {
+            0 => PieceTypeID::Hero,
+            1 => PieceTypeID::Smashboy,
+            2 => PieceTypeID::Teewee,
+            3 => PieceTypeID::OrangeRicky,
+            4 => PieceTypeID::BlueRicky,
+            5 => PieceTypeID::ClevelandZ,
+            _ => PieceTypeID::RhodeIslandZ,
+        }
+    }
+}
+
+/*
+const PIECE: HashMap<PieceTypeID, Box<dyn PieceType>> = [
+    (PieceTypeID::Hero, 100),
+    (PieceTypeID::Smashboy, 50),
+    (PieceTypeID::Teewee, 100),
+    (PieceTypeID::OrangeRicky, 50),
+    (PieceTypeID::BlueRicky, 100),
+    (PieceTypeID::ClevelandZ, 50),
+    (PieceTypeID::RhodeIslandZ, 10)].iter().cloned().collect();
+*/
+#[derive(Clone, Copy, PartialEq)]
 pub enum TileState {
     Free,
     Taken,
 }
 
 pub struct Game {
-    board: Board, //An array of arrays (Rust doesn't have matrices) of
-                                                        //size 10x20
+    board: Board, //An array of arrays (Rust doesn't have matrices) of size 10x20 (not counting the BASE)
     current_piece: Piece<dyn PieceType>,
 }
 
@@ -28,13 +71,15 @@ impl Game {
      */
 
     pub fn new_default() -> Game {
-        Game {
-            board: [[TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT],
+        let mut game = Game {
+            board: [[TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT + BOARD_BASE],
             current_piece: Piece::new(
                 Position{row:0,column:0},
                 Box::new(Hero{})
             ),
-        }
+        };
+        game.board[0] = [TileState::Taken; BOARD_WIDTH];
+        game
     }
 
     /* Updates the game state */
@@ -77,7 +122,7 @@ impl Game {
     fn _check_for_lines_removal(&mut self) {
         let mut row_number = 0;
         let mut lines_to_remove = 0;
-        for row in &self.board {
+        for row in self.board.iter().skip(1) { //This way we skip the BASE
             let mut empty_line_tiles = 0; //If we find a fully empty line then we are done checking
             let mut found_a_taken_tile = false;
             lines_to_remove += 1; //We assume the current row/line is fully taken
