@@ -72,5 +72,3 @@ impl PieceType for ClevelandZ {
         }
     }
 }
-
-

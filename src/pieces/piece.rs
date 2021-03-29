@@ -1,6 +1,5 @@
 use crate::game::Board;
 use std::collections::HashMap;
-use crate::pieces::hero::Hero;
 
 #[derive(Copy, Clone, PartialEq)]
 pub struct Position {

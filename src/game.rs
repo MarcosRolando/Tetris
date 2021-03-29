@@ -2,7 +2,6 @@ use crate::pieces::piece;
 use piece::Piece;
 use crate::pieces::piece::{Position, PieceType};
 use crate::pieces::hero::Hero;
-use crate::pieces::orange_ricky::OrangeRicky;
 
 /* This represents the Tetris board, which in classic NES Tetris is 10x20 Tiles*/
 

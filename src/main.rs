@@ -5,9 +5,7 @@ mod game;
 use view_unit::ViewUnit;
 use game::Game;
 use crate::pieces::piece::{Piece, Position};
-use crate::pieces::hero::Hero;
 use crate::pieces::orange_ricky::OrangeRicky;
-use std::borrow::Borrow;
 
 fn main() {
 

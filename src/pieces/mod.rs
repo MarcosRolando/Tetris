@@ -5,3 +5,4 @@ pub mod blue_ricky;
 pub mod cleveland_z;
 pub mod rhode_island_z;
 pub mod teewee;
+pub mod smashboy;

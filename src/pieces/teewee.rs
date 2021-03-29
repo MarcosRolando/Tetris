@@ -1,7 +1,7 @@
 use crate::pieces::piece::{PieceType, Position};
 use crate::game::{Board, TileState};
 
-/* This is the I piece */
+/* This is the T piece */
 /* This piece position is fixed on the upper center on the Default rotation */
 /*
 Default rotation
@@ -20,11 +20,6 @@ impl PieceType for Teewee {
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
     fn check_default_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
-        let r = Some([*position,
-            Position{column:position.column+1,..*position},
-            Position{column:position.column-1,..*position},
-            Position{row:position.row-1,..*position},
-        ]);
         if (board[position.row][position.column - 1] == TileState::Taken) ||
             (board[position.row][position.column + 1] == TileState::Taken) ||
             (board[position.row - 1][position.column] == TileState::Taken) {
