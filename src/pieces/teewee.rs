@@ -18,7 +18,7 @@ impl PieceType for Teewee {
     PUBLIC
      */
 
-    fn new() -> Box<dyn PieceType> where Self: Sized {
+    fn new() -> Box<dyn PieceType> {
         Box::new(Teewee {})
     }
 

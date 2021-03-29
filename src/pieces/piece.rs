@@ -68,11 +68,13 @@ impl Orientation {
 
 pub type TakenTiles = [Position; 4];
 
+/* Anyone who implements PieceType must implement Clone, this is because it is requiered to allow
+the HashMap initialization in game.rs
+ */
 pub trait PieceType {
     /* Constructor, useful for when selecting a new random piece in game */
-    fn new() -> Box<dyn PieceType> where Self: Sized; //I believe this guarantees that it knows
-                                                        //which PieceType is when I call this function,
-                                                        //which I do so there is no problem
+    fn new() -> Box<dyn PieceType> where Self: Sized; //This indicates that a PieceType trait object can't call this function
+                                                    //because it's size is not known
 
     /* The following functions return an array of 4 elements of Positions indicating which
     board tiles have been taken if it collided, otherwise they return None */

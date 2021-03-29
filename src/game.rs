@@ -1,67 +1,16 @@
 use crate::pieces::piece::{Piece, Rotation, TakenTiles, Movement};
 use crate::pieces::piece::{Position, PieceType};
-use crate::pieces::{
-    hero::Hero,
-    orange_ricky::OrangeRicky,
-    blue_ricky::BlueRicky,
-    cleveland_z::ClevelandZ,
-    rhode_island_z::RhodeIslandZ,
-    smashboy::Smashboy,
-    teewee::Teewee,
-};
-use std::collections::HashMap;
-use rand::{
-    distributions::{Distribution, Standard},
-    Rng,
-};
+use crate::pieces::piece_factory::PieceFactory;
 
 /* This represents the Tetris board, which in classic NES Tetris is 10x20 Tiles*/
 
-const BOARD_WIDTH: usize = 10;
-const BOARD_HEIGHT: usize = 20;
+pub const BOARD_WIDTH: usize = 10;
+pub const BOARD_HEIGHT: usize = 20;
 const BOARD_BASE: usize = 1; // Base row of the board,
                             //this row is not visible and not part of the playable rows
                             //This acts as a solid foundation
 
-
 pub type Board = [[TileState; BOARD_WIDTH]; BOARD_HEIGHT + BOARD_BASE];
-
-#[derive(Clone, Copy, Hash)]
-enum PieceTypeID {
-    Hero,
-    Smashboy,
-    Teewee,
-    OrangeRicky,
-    BlueRicky,
-    ClevelandZ,
-    RhodeIslandZ,
-}
-
-/* Returns a random PieceTypeID value, for selecting the next piece */
-impl Distribution<PieceTypeID> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> PieceTypeID {
-        match rng.gen_range(0..=6) {
-            0 => PieceTypeID::Hero,
-            1 => PieceTypeID::Smashboy,
-            2 => PieceTypeID::Teewee,
-            3 => PieceTypeID::OrangeRicky,
-            4 => PieceTypeID::BlueRicky,
-            5 => PieceTypeID::ClevelandZ,
-            _ => PieceTypeID::RhodeIslandZ,
-        }
-    }
-}
-
-
-const PIECE: HashMap<PieceTypeID, fn () -> Box<dyn PieceType>> = [
-    (PieceTypeID::Hero, Hero::new()),
-    (PieceTypeID::Smashboy, Smashboy::new()),
-    (PieceTypeID::Teewee, Teewee::new()),
-    (PieceTypeID::OrangeRicky, OrangeRicky::new()),
-    (PieceTypeID::BlueRicky, BlueRicky::new()),
-    (PieceTypeID::ClevelandZ, ClevelandZ::new()),
-    (PieceTypeID::RhodeIslandZ, RhodeIslandZ::new())].iter().cloned().collect();
-
 
 #[derive(Clone, Copy, PartialEq)]
 pub enum TileState {
@@ -82,10 +31,7 @@ impl Game {
     pub fn new_default() -> Game {
         let mut game = Game {
             board: [[TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT + BOARD_BASE],
-            current_piece: Piece::new(
-                Position{row:0,column:0},
-                Box::new(Hero{})
-            ),
+            current_piece: PieceFactory::new(),
         };
         game.board[0] = [TileState::Taken; BOARD_WIDTH];
         game

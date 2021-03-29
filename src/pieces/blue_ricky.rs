@@ -18,7 +18,7 @@ impl PieceType for BlueRicky {
     PUBLIC
      */
 
-    fn new() -> Box<dyn PieceType> where Self: Sized {
+    fn new() -> Box<dyn PieceType> {
         Box::new(BlueRicky {})
     }
 
