@@ -59,9 +59,42 @@ impl Game {
         }
     }
 
+    /* Removes the completed lines and updates the player score */
     fn _update_board(&mut self, positions: &TakenTiles) {
         for position in positions {
             self.board[position.row][position.column] = TileState::Taken;
         }
+        self._check_for_lines_removal();
+    }
+
+    fn _check_for_lines_removal(&self) {
+        let mut row_number = 0;
+        let mut lines_to_remove = 0;
+        let mut found_lines_to_remove = false;
+        for row in &self.board {
+            let mut empty_line_tiles = 0; //If we find a fully empty line then we are done checking
+            lines_to_remove += 1; //We assume the current row/line is fully taken
+            for tile in row {
+                if tile != TileState::Taken {
+                    lines_to_remove -= 1; //If it turns out it's not then we cancel the operation
+                    empty_line_tiles += 1;
+                    break;
+                }
+                if found_lines_to_remove {
+                    self._remove_lines(row_number - lines_to_remove, lines_to_remove);
+                    return;
+                }
+            }
+            if lines_to_remove == 1 { //We found at least 1 fully taken row
+                found_lines_to_remove = true;
+            } else if empty_line_tiles == BOARD_WIDTH {
+                return;
+            }
+            row_number += 1;
+        }
+    }
+
+    fn _remove_lines(&self, first_line: usize, lines_to_remove: usize) {
+
     }
 }
