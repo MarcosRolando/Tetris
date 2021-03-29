@@ -1,10 +1,10 @@
-use crate::pieces::piece::{PieceType, Position};
+use crate::pieces::piece::{PieceType, Position, TakenTiles};
 use crate::game::{Board, TileState};
 
 /* This is the T piece */
-/* This piece position is fixed on the upper center on the Default rotation */
+/* This piece position is fixed on the upper center on the Default Orientation */
 /*
-Default rotation
+Default Orientation
 
 * x *
   *
@@ -19,7 +19,7 @@ impl PieceType for Teewee {
      */
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_default_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
+    fn check_default_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         if (board[position.row][position.column - 1] == TileState::Taken) ||
             (board[position.row][position.column + 1] == TileState::Taken) ||
             (board[position.row - 1][position.column] == TileState::Taken) {
@@ -35,7 +35,7 @@ impl PieceType for Teewee {
     }
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
+    fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         for i in (position.column-1)..(position.column + 2) {
             if board[position.row - 1][i] == TileState::Taken {
                 return Some([*position,
@@ -49,7 +49,7 @@ impl PieceType for Teewee {
     }
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
+    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         if (board[position.row - 1][position.column + 1] == TileState::Taken) ||
             (board[position.row - 2][position.column] == TileState::Taken) {
 
@@ -64,7 +64,7 @@ impl PieceType for Teewee {
     }
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_left_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
+    fn check_left_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         if (board[position.row - 1][position.column - 1] == TileState::Taken) ||
             (board[position.row - 2][position.column] == TileState::Taken) {
 

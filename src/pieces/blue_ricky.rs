@@ -1,10 +1,10 @@
-use crate::pieces::piece::{PieceType, Position};
+use crate::pieces::piece::{PieceType, Position, TakenTiles};
 use crate::game::{Board, TileState};
 
 /* This is the inverted L piece */
-/* This piece position is fixed on the upper right corner on the Default rotation */
+/* This piece position is fixed on the upper right corner on the Default Orientation */
 /*
-Default rotation
+Default Orientation
 
 * * x
     *
@@ -19,7 +19,7 @@ impl PieceType for BlueRicky {
      */
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_default_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
+    fn check_default_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         let r = Some([*position,
             Position{column:position.column-1,..*position},
             Position{column:position.column-2,..*position},
@@ -37,7 +37,7 @@ impl PieceType for BlueRicky {
     }
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
+    fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         for i in position.column..(position.column+3) {
             if board[position.row - 1][i] == TileState::Taken {
                 return Some([*position,
@@ -51,7 +51,7 @@ impl PieceType for BlueRicky {
     }
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
+    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         if (board[position.row - 1][position.column] == TileState::Taken) ||
             (board[position.row - 1][position.column - 1] == TileState::Taken) {
 
@@ -66,7 +66,7 @@ impl PieceType for BlueRicky {
     }
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_left_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
+    fn check_left_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         if (board[position.row - 1][position.column + 1] == TileState::Taken) ||
             (board[position.row - 3][position.column] == TileState::Taken) {
 

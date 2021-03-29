@@ -8,26 +8,31 @@ pub struct Position {
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
-pub enum Rotation {
-    Default, /*No rotation, default piece orientation*/
+pub enum Orientation {
+    Default, /*No Orientation, default piece orientation*/
     Inverted, /*180 degree rotation*/
     Right, /*90 degree rotation*/
     Left, /*-90 degree rotation*/
 }
 
-impl Rotation {
+#[derive(Copy, Clone, PartialEq)]
+pub enum Rotation {
+    Right,
+    Left,
+}
+
+impl Orientation {
     /*
     PUBLIC
      */
 
-    /* Given the current Rotation value and the Right or Left rotation transformation applied it
-    returns the next Rotation value
+    /* Given the current Orientation value and the Right or Left Orientation transformation applied it
+    returns the next Orientation value
      */
-    pub fn change(&self, direction: Self) -> Self {
-        match direction {
-            Self::Right => self._change_right(),
-            Self::Left => self._change_left(),
-            _ => panic!("Tried to change the rotation without a Right or Left value!"), //This case should never happen
+    pub fn change(&self, rotation: Rotation) -> Self {
+        match rotation {
+            Rotation::Right => self._change_right(),
+            Rotation::Left => self._change_left(),
         }
     }
 
@@ -54,23 +59,26 @@ impl Rotation {
     }
 }
 
+pub type TakenTiles = [Position; 4];
+
 pub trait PieceType {
     /* The following functions return an array of 4 elements of Positions indicating which
     board tiles have been taken if it collided, otherwise they return None */
-    fn check_default_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
-    fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
-    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
-    fn check_left_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
+    fn check_default_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;
+    fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;
+    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;
+    fn check_left_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;
 
-    /* Changes the piece position that corresponds to the given rotation */
-    fn rotate(&self, rotation: Rotation);
+    /* Changes the piece position that corresponds to the given Orientation */
+    fn change_position(&self, position: &Position, orientation: Orientation, rotation: Rotation)
+                        -> Position;
 }
 
 pub struct Piece<T: PieceType + ?Sized> {
     position: Position,
     piece_type: Box<T>,
-    rotation: Rotation,
-    collision_checkers: HashMap<Rotation, fn (&T, &Board, &Position) -> Option<[Position; 4]>>,
+    orientation: Orientation,
+    collision_checkers: HashMap<Orientation, fn (&T, &Board, &Position) -> Option<TakenTiles>>,
 }
 
 impl<T: PieceType + ?Sized> Piece<T> {
@@ -82,29 +90,29 @@ impl<T: PieceType + ?Sized> Piece<T> {
         let mut piece = Piece {
             position,
             piece_type,
-            rotation: Rotation::Default,
+            orientation: Orientation::Default,
             collision_checkers: HashMap::new(),
         };
-        piece.collision_checkers.insert(Rotation::Default, PieceType::check_default_collision);
-        piece.collision_checkers.insert(Rotation::Inverted, PieceType::check_inverted_collision);
-        piece.collision_checkers.insert(Rotation::Right, PieceType::check_right_collision);
-        piece.collision_checkers.insert(Rotation::Left, PieceType::check_left_collision);
+        piece.collision_checkers.insert(Orientation::Default, PieceType::check_default_collision);
+        piece.collision_checkers.insert(Orientation::Inverted, PieceType::check_inverted_collision);
+        piece.collision_checkers.insert(Orientation::Right, PieceType::check_right_collision);
+        piece.collision_checkers.insert(Orientation::Left, PieceType::check_left_collision);
         /*Rust tiene una forma medio sidosa con collector y clone y eso de declarar de una el HashMap pero
          no funca con mi puntero a funcion porque tengo que implementarle el FromIterator y no
          se como es y paja. todo Ver como es e implementarlo!*/
         piece
     }
 
-    pub fn rotate(&mut self, direction: Rotation) {
-        self.rotation = self.rotation.change(direction);
-        self.piece_type.rotate(self.rotation);
+    pub fn rotate(&mut self, rotation: Rotation) {
+        self.position = self.piece_type.change_position(self.orientation, rotation);
+        self.orientation = self.orientation.change(rotation);
     }
 
     /* Checks if the current piece has collided with the board and if so updates the taken tiles */
     pub fn check_collision(&self, board: &Board) -> Option<[Position;4]> {
-        match self.collision_checkers.get(&self.rotation) {
+        match self.collision_checkers.get(&self.orientation) {
             Some(f) => f(&self.piece_type, board, &self.position),
-            None => panic!("Tried to invoke a CollisionChecker of an unknown rotation!"), //This case should never happen
+            None => panic!("Tried to invoke a CollisionChecker of an unknown Orientation!"), //This case should never happen
         }
     }
 }

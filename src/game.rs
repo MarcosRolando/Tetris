@@ -1,4 +1,4 @@
-use crate::pieces::piece::{Piece, Rotation};
+use crate::pieces::piece::{Piece, Orientation, Rotation, TakenTiles};
 use crate::pieces::piece::{Position, PieceType};
 use crate::pieces::hero::Hero;
 
@@ -42,15 +42,12 @@ impl Game {
         self._check_collision();
     }
 
-    /* Rotates the piece based on the Rotation given. Notice that Rotation should only allow for
+    /* Rotates the piece based on the Orientation given. Notice that Orientation should only allow for
     Right and Left, discrading Default and Inverted. This was because I didn't want to create
-    another enum just for indicating this two values that are already described in Rotation enum
+    another enum just for indicating this two values that are already described in Orientation enum
      */
-    pub fn rotate_piece(&self, direction: Rotation) {
-        match direction {
-            Rotation::Right | Rotation::Left => self.current_piece.rotate(direction),
-            _ => eprintln!("Tried to rotate to Default or to Inverted!"), //They should not happen
-        }
+    pub fn rotate_piece(&mut self, rotation: Rotation) {
+        self.current_piece.rotate(rotation);
     }
 
     /*
@@ -65,7 +62,7 @@ impl Game {
         }
     }
 
-    fn _update_board(&mut self, positions: &[Position; 4]) {
+    fn _update_board(&mut self, positions: &TakenTiles) {
         for position in positions {
             self.board[position.row][position.column] = TileState::Taken;
         }
