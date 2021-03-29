@@ -52,17 +52,16 @@ impl PieceType for BlueRicky {
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
     fn check_right_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
-        if (board[position.row - 1][position.column] == TileState::Taken) ||
-            (board[position.row - 1][position.column - 1] == TileState::Taken) {
-
-            Some([*position,
-                Position{column:position.column-1,..*position},
-                Position{row:position.row+1,..*position},
-                Position{row:position.row+2,..*position},
-            ])
-        } else {
-            None
+        for i in (position.column-1)..(position.column + 1) {
+            if board[position.row - 1][i] == TileState::Taken {
+                return Some([*position,
+                    Position{column:position.column-1,..*position},
+                    Position{row:position.row+1,..*position},
+                    Position{row:position.row+2,..*position},
+                ]);
+            }
         }
+        None
     }
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
