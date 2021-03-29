@@ -71,7 +71,6 @@ impl Game {
     fn _check_for_lines_removal(&self) {
         let mut row_number = 0;
         let mut lines_to_remove = 0;
-        let mut found_lines_to_remove = false;
         for row in &self.board {
             let mut empty_line_tiles = 0; //If we find a fully empty line then we are done checking
             let mut found_a_taken_tile = false;
@@ -88,7 +87,8 @@ impl Game {
                     }
                 }
             }
-            if found_lines_to_remove && (empty_line_tiles > 0) {
+            if ( (lines_to_remove > 0) && (empty_line_tiles > 0) ) || (lines_to_remove == 4) ||
+                ( (lines_to_remove > 0) && (row_number == BOARD_HEIGHT - 1) ) {
                 self._remove_lines(row_number - lines_to_remove, lines_to_remove);
                 return;
             }
