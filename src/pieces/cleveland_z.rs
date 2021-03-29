@@ -18,6 +18,10 @@ impl PieceType for ClevelandZ {
     PUBLIC
      */
 
+    fn new() -> Box<dyn PieceType> where Self: Sized {
+        Box::new(ClevelandZ {})
+    }
+
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
     fn check_default_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         let r = Some([*position,

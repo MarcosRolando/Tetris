@@ -19,6 +19,10 @@ impl PieceType for Smashboy {
     PUBLIC
      */
 
+    fn new() -> Box<dyn PieceType> where Self: Sized {
+        Box::new(Smashboy {})
+    }
+
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
     fn check_default_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         if (board[position.row - 1][position.column] == TileState::Taken) ||

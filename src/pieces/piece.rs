@@ -69,6 +69,11 @@ impl Orientation {
 pub type TakenTiles = [Position; 4];
 
 pub trait PieceType {
+    /* Constructor, useful for when selecting a new random piece in game */
+    fn new() -> Box<dyn PieceType> where Self: Sized; //I believe this guarantees that it knows
+                                                        //which PieceType is when I call this function,
+                                                        //which I do so there is no problem
+
     /* The following functions return an array of 4 elements of Positions indicating which
     board tiles have been taken if it collided, otherwise they return None */
     fn check_default_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;

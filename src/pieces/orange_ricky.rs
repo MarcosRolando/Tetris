@@ -18,6 +18,10 @@ impl PieceType for OrangeRicky {
     PUBLIC
      */
 
+    fn new() -> Box<dyn PieceType> where Self: Sized {
+        Box::new(OrangeRicky {})
+    }
+
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
     fn check_default_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         let r = Some([Position{row:position.row+1, ..*position},

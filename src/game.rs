@@ -1,6 +1,14 @@
 use crate::pieces::piece::{Piece, Rotation, TakenTiles, Movement};
 use crate::pieces::piece::{Position, PieceType};
-use crate::pieces::hero::Hero;
+use crate::pieces::{
+    hero::Hero,
+    orange_ricky::OrangeRicky,
+    blue_ricky::BlueRicky,
+    cleveland_z::ClevelandZ,
+    rhode_island_z::RhodeIslandZ,
+    smashboy::Smashboy,
+    teewee::Teewee,
+};
 use std::collections::HashMap;
 use rand::{
     distributions::{Distribution, Standard},
@@ -44,16 +52,17 @@ impl Distribution<PieceTypeID> for Standard {
     }
 }
 
-/*
-const PIECE: HashMap<PieceTypeID, Box<dyn PieceType>> = [
-    (PieceTypeID::Hero, 100),
-    (PieceTypeID::Smashboy, 50),
-    (PieceTypeID::Teewee, 100),
-    (PieceTypeID::OrangeRicky, 50),
-    (PieceTypeID::BlueRicky, 100),
-    (PieceTypeID::ClevelandZ, 50),
-    (PieceTypeID::RhodeIslandZ, 10)].iter().cloned().collect();
-*/
+
+const PIECE: HashMap<PieceTypeID, fn () -> Box<dyn PieceType>> = [
+    (PieceTypeID::Hero, Hero::new()),
+    (PieceTypeID::Smashboy, Smashboy::new()),
+    (PieceTypeID::Teewee, Teewee::new()),
+    (PieceTypeID::OrangeRicky, OrangeRicky::new()),
+    (PieceTypeID::BlueRicky, BlueRicky::new()),
+    (PieceTypeID::ClevelandZ, ClevelandZ::new()),
+    (PieceTypeID::RhodeIslandZ, RhodeIslandZ::new())].iter().cloned().collect();
+
+
 #[derive(Clone, Copy, PartialEq)]
 pub enum TileState {
     Free,

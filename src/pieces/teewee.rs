@@ -18,6 +18,10 @@ impl PieceType for Teewee {
     PUBLIC
      */
 
+    fn new() -> Box<dyn PieceType> where Self: Sized {
+        Box::new(Teewee {})
+    }
+
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
     fn check_default_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         if (board[position.row][position.column - 1] == TileState::Taken) ||
