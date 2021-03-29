@@ -1,5 +1,5 @@
-use crate::pieces::piece::{Piece, Rotation, TakenTiles, Movement};
-use crate::pieces::piece::{Position, PieceType};
+use crate::pieces::piece::{Piece, Rotation, TakenTiles, Movement, Position};
+use crate::pieces::piece::PieceType;
 use crate::pieces::piece_factory::PieceFactory;
 
 /* This represents the Tetris board, which in classic NES Tetris is 10x20 Tiles*/
@@ -9,6 +9,8 @@ pub const BOARD_HEIGHT: usize = 20;
 const BOARD_BASE: usize = 1; // Base row of the board,
                             //this row is not visible and not part of the playable rows
                             //This acts as a solid foundation
+
+const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT / 2, column: BOARD_WIDTH / 2}; //todo ver bien el tema del spawn
 
 pub type Board = [[TileState; BOARD_WIDTH]; BOARD_HEIGHT + BOARD_BASE];
 
@@ -31,7 +33,7 @@ impl Game {
     pub fn new_default() -> Game {
         let mut game = Game {
             board: [[TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT + BOARD_BASE],
-            current_piece: PieceFactory::new(),
+            current_piece: PieceFactory::new(STARTING_POSITION),
         };
         game.board[0] = [TileState::Taken; BOARD_WIDTH];
         game
@@ -51,6 +53,19 @@ impl Game {
     /* Moves the piece based on the Movement given */
     pub fn move_piece(&mut self, movement: Movement) {
         self.current_piece.move_to(movement);
+    }
+
+    pub fn print(&self) {
+        print!("{}[2J", 27 as char); //clears the screen
+        for row in self.board.iter().rev() {
+            for tile in row {
+                match tile {
+                    TileState::Free => print!(" "),
+                    TileState::Taken => print!("*"),
+                }
+            }
+            print!("\n");
+        }
     }
 
     /*

@@ -10,9 +10,6 @@ use super::{
 use rand::{distributions::{Distribution, Standard}, Rng, random};
 use super::piece::PieceType;
 use crate::pieces::piece::{Piece, Position};
-use crate::game::{BOARD_WIDTH, BOARD_HEIGHT};
-
-const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT / 2, column: BOARD_WIDTH / 2}; //todo ver bien el tema del spawn
 
 #[derive(Clone, Copy, Hash)]
 enum PieceTypeID {
@@ -48,16 +45,16 @@ impl PieceFactory {
      */
 
     /* Returns a random new piece */
-    pub fn new() -> Piece<dyn PieceType> {
+    pub fn new(starting_position: Position) -> Piece<dyn PieceType> {
         let piece_type: PieceTypeID = random();
         match piece_type {
-            PieceTypeID::Hero => Piece::new(STARTING_POSITION, Box::new(Hero{})),
-            PieceTypeID::OrangeRicky => Piece::new(STARTING_POSITION, Box::new(OrangeRicky{})),
-            PieceTypeID::BlueRicky => Piece::new(STARTING_POSITION, Box::new(BlueRicky{})),
-            PieceTypeID::Teewee => Piece::new(STARTING_POSITION, Box::new(Teewee{})),
-            PieceTypeID::ClevelandZ => Piece::new(STARTING_POSITION, Box::new(ClevelandZ{})),
-            PieceTypeID::RhodeIslandZ => Piece::new(STARTING_POSITION, Box::new(RhodeIslandZ{})),
-            PieceTypeID::Smashboy => Piece::new(STARTING_POSITION, Box::new(Smashboy{})),
+            PieceTypeID::Hero => Piece::new(starting_position, Box::new(Hero{})),
+            PieceTypeID::OrangeRicky => Piece::new(starting_position, Box::new(OrangeRicky{})),
+            PieceTypeID::BlueRicky => Piece::new(starting_position, Box::new(BlueRicky{})),
+            PieceTypeID::Teewee => Piece::new(starting_position, Box::new(Teewee{})),
+            PieceTypeID::ClevelandZ => Piece::new(starting_position, Box::new(ClevelandZ{})),
+            PieceTypeID::RhodeIslandZ => Piece::new(starting_position, Box::new(RhodeIslandZ{})),
+            PieceTypeID::Smashboy => Piece::new(starting_position, Box::new(Smashboy{})),
         }
     }
 }
