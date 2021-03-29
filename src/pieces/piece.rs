@@ -7,7 +7,7 @@ pub struct Position {
     pub column: usize,
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, Hash)]
+#[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
 enum Rotation {
     Default, /*No rotation, default piece orientation*/
     Inverted, /*180 degree rotation*/
@@ -27,7 +27,7 @@ pub trait PieceType {
 pub struct Piece<T: PieceType + ?Sized> {
     position: Position,
     piece_type: Box<T>,
-    orientation: Rotation,
+    rotation: Rotation,
     collision_checkers: HashMap<Rotation, fn (&T, &Board, &Position) -> Option<[Position; 4]>>,
 }
 
@@ -40,20 +40,24 @@ impl<T: PieceType + ?Sized> Piece<T> {
         let mut piece = Piece {
             position,
             piece_type,
-            orientation: Rotation::Default,
+            rotation: Rotation::Default,
             collision_checkers: HashMap::new(),
         };
         piece.collision_checkers.insert(Rotation::Default, PieceType::check_default_collision);
         piece.collision_checkers.insert(Rotation::Inverted, PieceType::check_inverted_collision);
         piece.collision_checkers.insert(Rotation::Right, PieceType::check_right_collision);
         piece.collision_checkers.insert(Rotation::Left, PieceType::check_left_collision);
+        /*Rust tiene una forma medio sidosa con collector y clone y eso de declarar de una el HashMap pero
+         no funca con mi puntero a funcion porque tengo que implementarle el FromIterator y no
+         se como es y paja. todo Ver como es e implementarlo!*/
         piece
     }
 
-    pub fn check_collision(&self, board: &Board) {
-        match self.collision_checkers.get(&self.orientation) {
-            Some(f) => drop(f(&self.piece_type, board, &self.position)),
-            None => (),
+    /* Checks if the current piece has collided with the board and if so updates the taken tiles */
+    pub fn check_collision(&self, board: &Board) -> Option<[Position;4]> {
+        match self.collision_checkers.get(&self.rotation) {
+            Some(f) => f(&self.piece_type, board, &self.position),
+            None => panic!("Tried to invoke a CollisionChecker of an unknown rotation!"), //This case should never happen
         }
     }
 }

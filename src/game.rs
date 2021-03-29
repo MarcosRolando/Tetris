@@ -38,8 +38,8 @@ impl Game {
         }
     }
 
-    /* Updates to next game state */
-    pub fn update(&self, delta_time: i32) {
+    /* Updates the game state */
+    pub fn update(&mut self, delta_time: i32) {
         self._check_collision();
     }
 
@@ -48,7 +48,16 @@ impl Game {
      */
 
     /* Checks if the piece has collided with the board and if so, sets the tiles as taken*/
-    fn _check_collision(&self) {
-        self.current_piece.check_collision(&self.board);
+    fn _check_collision(&mut self) {
+        match self.current_piece.check_collision(&self.board) {
+            Some(positions) => self._update_board(&positions),
+            None => (), //Do nothing because it hasn't collided
+        }
+    }
+
+    fn _update_board(&mut self, positions: &[Position; 4]) {
+        for position in positions {
+            self.board[position.row][position.column] = TileState::Taken;
+        }
     }
 }
