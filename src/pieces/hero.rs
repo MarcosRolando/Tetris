@@ -1,4 +1,4 @@
-use crate::pieces::piece::{PieceType, Position, Orientation, Rotation, TakenTiles};
+use crate::pieces::piece::{PieceType, Position, TakenTiles};
 use crate::game::{Board, TileState};
 
 /* This is the I piece */
@@ -12,21 +12,7 @@ Default Orientation
 
 pub struct Hero {}
 
-impl Hero {
-    /*
-    PRIVATE
-     */
-
-    fn _rotate_right(&self, position: &Position, orientation: Orientation) -> Position {
-        match orientation {
-            Orientation::Default => Position {row:position.row},
-        }
-    }
-
-    fn _rotate_left(&self, orientation: Orientation) {
-
-    }
-}
+impl Hero {}
 
 impl PieceType for Hero {
     /*
@@ -69,14 +55,5 @@ impl PieceType for Hero {
     /* In Classic Tetris this rotation is actually the same as the right rotation */
     fn check_left_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
         self.check_right_collision(board, position)
-    }
-
-    /* Changes the piece position that corresponds to the given Orientation */
-    fn change_position(&self, position: &Position, orientation: Orientation, rotation: Rotation)
-                        -> Position {
-        match rotation {
-            Rotation::Right => self._rotate_right(position, orientation),
-            Rotation::Left => self._rotate_left(position, orientation),
-        }
     }
 }

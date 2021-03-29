@@ -45,7 +45,7 @@ impl PieceType for ClevelandZ {
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
     /* In Classic Tetris this rotation is actually the same as the left rotation */
     fn check_right_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
-        self.check_right_collision(board, position)
+        self.check_left_collision(board, position)
     }
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */

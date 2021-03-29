@@ -68,10 +68,6 @@ pub trait PieceType {
     fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;
     fn check_right_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;
     fn check_left_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;
-
-    /* Changes the piece position that corresponds to the given Orientation */
-    fn change_position(&self, position: &Position, orientation: Orientation, rotation: Rotation)
-                        -> Position;
 }
 
 pub struct Piece<T: PieceType + ?Sized> {
@@ -103,8 +99,8 @@ impl<T: PieceType + ?Sized> Piece<T> {
         piece
     }
 
+    /* Rotates the piece based on the Rotation given */
     pub fn rotate(&mut self, rotation: Rotation) {
-        self.position = self.piece_type.change_position(self.orientation, rotation);
         self.orientation = self.orientation.change(rotation);
     }
 
