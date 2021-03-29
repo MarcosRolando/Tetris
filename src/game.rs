@@ -1,4 +1,4 @@
-use crate::pieces::piece::{Piece, Rotation, TakenTiles};
+use crate::pieces::piece::{Piece, Rotation, TakenTiles, Movement};
 use crate::pieces::piece::{Position, PieceType};
 use crate::pieces::hero::Hero;
 
@@ -38,13 +38,19 @@ impl Game {
     }
 
     /* Updates the game state */
-    pub fn update(&mut self, delta_time: i32) {
+    pub fn update(&mut self, delta_t: f32) {
+        self.current_piece.try_to_descend(delta_t);
         self._check_collision();
     }
 
     /* Rotates the piece based on the Rotation given */
     pub fn rotate_piece(&mut self, rotation: Rotation) {
         self.current_piece.rotate(rotation);
+    }
+
+    /* Moves the piece based on the Movement given */
+    pub fn move_piece(&mut self, movement: Movement) {
+        self.current_piece.move_to(movement);
     }
 
     /*
