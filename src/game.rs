@@ -68,7 +68,7 @@ impl Game {
     }
 
     //todo Refactor
-    fn _check_for_lines_removal(&self) {
+    fn _check_for_lines_removal(&mut self) {
         let mut row_number = 0;
         let mut lines_to_remove = 0;
         for row in &self.board {
@@ -80,7 +80,7 @@ impl Game {
                     lines_to_remove -= 1; //If it turns out it's not then we cancel the operation
                     break;
                 } else {
-                    if tile == TileState::Free {
+                    if *tile == TileState::Free {
                         empty_line_tiles += 1;
                     } else {
                         found_a_taken_tile = true;
@@ -89,19 +89,19 @@ impl Game {
             }
             if ( (lines_to_remove > 0) && (empty_line_tiles > 0) ) || (lines_to_remove == 4) ||
                 ( (lines_to_remove > 0) && (row_number == BOARD_HEIGHT - 1) ) {
-                self._remove_lines(row_number - lines_to_remove, lines_to_remove);
-                return;
+                return self._remove_lines(row_number - lines_to_remove, lines_to_remove);
             }
-            if lines_to_remove == 1 { //We found at least 1 fully taken row
-                found_lines_to_remove = true;
-            } else if empty_line_tiles == BOARD_WIDTH {
+            if empty_line_tiles == BOARD_WIDTH {
                 return;
             }
             row_number += 1;
         }
     }
 
-    fn _remove_lines(&self, first_line: usize, lines_to_remove: usize) {
-
+    fn _remove_lines(&mut self, first_line: usize, lines_to_remove: usize) {
+        let offset = first_line + lines_to_remove;
+        for i in offset..(BOARD_HEIGHT - 1) {
+            self.board[i - lines_to_remove] = self.board[i]; //Aca pierdo algo de eficiencia porque copio vacias tambien, pero bueno
+        }
     }
 }
