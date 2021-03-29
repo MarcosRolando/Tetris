@@ -6,7 +6,7 @@ use crate::game::{Board, TileState};
 /*
 Default rotation
 
-* * *
+* * x
     *
 
  */
