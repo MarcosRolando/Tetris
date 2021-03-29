@@ -8,11 +8,50 @@ pub struct Position {
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
-enum Rotation {
+pub enum Rotation {
     Default, /*No rotation, default piece orientation*/
     Inverted, /*180 degree rotation*/
     Right, /*90 degree rotation*/
     Left, /*-90 degree rotation*/
+}
+
+impl Rotation {
+    /*
+    PUBLIC
+     */
+
+    /* Given the current Rotation value and the Right or Left rotation transformation applied it
+    returns the next Rotation value
+     */
+    pub fn change(&self, direction: Self) -> Self {
+        match direction {
+            Self::Right => self._change_right(),
+            Self::Left => self._change_left(),
+            _ => panic!("Tried to change the rotation without a Right or Left value!"), //This case should never happen
+        }
+    }
+
+    /*
+    PRIVATE
+     */
+
+    fn _change_right(&self) -> Self {
+        match self {
+            Self::Default => Self::Right,
+            Self::Right => Self::Inverted,
+            Self::Inverted => Self::Left,
+            Self::Left => Self::Default,
+        }
+    }
+
+    fn _change_left(&self) -> Self {
+        match self {
+            Self::Default => Self::Left,
+            Self::Left => Self::Inverted,
+            Self::Inverted => Self::Right,
+            Self::Right => Self::Default,
+        }
+    }
 }
 
 pub trait PieceType {
@@ -22,6 +61,9 @@ pub trait PieceType {
     fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
     fn check_right_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
     fn check_left_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]>;
+
+    /* Changes the piece position that corresponds to the given rotation */
+    fn rotate(&self, rotation: Rotation);
 }
 
 pub struct Piece<T: PieceType + ?Sized> {
@@ -51,6 +93,11 @@ impl<T: PieceType + ?Sized> Piece<T> {
          no funca con mi puntero a funcion porque tengo que implementarle el FromIterator y no
          se como es y paja. todo Ver como es e implementarlo!*/
         piece
+    }
+
+    pub fn rotate(&mut self, direction: Rotation) {
+        self.rotation = self.rotation.change(direction);
+        self.piece_type.rotate(self.rotation);
     }
 
     /* Checks if the current piece has collided with the board and if so updates the taken tiles */

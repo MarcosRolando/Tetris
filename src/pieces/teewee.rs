@@ -65,7 +65,17 @@ impl PieceType for Teewee {
 
     /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
     fn check_left_collision(&self, board: &Board, position: &Position) -> Option<[Position; 4]> {
-        self.check_right_collision(board, &Position{row:position.row+3,..*position})
+        if (board[position.row - 1][position.column - 1] == TileState::Taken) ||
+            (board[position.row - 2][position.column] == TileState::Taken) {
+
+            Some([*position,
+                Position{column:position.column-1,..*position},
+                Position{row:position.row+1,..*position},
+                Position{row:position.row-1,..*position},
+            ])
+        } else {
+            None
+        }
     }
 }
 

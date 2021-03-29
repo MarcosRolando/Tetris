@@ -1,5 +1,4 @@
-use crate::pieces::piece;
-use piece::Piece;
+use crate::pieces::piece::{Piece, Rotation};
 use crate::pieces::piece::{Position, PieceType};
 use crate::pieces::hero::Hero;
 
@@ -41,6 +40,17 @@ impl Game {
     /* Updates the game state */
     pub fn update(&mut self, delta_time: i32) {
         self._check_collision();
+    }
+
+    /* Rotates the piece based on the Rotation given. Notice that Rotation should only allow for
+    Right and Left, discrading Default and Inverted. This was because I didn't want to create
+    another enum just for indicating this two values that are already described in Rotation enum
+     */
+    pub fn rotate_piece(&self, direction: Rotation) {
+        match direction {
+            Rotation::Right | Rotation::Left => self.current_piece.rotate(direction),
+            _ => eprintln!("Tried to rotate to Default or to Inverted!"), //They should not happen
+        }
     }
 
     /*
