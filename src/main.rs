@@ -23,7 +23,7 @@ fn main() {
     loop {
         game.update(frame_time*1000.0);
         game.print();
-        thread::sleep(Duration::from_millis((frame_time*1000.0) as u64));
+        thread::sleep(Duration::from_millis((0.5*1000.0) as u64));
     }
 }
 

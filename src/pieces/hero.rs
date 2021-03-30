@@ -1,4 +1,4 @@
-use crate::pieces::piece::{PieceType, Position, TakenTiles};
+use crate::pieces::piece::{PieceType, Position, PieceTiles, Orientation};
 use crate::game::{Board, TileState};
 
 /* This is the I piece */
@@ -12,52 +12,29 @@ Default Orientation
 
 pub struct Hero {}
 
-impl Hero {}
-
 impl PieceType for Hero {
-    /*
-    PUBLIC
-     */
-
-    fn new() -> Box<dyn PieceType> {
-        Box::new(Hero {})
+    fn get_default_positions(&self, position: &Position) -> PieceTiles {
+        [   *position,
+            Position{column:position.column+1,..*position},
+            Position{column:position.column-1,..*position},
+            Position{column:position.column-2,..*position},
+        ]
     }
 
-    /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_default_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
-        for i in (position.column - 2)..(position.column + 2) {
-            if board[position.row][i] == TileState::Taken {
-                return Some([Position{row:position.row+1,..*position},
-                             Position{column:position.column+1,row:position.row+1},
-                             Position{column:position.column-1,row:position.row+1},
-                             Position{column:position.column-2,row:position.row+1},
-               ]);
-            }
-        }
-        None
+    fn get_inverted_positions(&self, position: &Position) -> PieceTiles {
+        self.get_default_positions(position)
     }
 
-    /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
-        self.check_default_collision(board, position)
+    fn get_right_positions(&self, position: &Position) -> PieceTiles {
+        [   *position,
+            Position{row:position.row-1,..*position},
+            Position{row:position.row+1,..*position},
+            Position{row:position.row+2,..*position},
+        ]
     }
 
-    /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
-        if board[position.row - 1][position.column] == TileState::Taken {
-            Some([*position,
-                Position{row:position.row+1,..*position},
-                Position{row:position.row+2,..*position},
-                Position{row:position.row+3,..*position},
-            ])
-        } else {
-            None
-        }
-    }
-
-    /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    /* In Classic Tetris this rotation is actually the same as the right rotation */
-    fn check_left_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
-        self.check_right_collision(board, position)
+    /* Classic Tetris left rotation is the same as the right rotation */
+    fn get_left_positions(&self, position: &Position) -> PieceTiles {
+        self.get_right_positions(position)
     }
 }

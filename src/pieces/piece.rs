@@ -1,4 +1,4 @@
-use crate::game::Board;
+use crate::game::{Board, BOARD_WIDTH};
 use std::collections::HashMap;
 
 #[derive(Copy, Clone, PartialEq)]
@@ -11,8 +11,8 @@ pub struct Position {
 pub enum Orientation {
     Default, /*No Orientation, default piece orientation*/
     Inverted, /*180 degree rotation*/
-    Right, /*90 degree rotation*/
-    Left, /*-90 degree rotation*/
+    Right, /*-90 degree rotation*/
+    Left, /*90 degree rotation*/
 }
 
 #[derive(Copy, Clone, PartialEq)]
@@ -66,29 +66,32 @@ impl Orientation {
     }
 }
 
-pub type TakenTiles = [Position; 4];
+pub type PieceTiles = [Position; 4];
 
 /* Anyone who implements PieceType must implement Clone, this is because it is requiered to allow
 the HashMap initialization in game.rs
  */
 pub trait PieceType {
-    /* Constructor, useful for when selecting a new random piece in game */
-    fn new() -> Box<dyn PieceType> where Self: Sized; //This indicates that a PieceType trait object can't call this function
-                                                    //because it's size is not known
+    /*Returns the tiles the piece occupies in the board */
+    fn get_positions(&self, orientation: Orientation, position: &Position) -> PieceTiles {
+        match orientation {
+            Orientation::Default => self.get_default_positions(position),
+            Orientation::Inverted => self.get_inverted_positions(position),
+            Orientation::Right => self.get_right_positions(position),
+            Orientation::Left => self.get_left_positions(position),
+        }
+    }
 
-    /* The following functions return an array of 4 elements of Positions indicating which
-    board tiles have been taken if it collided, otherwise they return None */
-    fn check_default_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;
-    fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;
-    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;
-    fn check_left_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles>;
+    fn get_default_positions(&self, position: &Position) -> PieceTiles;
+    fn get_inverted_positions(&self, position: &Position) -> PieceTiles;
+    fn get_right_positions(&self, position: &Position) -> PieceTiles;
+    fn get_left_positions(&self, position: &Position) -> PieceTiles;
 }
 
 pub struct Piece<T: PieceType + ?Sized> {
     position: Position,
     piece_type: Box<T>,
     orientation: Orientation,
-    collision_checkers: HashMap<Orientation, fn (&T, &Board, &Position) -> Option<TakenTiles>>,
     descent_time: f32,
     elapsed_time: f32,
 }
@@ -103,14 +106,9 @@ impl<T: PieceType + ?Sized> Piece<T> {
             position,
             piece_type,
             orientation: Orientation::Default,
-            collision_checkers: HashMap::new(),
             descent_time: (28 / 60) as f32, //It takes 28 frames to move and the game runs at 60 fps
             elapsed_time: 0 as f32,
         };
-        piece.collision_checkers.insert(Orientation::Default, PieceType::check_default_collision);
-        piece.collision_checkers.insert(Orientation::Inverted, PieceType::check_inverted_collision);
-        piece.collision_checkers.insert(Orientation::Right, PieceType::check_right_collision);
-        piece.collision_checkers.insert(Orientation::Left, PieceType::check_left_collision);
         /*Rust tiene una forma medio sidosa con collector y clone y eso de declarar de una el HashMap pero
          no funca con mi puntero a funcion porque tengo que implementarle el FromIterator y no
          se como es y paja. todo Ver como es e implementarlo!*/
@@ -122,12 +120,9 @@ impl<T: PieceType + ?Sized> Piece<T> {
         self.orientation = self.orientation.change(rotation);
     }
 
-    /* Checks if the current piece has collided with the board and if so updates the taken tiles */
-    pub fn check_collision(&self, board: &Board) -> Option<[Position;4]> {
-        match self.collision_checkers.get(&self.orientation) {
-            Some(f) => f(&self.piece_type, board, &self.position),
-            None => panic!("Tried to invoke a CollisionChecker of an unknown Orientation!"), //This case should never happen
-        }
+    /* Returns the tiles in the board that the piece is ocupying */
+    pub fn get_positions(&self) -> PieceTiles {
+        self.piece_type.get_positions(self.orientation, &self.position)
     }
 
     /* Changes the time it takes for the piece to descend */
@@ -148,9 +143,21 @@ impl<T: PieceType + ?Sized> Piece<T> {
     /*Updates the piece position */
     pub fn move_to(&mut self, movement: Movement) {
         match movement {
-            Movement::Right => self.position.column += 1,
-            Movement::Left => self.position.column -= 1,
-            Movement::Down => self.position.row -= 1,
+            Movement::Right => {
+                if self.position.column < (BOARD_WIDTH - 1) {
+                    self.position.column += 1
+                }
+            },
+            Movement::Left => {
+                if self.position.column > 0 {
+                    self.position.column -= 1
+                }
+            },
+            Movement::Down => {
+                if self.position.row > 0 {
+                    self.position.row -= 1
+                }
+            },
         }
     }
 }

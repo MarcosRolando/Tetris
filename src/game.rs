@@ -1,4 +1,4 @@
-use crate::pieces::piece::{Piece, Rotation, TakenTiles, Movement, Position};
+use crate::pieces::piece::{Piece, Rotation, PieceTiles, Movement, Position};
 use crate::pieces::piece::PieceType;
 use crate::pieces::piece_factory::PieceFactory;
 
@@ -42,7 +42,9 @@ impl Game {
     /* Updates the game state */
     pub fn update(&mut self, delta_t: f32) {
         self.current_piece.try_to_descend(delta_t);
-        self._check_collision();
+        if self._check_collision() {
+            self.current_piece = PieceFactory::new(STARTING_POSITION);
+        }
     }
 
     /* Rotates the piece based on the Rotation given */
@@ -56,12 +58,16 @@ impl Game {
     }
 
     pub fn print(&self) {
-        print!("{}[2J", 27 as char); //clears the screen
-        for row in self.board.iter().rev() {
+        print!("\x1B[2J\x1B[1;1H"); //clears the screen
+        let mut board = self.board;
+        for position in &self.current_piece.get_positions() {
+            board[position.row][position.column] = TileState::Taken;
+        }
+        for row in board.iter().rev() {
             for tile in row {
                 match tile {
-                    TileState::Free => print!(" "),
-                    TileState::Taken => print!("*"),
+                    TileState::Free => print!(" - "),
+                    TileState::Taken => print!(" + "),
                 }
             }
             print!("\n");
@@ -72,25 +78,30 @@ impl Game {
     PRIVATE
      */
 
-    /* Checks if the piece has collided with the board and if so, sets the tiles as taken*/
-    fn _check_collision(&mut self) {
-        match self.current_piece.check_collision(&self.board) {
-            Some(positions) => self._update_board(&positions),
-            None => (), //Do nothing because it hasn't collided
+    /* Checks if the piece has collided with the board and if so, sets the tiles as taken
+        If there was a collision then it return true, otherwise returns false */
+    fn _check_collision(&mut self) -> bool {
+        let piece_positions = self.current_piece.get_positions();
+        for position in &piece_positions {
+            if self.board[position.row][position.column] == TileState::Taken {
+                self._update_board(&piece_positions);
+                return true;
+            }
         }
+        false
     }
 
     /* Removes the completed lines and updates the player score */
-    fn _update_board(&mut self, positions: &TakenTiles) {
+    fn _update_board(&mut self, positions: &PieceTiles) {
         for position in positions {
-            self.board[position.row][position.column] = TileState::Taken;
+            self.board[position.row + 2][position.column] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
         }
         self._check_for_lines_removal();
     }
 
     //todo Refactor
     fn _check_for_lines_removal(&mut self) {
-        let mut row_number = 0;
+        let mut row_number = 0 + BOARD_BASE;
         let mut lines_to_remove = 0;
         for row in self.board.iter().skip(1) { //This way we skip the BASE
             let mut empty_line_tiles = 0; //If we find a fully empty line then we are done checking
@@ -120,8 +131,9 @@ impl Game {
     }
 
     fn _remove_lines(&mut self, first_line: usize, lines_to_remove: usize) {
+        println!("hello!");
         let offset = first_line + lines_to_remove;
-        for i in offset..(BOARD_HEIGHT - 1) {
+        for i in offset..BOARD_HEIGHT {
             self.board[i - lines_to_remove] = self.board[i]; //Aca pierdo algo de eficiencia porque copio vacias tambien, pero bueno
         }
     }

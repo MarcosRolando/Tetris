@@ -1,4 +1,4 @@
-use crate::pieces::piece::{PieceType, Position, TakenTiles};
+use crate::pieces::piece::{PieceType, Position, PieceTiles};
 use crate::game::{Board, TileState};
 
 /* This is the Z piece */
@@ -14,56 +14,28 @@ Default Orientation
 pub struct ClevelandZ {}
 
 impl PieceType for ClevelandZ {
-    /*
-    PUBLIC
-     */
-
-    fn new() -> Box<dyn PieceType> {
-        Box::new(ClevelandZ {})
+    fn get_default_positions(&self, position: &Position) -> PieceTiles {
+        [   *position,
+            Position{column:position.column+1,row:position.row-1},
+            Position{row:position.row-1,..*position},
+            Position{column:position.column-1,..*position},
+        ]
     }
 
-    /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_default_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
-        let r = Some([*position,
+    fn get_inverted_positions(&self, position: &Position) -> PieceTiles {
+        self.get_default_positions(position)
+    }
+
+    /* Classic Tetris right rotation is the same as the left rotation */
+    fn get_right_positions(&self, position: &Position) -> PieceTiles {
+        self.get_left_positions(position)
+    }
+
+    fn get_left_positions(&self, position: &Position) -> PieceTiles {
+        [   *position,
+            Position{row:position.row-1,..*position},
             Position{column:position.column+1,..*position},
-            Position{row:position.row+1,..*position},
-            Position{row:position.row+1,column:position.column-1},
-        ]);
-        if board[position.row][position.column - 1] == TileState::Taken {
-            return r;
-        }
-        for i in position.column..(position.column+2) {
-            if board[position.row - 1][i] == TileState::Taken {
-                return r;
-            }
-        }
-        None
-    }
-
-    /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    //noinspection DuplicatedCode CLion complains about one fucking duplicated line between different files
-    fn check_inverted_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
-        self.check_default_collision(board, position)
-    }
-
-    /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    /* In Classic Tetris this rotation is actually the same as the left rotation */
-    fn check_right_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
-        self.check_left_collision(board, position)
-    }
-
-    /* Returns an array of 4 elements of Positions if it collided, otherwise returns None */
-    fn check_left_collision(&self, board: &Board, position: &Position) -> Option<TakenTiles> {
-        if (board[position.row - 1][position.column] == TileState::Taken) ||
-            (board[position.row][position.column + 1] == TileState::Taken) {
-
-            Some([*position,
-                Position{row:position.row+1,..*position},
-                Position{row:position.row+1,column:position.column+1},
-                Position{row:position.row+2,column:position.column+1},
-            ])
-        } else {
-            None
-        }
+            Position{row:position.row+1,column:position.column+1},
+        ]
     }
 }
