@@ -94,14 +94,14 @@ impl Game {
     /* Removes the completed lines and updates the player score */
     fn _update_board(&mut self, positions: &PieceTiles) {
         for position in positions {
-            self.board[position.row + 2][position.column] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
+            self.board[position.row + 1][position.column] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
         }
         self._check_for_lines_removal();
     }
 
     //todo Refactor
     fn _check_for_lines_removal(&mut self) {
-        let mut row_number = 0 + BOARD_BASE;
+        let mut row_number = BOARD_BASE;
         let mut lines_to_remove = 0;
         for row in self.board.iter().skip(1) { //This way we skip the BASE
             let mut empty_line_tiles = 0; //If we find a fully empty line then we are done checking
@@ -119,12 +119,12 @@ impl Game {
                     }
                 }
             }
+            if empty_line_tiles == BOARD_WIDTH {
+                return;
+            }
             if ( (lines_to_remove > 0) && (empty_line_tiles > 0) ) || (lines_to_remove == 4) ||
                 ( (lines_to_remove > 0) && (row_number == BOARD_HEIGHT - 1) ) {
                 return self._remove_lines(row_number - lines_to_remove, lines_to_remove);
-            }
-            if empty_line_tiles == BOARD_WIDTH {
-                return;
             }
             row_number += 1;
         }
@@ -132,8 +132,9 @@ impl Game {
 
     fn _remove_lines(&mut self, first_line: usize, lines_to_remove: usize) {
         println!("hello!");
+        println!("{} {}", first_line, lines_to_remove);
         let offset = first_line + lines_to_remove;
-        for i in offset..BOARD_HEIGHT {
+        for i in offset..(BOARD_HEIGHT + BOARD_BASE) { //todo esto no funca si son las ultimas 4 lineas o por ahi, VER BIEN!
             self.board[i - lines_to_remove] = self.board[i]; //Aca pierdo algo de eficiencia porque copio vacias tambien, pero bueno
         }
     }
