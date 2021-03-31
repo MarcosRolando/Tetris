@@ -5,14 +5,12 @@ mod board;
 
 use view_unit::ViewUnit;
 use game::Game;
-use crate::pieces::piece::{Piece, Position, Movement, Rotation};
-use crate::pieces::orange_ricky::OrangeRicky;
+use crate::pieces::piece::{Movement, Rotation};
 use std::thread;
 use std::time::{Duration, Instant};
 use std::sync::mpsc::{Receiver, TryRecvError};
 use std::sync::mpsc;
 use std::io::Read;
-use std::process::Command;
 use raw_tty::IntoRawMode;
 
 fn main() {
@@ -26,7 +24,11 @@ fn main() {
  */
     let stdin_channel = spawn_stdin_channel();
     let mut game = Game::new_default();
-    let frame_time = (1 / 60) as f32; //16.6 ms, game runs at 60fps
+    //let frame_time = (1 / 60) as f32; //16.6 ms, game runs at 60fps
+    const FRAME_TIME: u128 = (1000 / 60) as u128;
+    let mut start = Instant::now();
+    let mut now;
+    let mut update_duration: u128;
     loop {
         match stdin_channel.try_recv() {
             Ok(key) => {
@@ -43,9 +45,16 @@ fn main() {
             Err(TryRecvError::Empty) => (),
             Err(TryRecvError::Disconnected) => panic!("Channel disconnected"),
         }
-        game.update(frame_time*1000.0);
+        now = Instant::now();
+        game.update((now - start).as_secs_f32());
         game.print();
-        thread::sleep(Duration::from_millis((0.5*1000.0) as u64));
+        now = Instant::now();
+        update_duration = (now - start).as_millis();
+        //eprintln!("{}", update_duration);
+        start = Instant::now();
+        if update_duration <= FRAME_TIME {
+            thread::sleep(Duration::from_millis((FRAME_TIME - update_duration) as u64));
+        }
     }
 }
 
@@ -58,5 +67,3 @@ fn spawn_stdin_channel() -> Receiver<u8> {
     });
     receiver
 }
-
-

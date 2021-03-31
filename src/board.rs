@@ -40,7 +40,6 @@ impl Board {
                 match tile {
                     TileState::Free => print!("   "),
                     TileState::Taken => print!(" + "),
-                    _ => (),
                 }
             }
             print!("\n\r");

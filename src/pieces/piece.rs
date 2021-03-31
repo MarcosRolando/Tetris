@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use crate::board::{BOARD_WIDTH, BOARD_BASE};
 
 #[derive(Copy, Clone, PartialEq)]
@@ -102,16 +101,13 @@ impl<T: PieceType + ?Sized> Piece<T> {
      */
 
     pub fn new(position: Position, piece_type: Box<T>) -> Self {
-        let mut piece = Piece {
+        let piece = Piece {
             position,
             piece_type,
             orientation: Orientation::Default,
-            descent_time: (28 / 60) as f32, //It takes 28 frames to move and the game runs at 60 fps
-            elapsed_time: 0 as f32,
+            descent_time: 28.0 / 60.0, //It takes 28 frames to move and the game runs at 60 fps
+            elapsed_time: 0.0,
         };
-        /*Rust tiene una forma medio sidosa con collector y clone y eso de declarar de una el HashMap pero
-         no funca con mi puntero a funcion porque tengo que implementarle el FromIterator y no
-         se como es y paja. todo Ver como es e implementarlo!*/
         piece
     }
 
@@ -134,6 +130,7 @@ impl<T: PieceType + ?Sized> Piece<T> {
     just update the time elapsed */
     pub fn try_to_descend(&mut self, delta_t: f32) {
         self.elapsed_time += delta_t;
+        eprintln!("{}", delta_t);
         if self.elapsed_time >= self.descent_time {
             self.elapsed_time -= self.descent_time;
             self.move_to(Movement::Down);

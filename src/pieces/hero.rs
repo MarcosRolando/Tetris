@@ -1,4 +1,4 @@
-use crate::pieces::piece::{PieceType, Position, PieceTiles, Orientation};
+use crate::pieces::piece::{PieceType, Position, PieceTiles};
 
 /* This is the I piece */
 /* This piece position is fixed on the center right (Default Orientation) */

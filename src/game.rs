@@ -1,4 +1,4 @@
-use crate::pieces::piece::{Piece, Rotation, PieceTiles, Movement, Position};
+use crate::pieces::piece::{Piece, Rotation, Movement, Position};
 use crate::pieces::piece::PieceType;
 use crate::pieces::piece_factory::PieceFactory;
 use crate::board::{Board, BOARD_HEIGHT, BOARD_WIDTH};
@@ -23,7 +23,7 @@ impl Game {
      */
 
     pub fn new_default() -> Game {
-        let mut game = Game {
+        let game = Game {
             board: Board::new(),
             current_piece: PieceFactory::new(STARTING_POSITION),
         };
