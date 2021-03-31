@@ -5,7 +5,7 @@ mod board;
 
 use view_unit::ViewUnit;
 use game::Game;
-use crate::pieces::piece::{Piece, Position, Movement};
+use crate::pieces::piece::{Piece, Position, Movement, Rotation};
 use crate::pieces::orange_ricky::OrangeRicky;
 use std::thread;
 use std::time::{Duration, Instant};
@@ -33,6 +33,8 @@ fn main() {
                     'd' => game.move_piece(Movement::Right),
                     'a' => game.move_piece(Movement::Left),
                     's' => game.move_piece(Movement::Down),
+                    'e' => game.rotate_piece(Rotation::Right),
+                    'q' => game.rotate_piece(Rotation::Left),
                     _ => (),
                 }
             }

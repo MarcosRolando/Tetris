@@ -38,7 +38,7 @@ impl Board {
         for row in board.iter().rev().skip(4) {
             for tile in row {
                 match tile {
-                    TileState::Free => print!(" - "),
+                    TileState::Free => print!("   "),
                     TileState::Taken => print!(" + "),
                 }
             }
@@ -71,22 +71,21 @@ impl Board {
             let mut found_a_taken_tile = false;
             lines_to_remove += 1; //We assume the current row/line is fully taken
             for tile in row {
+                if *tile == TileState::Free {
+                    empty_line_tiles += 1;
+                } else {
+                    found_a_taken_tile = true;
+                }
                 if found_a_taken_tile && (empty_line_tiles > 0) {
                     lines_to_remove -= 1; //If it turns out it's not then we cancel the operation
                     break;
-                } else {
-                    if *tile == TileState::Free {
-                        empty_line_tiles += 1;
-                    } else {
-                        found_a_taken_tile = true;
-                    }
                 }
             }
             if empty_line_tiles == BOARD_WIDTH {
                 return;
             }
             if ( (lines_to_remove > 0) && (empty_line_tiles > 0) ) || (lines_to_remove == 4) ||
-                ( (lines_to_remove > 0) && (row_number == BOARD_HEIGHT - 1) ) {
+                ( (lines_to_remove > 0) && (row_number == BOARD_CEILING) ) {
                 return self._remove_lines(row_number - lines_to_remove, lines_to_remove);
             }
             row_number += 1;
