@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use crate::board::BOARD_WIDTH;
+use crate::board::{BOARD_WIDTH, BOARD_BASE};
 
 #[derive(Copy, Clone, PartialEq)]
 pub struct Position {
@@ -142,21 +142,31 @@ impl<T: PieceType + ?Sized> Piece<T> {
 
     /*Updates the piece position */
     pub fn move_to(&mut self, movement: Movement) { //todo cambiar esto, en realidad depende de la pieza y de la orientacion
+        let positions = self.piece_type.get_positions(self.orientation, &self.position);
         match movement {
             Movement::Right => {
-                if self.position.column < (BOARD_WIDTH - 1) {
-                    self.position.column += 1
+                for p in &positions {
+                    if p.column >= (BOARD_WIDTH - 1) {
+                        return;
+                    }
                 }
+                self.position.column += 1
             },
             Movement::Left => {
-                if self.position.column > 0 {
-                    self.position.column -= 1
+                for p in &positions {
+                    if p.column <= 0 {
+                        return;
+                    }
                 }
+                self.position.column -= 1
             },
             Movement::Down => {
-                if self.position.row > 0 {
-                    self.position.row -= 1
+                for p in &positions {
+                    if p.row < BOARD_BASE {
+                        return;
+                    }
                 }
+                self.position.row -= 1
             },
         }
     }
