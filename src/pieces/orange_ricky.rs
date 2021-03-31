@@ -1,5 +1,4 @@
 use crate::pieces::piece::{PieceType, Position, PieceTiles, Orientation};
-use crate::game::{Board, TileState};
 
 /* This is the L piece */
 /* This piece position is fixed on the upper center (Default Orientation) */

@@ -1,5 +1,4 @@
 use crate::pieces::piece::{PieceType, Position, PieceTiles};
-use crate::game::{Board, TileState};
 
 /* This is the inverted Z piece */
 /* This piece position is fixed on the upper center corner (Default Orientation) */

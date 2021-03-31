@@ -1,5 +1,4 @@
 use crate::pieces::piece::{PieceType, Position, PieceTiles};
-use crate::game::{Board, TileState};
 
 /* This is the square piece */
 /* This piece position is fixed on the lower left corner on the Default Orientation */

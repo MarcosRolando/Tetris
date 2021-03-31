@@ -1,5 +1,5 @@
-use crate::game::{Board, BOARD_WIDTH};
 use std::collections::HashMap;
+use crate::board::BOARD_WIDTH;
 
 #[derive(Copy, Clone, PartialEq)]
 pub struct Position {

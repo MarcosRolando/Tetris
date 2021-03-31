@@ -1,6 +1,7 @@
 mod view_unit;
 mod pieces;
 mod game;
+mod board;
 
 use view_unit::ViewUnit;
 use game::Game;
