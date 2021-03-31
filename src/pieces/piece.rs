@@ -141,7 +141,7 @@ impl<T: PieceType + ?Sized> Piece<T> {
     }
 
     /*Updates the piece position */
-    pub fn move_to(&mut self, movement: Movement) {
+    pub fn move_to(&mut self, movement: Movement) { //todo cambiar esto, en realidad depende de la pieza y de la orientacion
         match movement {
             Movement::Right => {
                 if self.position.column < (BOARD_WIDTH - 1) {

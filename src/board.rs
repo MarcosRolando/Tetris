@@ -35,7 +35,7 @@ impl Board {
         for position in positions {
             board[position.row][position.column] = TileState::Taken;
         }
-        for row in board.iter().rev() {
+        for row in board.iter().rev().skip(4) {
             for tile in row {
                 match tile {
                     TileState::Free => print!(" - "),
@@ -49,7 +49,11 @@ impl Board {
     /* Removes the completed lines and updates the player score */
     pub fn update_board(&mut self, positions: &PieceTiles) {
         for position in positions {
-            self.board[position.row + 1][position.column] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
+            if position.row + 1 <= BOARD_CEILING {
+                self.board[position.row + 1][position.column] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
+            } else {
+                panic!("You lost!"); //todo properly end the game
+            }
         }
         self._check_for_lines_removal();
     }

@@ -3,7 +3,7 @@ use crate::pieces::piece::PieceType;
 use crate::pieces::piece_factory::PieceFactory;
 use crate::board::{Board, BOARD_HEIGHT, BOARD_WIDTH};
 
-const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT / 2, column: BOARD_WIDTH / 2}; //todo ver bien el tema del spawn
+const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT - 3, column: BOARD_WIDTH / 2}; //todo ver bien el tema del spawn
 
 
 #[derive(Clone, Copy, PartialEq)]
