@@ -50,7 +50,6 @@ fn main() {
         game.print();
         now = Instant::now();
         update_duration = (now - start).as_millis();
-        //eprintln!("{}", update_duration);
         start = Instant::now();
         if update_duration <= FRAME_TIME {
             thread::sleep(Duration::from_millis((FRAME_TIME - update_duration) as u64));

@@ -130,7 +130,6 @@ impl<T: PieceType + ?Sized> Piece<T> {
     just update the time elapsed */
     pub fn try_to_descend(&mut self, delta_t: f32) {
         self.elapsed_time += delta_t;
-        eprintln!("{}", delta_t);
         if self.elapsed_time >= self.descent_time {
             self.elapsed_time -= self.descent_time;
             self.move_to(Movement::Down);
@@ -138,7 +137,7 @@ impl<T: PieceType + ?Sized> Piece<T> {
     }
 
     /*Updates the piece position */
-    pub fn move_to(&mut self, movement: Movement) { //todo cambiar esto, en realidad depende de la pieza y de la orientacion
+    pub fn move_to(&mut self, movement: Movement) {
         let positions = self.piece_type.get_positions(self.orientation, &self.position);
         match movement {
             Movement::Right => {
