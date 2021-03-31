@@ -30,7 +30,7 @@ impl Board {
     }
 
     pub fn print(&self, positions: &PieceTiles) {
-        print!("\x1B[2J\x1B[1;1H"); //clears the screen
+        print!("\x1B[2J\x1B[1;1H\r"); //clears the screen
         let mut board = self.board;
         for position in positions {
             board[position.row][position.column] = TileState::Taken;
@@ -40,9 +40,10 @@ impl Board {
                 match tile {
                     TileState::Free => print!("   "),
                     TileState::Taken => print!(" + "),
+                    _ => (),
                 }
             }
-            print!("\n");
+            print!("\n\r");
         }
     }
 

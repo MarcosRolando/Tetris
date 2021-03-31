@@ -13,6 +13,7 @@ use std::sync::mpsc::{Receiver, TryRecvError};
 use std::sync::mpsc;
 use std::io::Read;
 use std::process::Command;
+use raw_tty::IntoRawMode;
 
 fn main() {
 /*
@@ -35,6 +36,7 @@ fn main() {
                     's' => game.move_piece(Movement::Down),
                     'e' => game.rotate_piece(Rotation::Right),
                     'q' => game.rotate_piece(Rotation::Left),
+                    'f' => break,
                     _ => (),
                 }
             }
@@ -51,7 +53,7 @@ fn spawn_stdin_channel() -> Receiver<u8> {
     let (sender, receiver) = mpsc::channel::<u8>();
     thread::spawn(move || loop {
         let mut buffer = vec![0;1];
-        std::io::stdin().read(&mut buffer).unwrap();
+        std::io::stdin().into_raw_mode().unwrap().read(&mut buffer).unwrap();
         sender.send(buffer[0]).unwrap();
     });
     receiver
