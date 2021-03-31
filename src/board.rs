@@ -68,19 +68,7 @@ impl Board {
         let mut lines_to_remove = 0;
         for row in self.board.iter().skip(1) { //This way we skip the BASE
             let mut empty_line_tiles = 0; //If we find a fully empty line then we are done checking
-            let mut found_a_taken_tile = false;
-            lines_to_remove += 1; //We assume the current row/line is fully taken
-            for tile in row {
-                if *tile == TileState::Free {
-                    empty_line_tiles += 1;
-                } else {
-                    found_a_taken_tile = true;
-                }
-                if found_a_taken_tile && (empty_line_tiles > 0) {
-                    lines_to_remove -= 1; //If it turns out it's not then we cancel the operation
-                    break;
-                }
-            }
+            self._process_line(row, &mut lines_to_remove, &mut empty_line_tiles);
             if empty_line_tiles == BOARD_WIDTH {
                 return;
             }
@@ -89,6 +77,23 @@ impl Board {
                 return self._remove_lines(row_number - lines_to_remove, lines_to_remove);
             }
             row_number += 1;
+        }
+    }
+
+    fn _process_line(&self, row: &[TileState; 10], lines_to_remove: &mut usize,
+                     empty_line_tiles: &mut usize) {
+        let mut found_a_taken_tile = false;
+        *lines_to_remove += 1; //We assume the current row/line is fully taken
+        for tile in row {
+            if *tile == TileState::Free {
+                *empty_line_tiles += 1;
+            } else {
+                found_a_taken_tile = true;
+            }
+            if found_a_taken_tile && (*empty_line_tiles > 0) {
+                *lines_to_remove -= 1; //If it turns out it's not then we cancel the operation
+                break;
+            }
         }
     }
 
