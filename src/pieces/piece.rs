@@ -1,14 +1,17 @@
-use crate::board::{BOARD_WIDTH, BOARD_BASE};
 
+/*The only reason this is generic and not isize is because I need to cast it to and isize based
+type to be able to access the board array, and casting Position to Position<usize> is
+the most natural and convenient way
+ */
 #[derive(Copy, Clone, PartialEq)]
-pub struct Position {
-    pub row: isize,
-    pub column: isize,
+pub struct Position<T=isize> {
+    pub row: T,
+    pub column: T,
 }
 
-impl From<Position> for (usize, usize) {
+impl From<Position<isize>> for Position<usize> {
     fn from(position: Position) -> Self {
-        (position.row as usize, position.column as usize)
+        Position {row:position.row as usize, column: position.column as usize}
     }
 }
 

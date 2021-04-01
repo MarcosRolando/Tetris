@@ -28,8 +28,8 @@ impl Board {
         print!("\x1B[2J\x1B[1;1H\r"); //clears the screen
         let mut board = self.board;
         for position in positions {
-            let p : (usize, usize) = From::from(*position);
-            board[p.0][p.1] = TileState::Taken;
+            let p: Position<usize> = From::from(*position);
+            board[p.row][p.column] = TileState::Taken;
         }
         for row in board.iter().rev().skip(4) {
             for tile in row {
@@ -46,9 +46,9 @@ impl Board {
     pub fn update_board(&mut self, positions: &PieceTiles) -> bool {
         return if self._check_collision(positions) {
             for position in positions {
-                let p : (usize, usize) = From::from(*position);
-                if (p.0 + 1) <= BOARD_CEILING {
-                    self.board[p.0 + 1][p.1] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
+                let p: Position<usize> = From::from(*position);
+                if (p.row + 1) <= BOARD_CEILING {
+                    self.board[p.row + 1][p.column] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
                 } else {
                     panic!("You lost!"); //todo properly end the game
                 }
@@ -61,11 +61,11 @@ impl Board {
     }
 
     pub fn positions_are_valid(&self, positions: &PieceTiles) -> bool {
-        for position in positions {
-            let p : (usize, usize) = From::from(*position);
-            if (p.0 < BOARD_BASE) || (p.0 > BOARD_CEILING) || (p.1 > (BOARD_WIDTH - 1)) {
+        for p in positions {
+            if (p.row < BOARD_BASE as isize) || (p.row > BOARD_CEILING as isize) || (p.column < 0) ||
+                (p.column > (BOARD_WIDTH as isize - 1)) {
                 return false;
-            } else if self.board[p.0][p.1] == TileState::Taken {
+            } else if self.board[p.row as usize][p.column as usize] == TileState::Taken {
                 return false;
             }
         }
@@ -130,7 +130,7 @@ impl Board {
 
     /* Returns true if the tile is taken, false otherwise */
     fn _is_tile_taken(&self, position: &Position) -> bool {
-        let p : (usize, usize) = From::from(*position);
-        self.board[p.0][p.1] == TileState::Taken
+        let p: Position<usize> = From::from(*position);
+        self.board[p.row][p.column] == TileState::Taken
     }
 }
