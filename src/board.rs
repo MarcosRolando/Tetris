@@ -24,11 +24,6 @@ impl Board {
         b
     }
 
-    /* Returns true if the tile is taken, false otherwise */
-    pub fn is_tile_taken(&self, position: &Position) -> bool {
-        self.board[position.row][position.column] == TileState::Taken
-    }
-
     pub fn print(&self, positions: &PieceTiles) {
         print!("\x1B[2J\x1B[1;1H\r"); //clears the screen
         let mut board = self.board;
@@ -46,23 +41,38 @@ impl Board {
         }
     }
 
-    /* Removes the completed lines and updates the player score */
-    pub fn update_board(&mut self, positions: &PieceTiles) {
-        for position in positions {
-            if position.row + 1 <= BOARD_CEILING {
-                self.board[position.row + 1][position.column] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
-            } else {
-                panic!("You lost!"); //todo properly end the game
+    /* Removes the completed lines, returns true if the the current piece collided, false otherwise */
+    pub fn update_board(&mut self, positions: &PieceTiles) -> bool {
+        return if self._check_collision(positions) {
+            for position in positions {
+                if (position.row + 1) <= BOARD_CEILING {
+                    self.board[position.row + 1][position.column] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
+                } else {
+                    panic!("You lost!"); //todo properly end the game
+                }
+            }
+            self._check_for_lines_removal();
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn positions_are_valid(&self, positions: &PieceTiles) -> bool {
+        for p in positions {
+            if (p.row < BOARD_BASE) || (p.row > BOARD_CEILING) || (p.column > (BOARD_WIDTH - 1)) {
+                return false;
+            } else if self.board[p.row][p.column] == TileState::Taken {
+                return false;
             }
         }
-        self._check_for_lines_removal();
+        true
     }
 
     /*
     PRIVATE
      */
 
-    //todo Refactor
     fn _check_for_lines_removal(&mut self) {
         let mut row_number = BOARD_BASE;
         let mut lines_to_remove = 0;
@@ -104,4 +114,19 @@ impl Board {
         }
     }
 
+    /* Checks if the piece has collided with the board and if so, sets the tiles as taken
+        If there was a collision then it return true, otherwise returns false */
+    fn _check_collision(&self, positions: &PieceTiles) -> bool {
+        for position in positions {
+            if self._is_tile_taken(position) {
+                return true;
+            }
+        }
+        false
+    }
+
+    /* Returns true if the tile is taken, false otherwise */
+    fn _is_tile_taken(&self, position: &Position) -> bool {
+        self.board[position.row][position.column] == TileState::Taken
+    }
 }

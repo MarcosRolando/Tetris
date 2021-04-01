@@ -20,11 +20,34 @@ pub enum Rotation {
     Left,
 }
 
+impl Rotation {
+    /* Returns the opposite rotation */
+    pub fn get_opposite(r: Self) -> Self {
+        match r {
+            Self::Right => Self::Left,
+            Self::Left => Self::Right,
+        }
+    }
+}
+
 #[derive(Copy, Clone, PartialEq)]
 pub enum Movement {
     Right,
     Left,
     Down,
+    Up,
+}
+
+impl Movement {
+    /* Returns the opposite movement */
+    pub fn get_opposite(m: Self) -> Self {
+        match m {
+            Self::Right => Self::Left,
+            Self::Left => Self::Right,
+            Self::Down => Self::Up,
+            Self::Up => Self::Down, //Though this case should never occur under normal Tetris rules!
+        }
+    }
 }
 
 impl Orientation {
@@ -136,34 +159,13 @@ impl<T: PieceType + ?Sized> Piece<T> {
         }
     }
 
-    /*Updates the piece position */
+    /* Moves the piece according to the given movement */
     pub fn move_to(&mut self, movement: Movement) {
-        let positions = self.piece_type.get_positions(self.orientation, &self.position);
         match movement {
-            Movement::Right => {
-                for p in &positions {
-                    if p.column >= (BOARD_WIDTH - 1) {
-                        return;
-                    }
-                }
-                self.position.column += 1
-            },
-            Movement::Left => {
-                for p in &positions {
-                    if p.column <= 0 {
-                        return;
-                    }
-                }
-                self.position.column -= 1
-            },
-            Movement::Down => {
-                for p in &positions {
-                    if p.row < BOARD_BASE {
-                        return;
-                    }
-                }
-                self.position.row -= 1
-            },
+            Movement::Right => self.position.column += 1,
+            Movement::Left => self.position.column -= 1,
+            Movement::Down => self.position.row -= 1,
+            Movement::Up => self.position.row += 1, //Though this case should never occur under normal Tetris rules!
         }
     }
 }
