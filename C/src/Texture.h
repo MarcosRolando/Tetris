@@ -10,6 +10,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include "Vector.h"
 
 #define TEXTURE_IMAGE_LOADING_ERROR 1
 #define TEXTURE_CREATION_ERROR 2
@@ -33,7 +34,7 @@ typedef struct Texture {
     int xOffset;
     int yOffset;
     int defaultScale;
-    std::vector<SDL_Rect> gSpriteClips; /*Sprites de la textura*/ //todo implementar esto en C
+    Vector_t/*<SDL_Rect>*/ g_sprite_clips; /*Sprites de la textura*/
 } Texture_t;
 
 void texture_init(Texture_t* this, SDL_Renderer* renderer);
@@ -41,8 +42,8 @@ void texture_init(Texture_t* this, SDL_Renderer* renderer);
 /*Carga la imagen de path, ignorando el color recibido en key. Opcionalmente
 * se le puede setear un offset de renderizacion y una escala distinta a la
 * imagen*/
-void texture_load_from_file(Texture_t* this, const char* path, ColorKey_t key = {-1, -1, -1}, int xOff = 0,
-                            int yOff = 0, int scale = 1);
+int texture_load_from_file(Texture_t* this, const char* path, ColorKey_t key, int xOff,
+                            int yOff, int scale);
 
 /*Especifica una dimension (un clip) que representa un sprite de la textura*/
 void texture_add_sprite(Texture_t* this, int x, int y, int width, int height);
@@ -51,9 +52,9 @@ void texture_add_sprite(Texture_t* this, int x, int y, int width, int height);
 void texture_render(const Texture_t* this, int x, int y, int spritePosition, double angle, int scale);
 
 /*Retorna las dimensiones del sprite de la textura*/
-SpriteDimensions_t texture_get_sprite_dimesions(const Texture_t* this, int spritePosition = 0);
+SpriteDimensions_t texture_get_sprite_dimesions(const Texture_t* this, int spritePosition);
 
 /*Crea una textura en base al texto recibido*/
-void texture_load_from_rendered_text(Texture_t* this, const char* text, SDL_Color textColor, TTF_Font* font);
+//void texture_load_from_rendered_text(Texture_t* this, const char* text, SDL_Color textColor, TTF_Font* font);
 
 #endif //TETRIS_TEXTURE_H

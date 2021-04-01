@@ -29,10 +29,12 @@ void texture_init(Texture_t* this, SDL_Renderer* renderer) {
     this->xOffset = 0;
     this->yOffset = 0;
     this->defaultScale = 1;
+    vector_init(&this->g_sprite_clips, sizeof(SDL_Rect), 8);
 }
 
 void texture_release(Texture_t* this) {
     _free(this);
+    vector_release(&this->g_sprite_clips);
 }
 
 int texture_load_from_file(Texture_t* this, const char* path, ColorKey_t key, int xOff, int yOff, int scale) {
@@ -40,9 +42,9 @@ int texture_load_from_file(Texture_t* this, const char* path, ColorKey_t key, in
     _free(this);
 
     //cargo la imagen de path
-    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+    SDL_Surface* loadedSurface = IMG_Load(path);
     if (loadedSurface == NULL) {
-        fprintf(stderr, "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+        fprintf(stderr, "Unable to load image %s! SDL_image Error: %s\n", path, IMG_GetError());
         return TEXTURE_IMAGE_LOADING_ERROR;
     } else {
         if (key.red > -1 && key.green > -1 && key.blue > -1) {
@@ -56,7 +58,7 @@ int texture_load_from_file(Texture_t* this, const char* path, ColorKey_t key, in
         if (this->mTexture == NULL) {
             //Si falla libero la superficie
             SDL_FreeSurface(loadedSurface);
-            fprintf(stderr, "Unable to create texture from %s! Graphics Error: %s\n", path.c_str(), SDL_GetError());
+            fprintf(stderr, "Unable to create texture from %s! Graphics Error: %s\n", path, SDL_GetError());
             return TEXTURE_CREATION_ERROR;
         } else {
             this->mWidth = loadedSurface->w;
@@ -70,11 +72,12 @@ int texture_load_from_file(Texture_t* this, const char* path, ColorKey_t key, in
     this->xOffset = xOff;
     this->yOffset = yOff;
     this->defaultScale = scale;
+    return 0;
 }
 
 void texture_render(const Texture_t* this, int x, int y, int spritePosition, double angle, int scale) {
     SDL_Rect renderQuad = {x + this->xOffset, y + this->yOffset, this->mWidth, this->mHeight};
-    SDL_Rect clip = gSpriteClips.at(spritePosition); //todo ver de implementar esto en C
+    SDL_Rect clip = *(SDL_Rect*)vector_at(&this->g_sprite_clips, spritePosition);
 
     //Setea las dimensiones del rectangulo a renderizar
     renderQuad.w = clip.w*scale;
@@ -86,10 +89,12 @@ void texture_render(const Texture_t* this, int x, int y, int spritePosition, dou
 
 void texture_add_sprite(Texture_t* this, int x, int y, int width, int height) {
     //gSpriteClips.push_back({x, y, width, height}); //todo ver como implementar esto en C
+    SDL_Rect sprite = {x, y, width, height};
+    vector_push_back(&this->g_sprite_clips, (void*)&sprite);
 }
 
 SpriteDimensions_t texture_get_sprite_dimesions(const Texture_t* this, int spritePosition) {
-    SDL_Rect spriteDimensions = gSpriteClips.at(spritePosition); //todo ver como implementar esto en C
+    SDL_Rect spriteDimensions = *(SDL_Rect*)vector_at(&this->g_sprite_clips, spritePosition);
     SpriteDimensions_t dimensions = {spriteDimensions.w, spriteDimensions.h};
     return dimensions;
 }
