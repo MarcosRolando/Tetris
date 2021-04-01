@@ -72,8 +72,6 @@ int texture_load_from_file(Texture_t* this, const char* path, ColorKey_t key, in
     this->defaultScale = scale;
 }
 
-
-
 void texture_render(const Texture_t* this, int x, int y, int spritePosition, double angle, int scale) {
     SDL_Rect renderQuad = {x + this->xOffset, y + this->yOffset, this->mWidth, this->mHeight};
     SDL_Rect clip = gSpriteClips.at(spritePosition); //todo ver de implementar esto en C
