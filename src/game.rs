@@ -3,7 +3,8 @@ use crate::pieces::piece::PieceType;
 use crate::pieces::piece_factory::PieceFactory;
 use crate::board::{Board, BOARD_HEIGHT, BOARD_WIDTH, BOARD_BASE, BOARD_CEILING};
 
-const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT - 3, column: BOARD_WIDTH / 2}; //todo ver bien el tema del spawn
+const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT as isize - 3,
+                                            column: BOARD_WIDTH as isize / 2}; //todo ver bien el tema del spawn
 
 
 #[derive(Clone, Copy, PartialEq)]
@@ -40,13 +41,10 @@ impl Game {
 
     /* Moves the piece based on the Movement given */
     pub fn move_piece(&mut self, movement: Movement) {
-
-        /*
         self.current_piece.move_to(movement);
         if !self.board.positions_are_valid(&self.current_piece.get_positions()) {
             self.current_piece.move_to(Movement::get_opposite(movement));
         }
-        */
     }
 
     /* Rotates the piece based on the Rotation given */

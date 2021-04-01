@@ -2,8 +2,14 @@ use crate::board::{BOARD_WIDTH, BOARD_BASE};
 
 #[derive(Copy, Clone, PartialEq)]
 pub struct Position {
-    pub row: usize,
-    pub column: usize,
+    pub row: isize,
+    pub column: isize,
+}
+
+impl From<Position> for (usize, usize) {
+    fn from(position: Position) -> Self {
+        (position.row as usize, position.column as usize)
+    }
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, Hash, Debug)]
