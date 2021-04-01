@@ -93,7 +93,6 @@ int viewer_init(Viewer_t* this) {
 }
 
 void viewer_render_frame(const Viewer_t* this) {
-    //printf("Hello, Tetris!\n");
     window_clear(&this->window);
     window_show(&this->window);
 }

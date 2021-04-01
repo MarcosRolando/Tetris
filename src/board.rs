@@ -62,7 +62,7 @@ impl Board {
 
     pub fn positions_are_valid(&self, positions: &PieceTiles) -> bool {
         for p in positions {
-            if (p.row < BOARD_BASE as isize) || (p.row > BOARD_CEILING as isize) || (p.column < 0) ||
+            if (p.row < BOARD_BASE as isize) || (p.row > (BOARD_HEIGHT - 1) as isize) || (p.column < 0) ||
                 (p.column > (BOARD_WIDTH as isize - 1)) {
                 return false;
             } else if self.board[p.row as usize][p.column as usize] == TileState::Taken {
