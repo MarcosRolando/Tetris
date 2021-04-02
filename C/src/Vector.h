@@ -19,7 +19,8 @@ typedef struct Vector {
 
 int vector_init(Vector_t* this, uint32_t element_size, uint32_t capacity);
 
-void vector_push_back(Vector_t* this, const void* element);
+/* Adds a new element to the vector, "moving" the element given */
+void vector_push_back(Vector_t* this, void* element);
 
 const void* vector_at(const Vector_t* this, uint32_t position);
 

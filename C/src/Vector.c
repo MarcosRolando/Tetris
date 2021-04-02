@@ -37,13 +37,14 @@ int vector_init(Vector_t* this, uint32_t element_size, uint32_t capacity) {
     return 0;
 }
 
-void vector_push_back(Vector_t* this, const void* element) {
+void vector_push_back(Vector_t* this, void* element) {
     if (this->curr_elements == this->capacity) {
         _resize(this);
     }
     void* new_element = (void*)malloc(this->element_size);
     CHECK_ALLOC_RESULT(new_element, "Could not allocate memory for a new element in a Vector!\n")
     memcpy(new_element, element, this->element_size);
+    memset(element, 0, this->element_size); //We "moved" the element provided to our vector
     this->data[this->curr_elements] = new_element;
     this->curr_elements++;
 }

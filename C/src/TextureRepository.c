@@ -22,6 +22,7 @@ static int _load_tiles(TextureRepository_t* this, const char* image_path) {
         }
     }
     textureDictionary_add(&this->textures, TILES, &tile_texture);
+    texture_release(&tile_texture);
     return 0;
 }
 

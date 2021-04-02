@@ -45,7 +45,7 @@ void textureDictionary_init(TextureDictionary_t* this) {
     memset(this->buckets, 0, sizeof(Node_t*)*DICT_SIZE);
 }
 
-void textureDictionary_add(TextureDictionary_t* this, TextureID key, const Texture_t* value) {
+void textureDictionary_add(TextureDictionary_t* this, TextureID key, Texture_t* value) {
     uint32_t i = _hash_value(key); //the bucket number this key hashes to
     Node_t* node = this->buckets[i];
     if (node) {
@@ -65,6 +65,7 @@ void textureDictionary_add(TextureDictionary_t* this, TextureID key, const Textu
         _node_init(new_node, key, NULL, value);
         this->buckets[i] = new_node;
     }
+    memset(value, 0, sizeof(Texture_t)); //We "moved" the values of the texture passed to the function into our dictionary!
 }
 
 /* Returns NULL if the key is not present in the dictionary */

@@ -18,8 +18,9 @@ typedef struct TextureDictionary {
 
 void textureDictionary_init(TextureDictionary_t* this);
 
-/* Adds a value for the given key. If the key already exists then it replaces the old value with the value given */
-void textureDictionary_add(TextureDictionary_t* this, TextureID key, const Texture_t* value);
+/* Adds a value for the given key. If the key already exists then it replaces the old value with the value given
+ * Note that this method "moves" the texture received to the dictionary */
+void textureDictionary_add(TextureDictionary_t* this, TextureID key, Texture_t* value);
 
 /* Returns NULL if the key is not present in the dictionary */
 const Texture_t* textureDictionary_at(const TextureDictionary_t* this, TextureID key);
