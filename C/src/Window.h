@@ -38,6 +38,9 @@ void window_show(const Window_t* this);
 /* Handles window's events, i.e. resizing or minimizing */
 bool window_handle_event(Window_t* this, SDL_Event* e);
 
+/* Returns the window's renderer */
+SDL_Renderer* window_get_renderer(const Window_t* this);
+
 /* Destructor */
 void window_release(Window_t* this);
 

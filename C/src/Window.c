@@ -116,6 +116,11 @@ bool window_handle_event(Window_t* this, SDL_Event* e) {
     return handled;
 }
 
+SDL_Renderer* window_get_renderer(const Window_t* this) {
+    return this->renderer;
+}
+
+
 void window_release(Window_t* this) {
     if (this->renderer != NULL) SDL_DestroyRenderer(this->renderer);
     if (this->window != NULL) SDL_DestroyWindow(this->window);

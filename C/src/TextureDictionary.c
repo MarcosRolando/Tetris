@@ -32,7 +32,7 @@ static void _node_release(Node_t* this) {
 
 
 /* Calculates the hash for a given key. Being that the keys are enum then the optimal hashing function (that is,
- * the one that produces the least amount of collisions) if f(x) = x % DICT_SIZE, so that is the one being used */
+ * the one that produces the least amount of collisions) is f(x) = x % DICT_SIZE, so that is the one being used */
 static uint32_t _hash_value(TextureID key) {
     return (uint32_t)key % DICT_SIZE;
 }
@@ -70,9 +70,8 @@ void textureDictionary_add(TextureDictionary_t* this, TextureID key, const Textu
 /* Returns NULL if the key is not present in the dictionary */
 const Texture_t* textureDictionary_at(const TextureDictionary_t* this, TextureID key) {
     uint32_t i = _hash_value(key); //the bucket number this key hashes to
-    Node_t* node = this->buckets[i];
-    if (!node) return NULL;
-    for (;node != NULL && node->key != key; node = node->next);
+    Node_t* node;
+    for (node = this->buckets[i]; node != NULL && node->key != key; node = node->next);
     if (!node) return NULL;
     return &node->texture;
 }

@@ -87,17 +87,16 @@ static void _close_SDL(Viewer_t* this) {
 int viewer_init(Viewer_t* this) {
     int s = _initialize_SDL(this);
     if (s) return s;
-    s = window_init(&this->window);
+    s = GUI_init(&this->gui);
     if (s) _close_SDL(this);
     return s;
 }
 
 void viewer_render_frame(const Viewer_t* this) {
-    window_clear(&this->window);
-    window_show(&this->window);
+    GUI_render(&this->gui);
 }
 
 void viewer_release(Viewer_t* this) {
-    window_release(&this->window);
+    GUI_release(&this->gui);
     _close_SDL(this);
 }

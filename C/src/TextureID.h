@@ -6,9 +6,7 @@
 #define TETRIS_TEXTUREID_H
 
 typedef enum TextureID {
-    A,
-    B,
-    C //todo poner los valores reales de las texturas
+    TILES,
 } TextureID;
 
 #endif //TETRIS_TEXTUREID_H

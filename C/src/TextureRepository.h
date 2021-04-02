@@ -13,7 +13,7 @@ typedef struct TextureRepository {
     SDL_Renderer* renderer;
 } TextureRepository_t;
 
-void textureRepository_init(TextureRepository_t* this, SDL_Renderer* renderer);
+int textureRepository_init(TextureRepository_t* this, SDL_Renderer* renderer);
 
 const Texture_t* textureRepository_get_texture(const TextureRepository_t* this, TextureID texture_key);
 

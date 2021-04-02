@@ -10,10 +10,10 @@
 #define SDL_MIXER_ERROR 3
 #define SDL_TTF_ERROR 4
 
-#include "Window.h"
+#include "GUI.h"
 
 typedef struct Viewer {
-    Window_t window;
+    GUI_t gui;
 } Viewer_t;
 
 /*

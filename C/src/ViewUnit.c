@@ -26,5 +26,6 @@ void viewUnit_render(const ViewUnit_t* this) {
 }
 
 void viewUnit_release(ViewUnit_t* this) {
+    viewer_release(this->viewer);
     free(this->viewer);
 }

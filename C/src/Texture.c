@@ -77,14 +77,18 @@ int texture_load_from_file(Texture_t* this, const char* path, ColorKey_t key, in
 
 void texture_render(const Texture_t* this, int x, int y, int spritePosition, double angle, int scale) {
     SDL_Rect renderQuad = {x + this->xOffset, y + this->yOffset, this->mWidth, this->mHeight};
-    SDL_Rect clip = *(SDL_Rect*)vector_at(&this->g_sprite_clips, spritePosition);
+    SDL_Rect* clip = (SDL_Rect*)vector_at(&this->g_sprite_clips, spritePosition);
+    if (!clip) {
+        fprintf(stderr, "Tried to render an inexistent sprite!\n");
+        return;
+    }
 
     //Setea las dimensiones del rectangulo a renderizar
-    renderQuad.w = clip.w*scale;
-    renderQuad.h = clip.h*scale;
+    renderQuad.w = clip->w*scale;
+    renderQuad.h = clip->h*scale;
 
     //Renderiza
-    SDL_RenderCopyEx(this->renderer, this->mTexture, &clip, &renderQuad, angle,NULL, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(this->renderer, this->mTexture, clip, &renderQuad, angle,NULL, SDL_FLIP_NONE);
 }
 
 void texture_add_sprite(Texture_t* this, int x, int y, int width, int height) {

@@ -4,34 +4,35 @@
 
 #include "TextureRepository.h"
 
-#define TILES_PATH "../assets/tiles.png"
+#define TILES_PATH "/home/marcosrolando/CLionProjects/Tetris/C/assets/tiles.png"
 
 /*
  * PRIVATE
  */
 
-static void _load_tiles(TextureRepository_t* this, const char* image_path) {
+static int _load_tiles(TextureRepository_t* this, const char* image_path) {
     Texture_t tile_texture;
     texture_init(&tile_texture, this->renderer);
     ColorKey_t color_key = {-1, -1, -1};
-    if (texture_load_from_file(&tile_texture, image_path, color_key, 0, 0, 1)) {
-        exit(-1);
-    }
+    int s = texture_load_from_file(&tile_texture, image_path, color_key, 0, 0, 1);
+    if (s) return s;
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 4; j++) {
-            texture_add_sprite(&tile_texture, i*8, j*8, 8, 8); //todo ver si las dimensiones estan bien
+            texture_add_sprite(&tile_texture, j*8, i*8, 8, 8); //todo ver si las dimensiones estan bien
         }
     }
+    textureDictionary_add(&this->textures, TILES, &tile_texture);
+    return 0;
 }
 
 /*
  * PUBLIC
  */
 
-void textureRepository_init(TextureRepository_t* this, SDL_Renderer* renderer) {
+int textureRepository_init(TextureRepository_t* this, SDL_Renderer* renderer) {
     textureDictionary_init(&this->textures);
     this->renderer = renderer;
-    _load_tiles(this, TILES_PATH);
+    return _load_tiles(this, TILES_PATH);
     //todo cargar las otras cosas
 }
 

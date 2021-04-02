@@ -14,14 +14,14 @@ use std::io::Read;
 use raw_tty::IntoRawMode;
 
 fn main() {
-/*
     unsafe {
-        let mut view_unit = ViewUnit {viewer: std::ptr::null_mut()};
+        let mut view_unit = ViewUnit { viewer: std::ptr::null_mut() };
         view_unit::viewUnit_init(&mut view_unit);
         view_unit::viewUnit_render(&view_unit);
         view_unit::viewUnit_release(&mut view_unit);
     }
- */
+}
+    /*
     let stdin_channel = spawn_stdin_channel();
     let mut game = Game::new_default();
     const FRAME_TIME: u128 = (1000 / 60) as u128;
@@ -65,3 +65,4 @@ fn spawn_stdin_channel() -> Receiver<u8> {
     });
     receiver
 }
+*/
