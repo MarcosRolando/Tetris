@@ -68,7 +68,7 @@ void textureDictionary_add(TextureDictionary_t* this, TextureID key, const Textu
 }
 
 /* Returns NULL if the key is not present in the dictionary */
-const Texture_t* textureDictionary_at(TextureDictionary_t* this, TextureID key) {
+const Texture_t* textureDictionary_at(const TextureDictionary_t* this, TextureID key) {
     uint32_t i = _hash_value(key); //the bucket number this key hashes to
     Node_t* node = this->buckets[i];
     if (!node) return NULL;

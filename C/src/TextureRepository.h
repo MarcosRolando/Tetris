@@ -15,7 +15,7 @@ typedef struct TextureRepository {
 
 void textureRepository_init(TextureRepository_t* this, SDL_Renderer* renderer);
 
-const Texture_t* textureRepository_get_texture(const TextureRepository_t* this, TextureID texture);
+const Texture_t* textureRepository_get_texture(const TextureRepository_t* this, TextureID texture_key);
 
 void textureRepository_release(TextureRepository_t* this);
 

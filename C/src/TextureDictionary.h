@@ -22,7 +22,7 @@ void textureDictionary_init(TextureDictionary_t* this);
 void textureDictionary_add(TextureDictionary_t* this, TextureID key, const Texture_t* value);
 
 /* Returns NULL if the key is not present in the dictionary */
-const Texture_t* textureDictionary_at(TextureDictionary_t* this, TextureID key);
+const Texture_t* textureDictionary_at(const TextureDictionary_t* this, TextureID key);
 
 void textureDictionary_release(TextureDictionary_t* this);
 
