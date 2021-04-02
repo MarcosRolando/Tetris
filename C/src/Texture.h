@@ -39,6 +39,8 @@ typedef struct Texture {
 
 void texture_init(Texture_t* this, SDL_Renderer* renderer);
 
+void texture_release(Texture_t* this);
+
 /*Carga la imagen de path, ignorando el color recibido en key. Opcionalmente
 * se le puede setear un offset de renderizacion y una escala distinta a la
 * imagen*/

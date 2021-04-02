@@ -6,15 +6,10 @@
 #define ARGENTUM_TEXTUREREPOSITORY_H
 
 #include "Texture.h"
-
-typedef enum TextureID {
-    A,
-    B,
-    C //todo poner los valores reales de las texturas
-} TextureID;
+#include "TextureDictionary.h"
 
 typedef struct TextureRepository {
-    TextureDictonary_t textures; /*The keys are TextureID enums and the values are Textures */
+    TextureDictionary_t textures; /*The keys are TextureID enums and the values are Textures */
     SDL_Renderer* renderer;
 } TextureRepository_t;
 
