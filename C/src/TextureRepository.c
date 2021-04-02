@@ -3,9 +3,31 @@
 //
 
 #include "TextureRepository.h"
-#include "../Client/GameConstants.h"
 
 #define PLAYER_GHOST_PATH "/var/Argentum/Assets/Images/Miscellaneous/PlayerGhost.png"
+
+/*
+ * PRIVATE
+ */
+
+/*
+ * PUBLIC
+ */
+
+void textureRepository_init(TextureRepository_t* this, SDL_Renderer* renderer) {
+
+}
+
+const Texture_t* textureRepository_get_texture(const TextureRepository_t* this, TextureID texture) {
+
+}
+
+void textureRepository_release(TextureRepository_t* this) {
+
+}
+
+
+
 
 TextureRepository::TextureRepository(SDL_Renderer& renderer) : renderer(renderer) {
     _loadClothing();

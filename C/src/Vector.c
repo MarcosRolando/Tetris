@@ -11,7 +11,7 @@
  * PRIVATE
  */
 
-void _resize(Vector_t* this) {
+static void _resize(Vector_t* this) {
     uint32_t new_capacity = this->capacity * 2;
     void** new_data = (void**)calloc(new_capacity, sizeof(void*));
     if (!new_data) {
@@ -52,7 +52,7 @@ void vector_push_back(Vector_t* this, const void* element) {
     this->curr_elements++;
 }
 
-void* vector_at(const Vector_t* this, uint32_t position) {
+const void* vector_at(const Vector_t* this, uint32_t position) {
     if (position < 0 || position >= this->curr_elements) return NULL;
     return this->data[position];
 }

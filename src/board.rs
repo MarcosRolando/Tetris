@@ -5,7 +5,7 @@ use crate::pieces::piece::{Position, PieceTiles};
 
 pub const BOARD_WIDTH: usize = 10;
 pub const BOARD_HEIGHT: usize = 25; //+1 row for the base and +4 rows for the ceiling, none of them
-//are visible to the player
+                                    //are visible to the player
 pub const BOARD_BASE: usize = 1; //first playable row
 pub const BOARD_CEILING: usize = 20; //last playable row
 

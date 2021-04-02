@@ -21,7 +21,7 @@ int vector_init(Vector_t* this, uint32_t element_size, uint32_t capacity);
 
 void vector_push_back(Vector_t* this, const void* element);
 
-void* vector_at(const Vector_t* this, uint32_t position);
+const void* vector_at(const Vector_t* this, uint32_t position);
 
 void vector_release(Vector_t* this);
 

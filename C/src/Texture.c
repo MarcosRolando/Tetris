@@ -8,7 +8,7 @@
  * PRIVATE
  */
 
-void _free(Texture_t* this) {
+static void _free(Texture_t* this) {
     if (this->mTexture != NULL) {
         SDL_DestroyTexture(this->mTexture);
         this->mTexture = NULL;
@@ -88,7 +88,6 @@ void texture_render(const Texture_t* this, int x, int y, int spritePosition, dou
 }
 
 void texture_add_sprite(Texture_t* this, int x, int y, int width, int height) {
-    //gSpriteClips.push_back({x, y, width, height}); //todo ver como implementar esto en C
     SDL_Rect sprite = {x, y, width, height};
     vector_push_back(&this->g_sprite_clips, (void*)&sprite);
 }

@@ -5,59 +5,24 @@
 #ifndef ARGENTUM_TEXTUREREPOSITORY_H
 #define ARGENTUM_TEXTUREREPOSITORY_H
 
-#include <unordered_map>
 #include "Texture.h"
-#include "TextureID.h"
 
-class TextureRepository {
-private:
-    std::unordered_map<TextureID, Texture> textures;
-    SDL_Renderer& renderer;
+typedef enum TextureID {
+    A,
+    B,
+    C //todo poner los valores reales de las texturas
+} TextureID;
 
-public:
-    explicit TextureRepository(SDL_Renderer& renderer);
-    Texture& getTexture(TextureID texture);
+typedef struct TextureRepository {
+    TextureDictonary_t textures; /*The keys are TextureID enums and the values are Textures */
+    SDL_Renderer* renderer;
+} TextureRepository_t;
 
-    /*Devuelve el mismo renderer que la window. No es ideal pero fue la mejor solucion
-     * para poder crear el texto del nivel/nombre de las entidades ya que necesitamos
-     * el renderer para text y sino tendriamos que pedirlo de screen, estando este
-     * mucho mas arriba en jerarquia y no es posible sin cambiar todo el modelo*/
-    SDL_Renderer& getRenderer() const;
+void textureRepository_init(TextureRepository_t* this, SDL_Renderer* renderer);
 
-private:
-    void _loadClothing();
-    void _loadHeads();
-    void _loadWeapons();
-    void _loadTiles();
-    void _loadStructures();
-    void _loadNPCS();
-    void _loadDrops();
-    void _loadMiscellaneous();
-    void _loadUI();
+const Texture_t* textureRepository_get_texture(const TextureRepository_t* this, TextureID texture);
 
-    void _setImage(TextureID TextureID, std::string&& image,
-                    int width, int height, int xOffset = 0, int yOffset = 0, int scale = 1
-                            , ColorKey_t key = {0, 0, 0});
-    void _setSpellImage(TextureID TextureID, std::string&& spellImage,
-                            int width, int height, int xOffset = 0, int yOffset = 0);
-    void _setNPCImage(TextureID TextureID, std::string&& npcImage, int width, int height
-                                                , int xOffset = 0, int yOffset = 0);
-    void _setBodyImage(TextureID texture, std::string&& bodyImage);
-    void _setShieldImage(TextureID TextureID, std::string&& shieldImage);
-    void _setWeaponImage(TextureID TextureID, std::string&& weaponImage);
-    void _setTileImage(TextureID TextureID, std::string&& tileImage, bool individualTile);
-    void _setHeadImage(TextureID TextureID, std::string&& headImage);
-    void _setHelmetImage(TextureID TextureID, std::string&& helmetImage,
-                         int xOffset = 0, int yOffset = 0);
-
-    static void _addBodySprites(Texture& texture, int y, bool lateralSide);
-    static void _addWeaponSprites(Texture& texture, int y, bool lateralSide);
-    static void _addShieldSprites(Texture& texture, int y, bool lateralSide);
-    static void _addNPCSprites(Texture& texture, int y, bool lateralSide, int width, int height);
-    static void _addTileSprites(Texture& texture, int y, bool individualTile);
-    static void _addSprites(Texture& texture, int width, int height);
-    static void _addSpellSprites(Texture& texture, int y, int width, int height);
-};
+void textureRepository_release(TextureRepository_t* this);
 
 
 #endif //ARGENTUM_TEXTUREREPOSITORY_H

@@ -24,7 +24,6 @@ fn main() {
  */
     let stdin_channel = spawn_stdin_channel();
     let mut game = Game::new_default();
-    //let frame_time = (1 / 60) as f32; //16.6 ms, game runs at 60fps
     const FRAME_TIME: u128 = (1000 / 60) as u128;
     let mut start = Instant::now();
     let mut now;
