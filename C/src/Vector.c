@@ -3,6 +3,7 @@
 //
 
 #include "Vector.h"
+#include "MemAllocMacro.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -14,10 +15,7 @@
 static void _resize(Vector_t* this) {
     uint32_t new_capacity = this->capacity * 2;
     void** new_data = (void**)calloc(new_capacity, sizeof(void*));
-    if (!new_data) {
-        fprintf(stderr, "Failed to allocate memory for the Vector!\n");
-        exit(-1);
-    }
+    CHECK_ALLOC_RESULT(new_data, "Failed to allocate memory for the Vector!\n")
     memcpy(new_data, this->data, sizeof(void*)*this->capacity);
     free(this->data);
     this->data = new_data;
@@ -35,10 +33,7 @@ int vector_init(Vector_t* this, uint32_t element_size, uint32_t capacity) {
     this->capacity = capacity;
     this->data = (void**)calloc(capacity, sizeof(void*)*capacity);
     this->curr_elements = 0;
-    if (!this->data) {
-        fprintf(stderr, "Failed to allocate memory for the Vector!\n");
-        exit(-1);
-    }
+    CHECK_ALLOC_RESULT(this->data, "Failed to allocate memory for the Vector!\n")
     return 0;
 }
 
@@ -47,6 +42,7 @@ void vector_push_back(Vector_t* this, const void* element) {
         _resize(this);
     }
     void* new_element = (void*)malloc(this->element_size);
+    CHECK_ALLOC_RESULT(new_element, "Could not allocate memory for a new element in a Vector!\n")
     memcpy(new_element, element, this->element_size);
     this->data[this->curr_elements] = new_element;
     this->curr_elements++;

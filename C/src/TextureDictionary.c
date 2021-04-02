@@ -3,6 +3,7 @@
 //
 
 #include "TextureDictionary.h"
+#include "MemAllocMacro.h"
 #include <string.h>
 
 typedef struct Node {
@@ -51,6 +52,7 @@ void textureDictionary_add(TextureDictionary_t* this, TextureID key, const Textu
         for (;node->next != NULL && node->key != key; node = node->next);
         if (!node->next) {
             Node_t* new_node = (Node_t*)malloc(sizeof(Node_t));
+            CHECK_ALLOC_RESULT(new_node, "Could not allocate memory for a new node in TextureDictionary!\n")
             _node_init(new_node, key, NULL, value);
             node->next = new_node;
         } else { //the node already existed
@@ -59,6 +61,7 @@ void textureDictionary_add(TextureDictionary_t* this, TextureID key, const Textu
         }
     } else {
         Node_t* new_node = (Node_t*)malloc(sizeof(Node_t));
+        CHECK_ALLOC_RESULT(new_node, "Could not allocate memory for a new node in TextureDictionary!\n")
         _node_init(new_node, key, NULL, value);
         this->buckets[i] = new_node;
     }

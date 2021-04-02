@@ -3,6 +3,7 @@
 //
 
 #include "ViewUnit.h"
+#include "MemAllocMacro.h"
 #include "Viewer.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,10 +14,8 @@
 
 int viewUnit_init(ViewUnit_t* this) {
     this->viewer = calloc(1, sizeof(Viewer_t));
-    if (!this->viewer) {
-        fprintf(stderr, "Failed to allocate memory for the Viewer! Check you RAM usage or try running again\n");
-        exit(1);
-    }
+    CHECK_ALLOC_RESULT(this->viewer,
+                       "Failed to allocate memory for the Viewer! Check you RAM usage or try running again\n")
     int s = viewer_init(this->viewer);
     if (s) free(this->viewer);
     return s;
