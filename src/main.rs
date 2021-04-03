@@ -1,19 +1,15 @@
-mod view_unit;
-mod pieces;
-mod game;
-mod board;
+mod game_engine;
+mod model;
 
-use view_unit::ViewUnit_t;
-use game::Game;
-use crate::pieces::piece::{Movement, Rotation};
+use crate::model::game::Game;
+use crate::model::pieces::piece::{Movement, Rotation};
 use std::thread;
 use std::time::{Duration, Instant};
 use std::sync::mpsc::{Receiver, TryRecvError};
 use std::sync::mpsc;
 use std::io::Read;
 use raw_tty::IntoRawMode;
-use crate::view_unit::{GameState, PieceTile_t, viewUnit_read_event, Input_DOWN, Input_RIGHT, Input_LEFT};
-use crate::board::Board;
+use crate::game_engine::{GameState, PieceTile_t, GameEngine_t, gameEngine_render, gameEngine_release, gameEngine_init, gameEngine_read_event, INPUT_DOWN, INPUT_RIGHT, INPUT_LEFT};
 
 fn main() {
     unsafe {
@@ -23,22 +19,26 @@ fn main() {
         let mut start = Instant::now();
         let mut now= Instant::now();
         let mut update_duration: u128;
-        let mut view_unit = ViewUnit_t { viewer: std::ptr::null_mut() };
-        let s = view_unit::viewUnit_init(&mut view_unit);
-        if s != 0 { panic!("Error in ViewUnit_init!"); }
+        let mut engine = GameEngine_t {
+            controller: std::ptr::null_mut(),
+            gui: std::ptr::null_mut(),
+            screen: std::ptr::null_mut(),
+        }; //todo ver de que no pueda ver estas cosas!!
+        let s = gameEngine_init(&mut engine);
+        if s != 0 { panic!("Error in gameEngine_init!"); }
         loop {
-            let e = viewUnit_read_event(&view_unit);
-            if e == Input_DOWN {
+            let e = gameEngine_read_event(&engine);
+            if e == INPUT_DOWN {
                 game.move_piece(Movement::Down); //todo por algun motivo si uso match chequea el tipo de dato y no el dato en si! VER!!
-            } else if e == Input_RIGHT {
+            } else if e == INPUT_RIGHT {
                 game.move_piece(Movement::Right);
-            } else if e == Input_LEFT {
+            } else if e == INPUT_LEFT {
                 game.move_piece(Movement::Left);
             }
             game.update((now - start).as_secs_f32());
             let game_state = game.get_state();
             start = Instant::now();
-            view_unit::viewUnit_render(&view_unit, &game_state); //todo por algun motivo llamar a esta funcion rompe la actualizacion del juego
+            gameEngine_render(&engine, &game_state);
             //game.print();
             now = Instant::now();
             update_duration = (now - start).as_millis();
@@ -48,7 +48,7 @@ fn main() {
             }
             */ //todo no hace falta porque ya uso VSYNC
         }
-        view_unit::viewUnit_release(&mut view_unit);
+        gameEngine_release(&mut engine);
     }
 }
 
