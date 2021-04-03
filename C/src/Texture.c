@@ -49,7 +49,7 @@ int texture_load_from_file(Texture_t* this, const char* path, ColorKey_t key, in
     } else {
         if (key.red > -1 && key.green > -1 && key.blue > -1) {
             SDL_SetColorKey(loadedSurface, SDL_TRUE,
-                            SDL_MapRGB(loadedSurface->format, key.red, key.green, key.blue));
+                            SDL_MapRGB(loadedSurface->format, (uint8_t)key.red, (uint8_t)key.green, (uint8_t)key.blue));
             /*Con esto aclaras que pixel hacer transparente*/
         }
 
@@ -76,7 +76,7 @@ int texture_load_from_file(Texture_t* this, const char* path, ColorKey_t key, in
 }
 
 void texture_render(const Texture_t* this, int x, int y, int spritePosition, double angle, int scale) {
-    SDL_Rect* clip = (SDL_Rect*)vector_at(&this->g_sprite_clips, spritePosition);
+    SDL_Rect* clip = (SDL_Rect*)vector_at(&this->g_sprite_clips, (uint32_t)spritePosition);
     if (!clip) {
         fprintf(stderr, "Tried to render an inexistent sprite!\n");
         return;
@@ -91,7 +91,7 @@ void texture_add_sprite(Texture_t* this, int x, int y, int width, int height) {
 }
 
 SpriteDimensions_t texture_get_sprite_dimesions(const Texture_t* this, int spritePosition) {
-    SDL_Rect spriteDimensions = *(SDL_Rect*)vector_at(&this->g_sprite_clips, spritePosition);
+    SDL_Rect spriteDimensions = *(SDL_Rect*)vector_at(&this->g_sprite_clips, (uint32_t)spritePosition);
     SpriteDimensions_t dimensions = {spriteDimensions.w, spriteDimensions.h};
     return dimensions;
 }

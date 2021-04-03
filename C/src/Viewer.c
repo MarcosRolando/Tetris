@@ -92,8 +92,8 @@ int viewer_init(Viewer_t* this) {
     return s;
 }
 
-void viewer_render_frame(const Viewer_t* this) {
-    GUI_render(&this->gui);
+void viewer_render_frame(const Viewer_t* this, const GameState_t* game_state) {
+    GUI_render(&this->gui, game_state);
 }
 
 void viewer_release(Viewer_t* this) {

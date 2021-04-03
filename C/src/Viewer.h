@@ -28,7 +28,7 @@ typedef struct Viewer {
  */
 int viewer_init(Viewer_t* this);
 
-void viewer_render_frame(const Viewer_t* this);
+void viewer_render_frame(const Viewer_t* this, const GameState_t* game_state);
 
 /* Destructor */
 void viewer_release(Viewer_t* this);

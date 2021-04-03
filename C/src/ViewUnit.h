@@ -5,6 +5,8 @@
 #ifndef TETRIS_VIEWUNIT_H
 #define TETRIS_VIEWUNIT_H
 
+#include "GameState.h"
+
 /*
  * This unit acts as a translator betweern the Rust code and the C code, the latter being the one
  * who handles all graphics related aspects.
@@ -21,7 +23,7 @@ typedef struct ViewUnit {
 int viewUnit_init(ViewUnit_t* this);
 
 /* Renders the frame based on the current state of the game */
-void viewUnit_render(const ViewUnit_t* this);
+void viewUnit_render(const ViewUnit_t* this, const GameState_t* game_state);
 
 /* Destructor */
 void viewUnit_release(ViewUnit_t* this);
