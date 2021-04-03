@@ -27,4 +27,11 @@ typedef struct GameState {
     //todo agregar score, info de lineas y level, etc
 } GameState_t;
 
+typedef enum Input {
+    DOWN,
+    RIGHT,
+    LEFT,
+    EMPTY, //todo ver de agregar el nombre del enum al principio para evitar problemas de namespace
+} Input_t;
+
 #endif //TETRIS_GAMESTATE_H

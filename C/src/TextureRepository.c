@@ -4,8 +4,8 @@
 
 #include "TextureRepository.h"
 
-#define TILES_PATH "/home/marcosrolando/CLionProjects/tetris/C/assets/tiles.png"
-#define BACKGROUND_PATH "/home/marcosrolando/CLionProjects/tetris/C/assets/backgrounds.png"
+#define TILES_PATH "/home/marcosrolando/CLionProjects/Tetris/C/assets/tiles.png"
+#define BACKGROUND_PATH "/home/marcosrolando/CLionProjects/Tetris/C/assets/backgrounds.png"
 
 
 /*

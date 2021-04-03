@@ -137,7 +137,7 @@ impl<T: PieceType + ?Sized> Piece<T> {
             position,
             piece_type,
             orientation: Orientation::Default,
-            descent_time: 28.0 / 60.0, //It takes 28 frames to move and the game runs at 60 fps
+            descent_time: 18.0 / 60.0, //The first number is the frame velocity (see https://tetris.wiki/Tetris_(NES,_Nintendo))
             elapsed_time: 0.0,
         };
         piece

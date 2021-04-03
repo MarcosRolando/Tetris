@@ -41,6 +41,12 @@ fn bindgen_test_layout_GameState() {
     );
 }
 pub type GameState_t = GameState;
+pub const Input_DOWN: Input = 0;
+pub const Input_RIGHT: Input = 1;
+pub const Input_LEFT: Input = 2;
+pub const Input_EMPTY: Input = 3;
+pub type Input = ::std::os::raw::c_uint;
+pub use self::Input as Input_t;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Viewer {
@@ -77,6 +83,9 @@ fn bindgen_test_layout_ViewUnit() {
 pub type ViewUnit_t = ViewUnit;
 extern "C" {
     pub fn viewUnit_init(this: *mut ViewUnit_t) -> ::std::os::raw::c_int;
+}
+extern "C" {
+    pub fn viewUnit_read_event(this: *const ViewUnit_t) -> Input_t;
 }
 extern "C" {
     pub fn viewUnit_render(this: *const ViewUnit_t, game_state: *const GameState_t);

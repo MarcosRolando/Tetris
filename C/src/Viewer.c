@@ -92,6 +92,10 @@ int viewer_init(Viewer_t* this) {
     return s;
 }
 
+Input_t viewer_read_event(Viewer_t* this) {
+    return GUI_read_event(&this->gui);
+}
+
 void viewer_render_frame(const Viewer_t* this, const GameState_t* game_state) {
     GUI_render(&this->gui, game_state);
 }

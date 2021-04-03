@@ -17,6 +17,8 @@ typedef struct GUI {
 
 int GUI_init(GUI_t* this);
 
+Input_t GUI_read_event(GUI_t* this);
+
 void GUI_render(const GUI_t* this, const GameState_t* game_state);
 
 void GUI_release(GUI_t* this);

@@ -16,6 +16,25 @@ int GUI_init(GUI_t* this) {
     return 0;
 }
 
+Input_t GUI_read_event(GUI_t* this) { //todo reorganizar el controlador y renombrar el tema de ViewUnit y Viewer y eso
+    SDL_Event event;
+    if (SDL_PollEvent(&event)) {
+        if (!window_handle_event(&this->screen, &event)) {
+            switch (event.key.keysym.sym) { //valgrind complains about this value not being initialized,
+                                            // but this seems to be a valgrind bug vecause PollEvent should initialize it,
+                                            // and even when I do it manually with memset it still complains
+                case SDLK_RIGHT:
+                    return RIGHT;
+                case SDLK_LEFT:
+                    return LEFT;
+                case SDLK_DOWN:
+                    return DOWN;
+            }
+        }
+    }
+    return EMPTY;
+}
+
 void GUI_render(const GUI_t* this, const GameState_t* game_state) {
     window_clear(&this->screen);
     board_render(&this->board, game_state);

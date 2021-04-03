@@ -12,7 +12,7 @@ use std::sync::mpsc::{Receiver, TryRecvError};
 use std::sync::mpsc;
 use std::io::Read;
 use raw_tty::IntoRawMode;
-use crate::view_unit::{GameState, PieceTile_t};
+use crate::view_unit::{GameState, PieceTile_t, viewUnit_read_event, Input_DOWN, Input_RIGHT, Input_LEFT};
 use crate::board::Board;
 
 fn main() {
@@ -27,36 +27,26 @@ fn main() {
         let s = view_unit::viewUnit_init(&mut view_unit);
         if s != 0 { panic!("Error in ViewUnit_init!"); }
         loop {
-            /*
-            match stdin_channel.try_recv() {
-                Ok(key) => {
-                    match key as char {
-                        'd' => game.move_piece(Movement::Right),
-                        'a' => game.move_piece(Movement::Left),
-                        's' => game.move_piece(Movement::Down),
-                        'e' => game.rotate_piece(Rotation::Right),
-                        'q' => game.rotate_piece(Rotation::Left),
-                        'f' => break,
-                        _ => (),
-                    }
-                }
-                Err(TryRecvError::Empty) => (),
-                Err(TryRecvError::Disconnected) => panic!("Channel disconnected"),
+            let e = viewUnit_read_event(&view_unit);
+            if e == Input_DOWN {
+                game.move_piece(Movement::Down); //todo por algun motivo si uso match chequea el tipo de dato y no el dato en si! VER!!
+            } else if e == Input_RIGHT {
+                game.move_piece(Movement::Right);
+            } else if e == Input_LEFT {
+                game.move_piece(Movement::Left);
             }
-            */
-            //now = Instant::now();
             game.update((now - start).as_secs_f32());
             let game_state = game.get_state();
             start = Instant::now();
             view_unit::viewUnit_render(&view_unit, &game_state); //todo por algun motivo llamar a esta funcion rompe la actualizacion del juego
-            game.print();
+            //game.print();
             now = Instant::now();
             update_duration = (now - start).as_millis();
             /*
             if update_duration <= FRAME_TIME {
                 thread::sleep(Duration::from_millis((FRAME_TIME - update_duration) as u64));
             }
-            */
+            */ //todo no hace falta porque ya uso VSYNC
         }
         view_unit::viewUnit_release(&mut view_unit);
     }

@@ -22,6 +22,8 @@ typedef struct ViewUnit {
 /* Constructor */
 int viewUnit_init(ViewUnit_t* this);
 
+Input_t viewUnit_read_event(const ViewUnit_t* this);
+
 /* Renders the frame based on the current state of the game */
 void viewUnit_render(const ViewUnit_t* this, const GameState_t* game_state);
 

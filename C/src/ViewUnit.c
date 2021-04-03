@@ -21,6 +21,10 @@ int viewUnit_init(ViewUnit_t* this) {
     return s;
 }
 
+Input_t viewUnit_read_event(const ViewUnit_t* this) {
+    return viewer_read_event(this->viewer);
+}
+
 void viewUnit_render(const ViewUnit_t* this, const GameState_t* game_state) {
     viewer_render_frame(this->viewer, game_state);
 }
