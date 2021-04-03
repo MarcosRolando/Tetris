@@ -21,7 +21,7 @@ fn main() {
         let mut game = Game::new_default();
         const FRAME_TIME: u128 = (1000 / 60) as u128;
         let mut start = Instant::now();
-        let mut now;
+        let mut now= Instant::now();
         let mut update_duration: u128;
         let mut view_unit = ViewUnit_t { viewer: std::ptr::null_mut() };
         let s = view_unit::viewUnit_init(&mut view_unit);
@@ -44,17 +44,19 @@ fn main() {
                 Err(TryRecvError::Disconnected) => panic!("Channel disconnected"),
             }
             */
-            now = Instant::now();
+            //now = Instant::now();
             game.update((now - start).as_secs_f32());
             let game_state = game.get_state();
-            view_unit::viewUnit_render(&view_unit, &game_state);
-            //game.print();
+            start = Instant::now();
+            view_unit::viewUnit_render(&view_unit, &game_state); //todo por algun motivo llamar a esta funcion rompe la actualizacion del juego
+            game.print();
             now = Instant::now();
             update_duration = (now - start).as_millis();
-            start = Instant::now();
+            /*
             if update_duration <= FRAME_TIME {
                 thread::sleep(Duration::from_millis((FRAME_TIME - update_duration) as u64));
             }
+            */
         }
         view_unit::viewUnit_release(&mut view_unit);
     }

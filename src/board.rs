@@ -138,11 +138,11 @@ impl Board {
 
 impl From<&Board> for [[PieceTile_t; 10usize]; 20usize] {
     fn from(game_board: &Board) -> Self {
-        let mut state_board: Self = [[PieceTile_NONE; 10usize]; 20usize];
-        for i in BOARD_BASE..BOARD_HEIGHT {
+        let mut state_board: Self = [[PieceTile_NONE; 10usize]; 20usize]; //todo arreglar que esta funcion me esta matando el juego
+        for i in BOARD_BASE..BOARD_CEILING {
             for j in 0..(BOARD_WIDTH - 1) {
                 match game_board.board[i][j] {
-                    TileState::Taken => {state_board[i][j] = PieceTile_HERO;},
+                    TileState::Taken => {state_board[i-1][j] = PieceTile_HERO;},
                     TileState::Free => (), //todo cambiar el tilestate para que en realidad sea que tipo de pieza guarda o en su defecto que no guarda ninguan
                 }
             }
