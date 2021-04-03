@@ -2,6 +2,7 @@ use crate::pieces::piece::{Piece, Rotation, Movement, Position};
 use crate::pieces::piece::PieceType;
 use crate::pieces::piece_factory::PieceFactory;
 use crate::board::{Board, BOARD_HEIGHT, BOARD_WIDTH};
+use crate::view_unit::GameState_t;
 
 const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT as isize - 3,
                                             column: BOARD_WIDTH as isize / 2}; //todo ver bien el tema del spawn
@@ -53,6 +54,11 @@ impl Game {
         if !self.board.positions_are_valid(&self.current_piece.get_positions()) {
             self.current_piece.rotate(Rotation::get_opposite(rotation));
         }
+    }
+
+    /* Returns a GameState_t which will be used by the SDL C module to render the current frame */
+    pub fn get_state(&self) -> GameState_t {
+        GameState_t {board_config: From::from(&self.board)}
     }
 
     pub fn print(&self) {
