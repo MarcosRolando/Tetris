@@ -15,7 +15,9 @@ int GUI_init(GUI_t* this) {
 void GUI_render(const GUI_t* this) {
     window_clear(&this->screen);
     const Texture_t* tiles = textureRepository_get_texture(&this->texture_repo, BACKGROUNDS);
-    texture_render(tiles, 0, 0, 1, 0, 3);
+    texture_render(tiles, 0, 0, 0, 0, SCREEN_SCALE);
+    texture_render(textureRepository_get_texture(&this->texture_repo, TILES),
+                   96*SCREEN_SCALE, 192*SCREEN_SCALE, 5, 0, SCREEN_SCALE); //Classic NES tetris leaves one pixel next to the lateral borders and two pixels next to the base
     window_show(&this->screen);
 }
 
