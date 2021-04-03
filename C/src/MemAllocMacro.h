@@ -10,7 +10,7 @@
 #define CHECK_ALLOC_RESULT(data, message) \
     if (!data) {                         \
         fprintf(stderr, message); \
-        exit(1); \
+        exit(EXIT_FAILURE); \
     }
 
 #endif //TETRIS_MEMALLOCMACRO_H

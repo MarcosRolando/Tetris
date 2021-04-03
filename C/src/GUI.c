@@ -14,8 +14,8 @@ int GUI_init(GUI_t* this) {
 
 void GUI_render(const GUI_t* this) {
     window_clear(&this->screen);
-    const Texture_t* tiles = textureRepository_get_texture(&this->texture_repo, TILES);
-    texture_render(tiles, 0, 0, 24, 0, 10);
+    const Texture_t* tiles = textureRepository_get_texture(&this->texture_repo, BACKGROUNDS);
+    texture_render(tiles, 0, 0, 1, 0, 3);
     window_show(&this->screen);
 }
 

@@ -5,16 +5,18 @@
 #include "TextureRepository.h"
 
 #define TILES_PATH "/home/marcosrolando/CLionProjects/Tetris/C/assets/tiles.png"
+#define BACKGROUND_PATH "/home/marcosrolando/CLionProjects/Tetris/C/assets/backgrounds.png"
+
 
 /*
  * PRIVATE
  */
 
-static int _load_tiles(TextureRepository_t* this, const char* image_path) {
+static int _load_tiles(TextureRepository_t* this) {
     Texture_t tile_texture;
     texture_init(&tile_texture, this->renderer);
     ColorKey_t color_key = {-1, -1, -1};
-    int s = texture_load_from_file(&tile_texture, image_path, color_key, 0, 0, 1);
+    int s = texture_load_from_file(&tile_texture, TILES_PATH, color_key, 0, 0, 1);
     if (s) {
         texture_release(&tile_texture);
         return s;
@@ -29,6 +31,22 @@ static int _load_tiles(TextureRepository_t* this, const char* image_path) {
     return 0;
 }
 
+static int _load_backgrounds(TextureRepository_t* this) {
+    Texture_t background_texture;
+    texture_init(&background_texture, this->renderer);
+    ColorKey_t color_key = {-1, -1, -1};
+    int s = texture_load_from_file(&background_texture, BACKGROUND_PATH, color_key, 0, 0, 1);
+    if (s) {
+        texture_release(&background_texture);
+        return s;
+    }
+    texture_add_sprite(&background_texture, 7, 6, 256, 224); //these magic numbers match the backgrounds.png sprite to perfection!
+    texture_add_sprite(&background_texture, 268, 6, 256, 224); //these magic numbers match the backgrounds.png sprite to perfection!
+    textureDictionary_add(&this->textures, BACKGROUNDS, &background_texture);
+    texture_release(&background_texture);
+    return 0;
+}
+
 /*
  * PUBLIC
  */
@@ -36,7 +54,9 @@ static int _load_tiles(TextureRepository_t* this, const char* image_path) {
 int textureRepository_init(TextureRepository_t* this, SDL_Renderer* renderer) {
     textureDictionary_init(&this->textures);
     this->renderer = renderer;
-    return _load_tiles(this, TILES_PATH);
+    int s = _load_tiles(this);
+    if (s) return s;
+    return _load_backgrounds(this);
     //todo cargar las otras cosas
 }
 

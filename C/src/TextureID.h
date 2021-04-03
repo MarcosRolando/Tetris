@@ -7,6 +7,7 @@
 
 typedef enum TextureID {
     TILES,
+    BACKGROUNDS
 } TextureID;
 
 #endif //TETRIS_TEXTUREID_H
