@@ -15,7 +15,10 @@ static int _load_tiles(TextureRepository_t* this, const char* image_path) {
     texture_init(&tile_texture, this->renderer);
     ColorKey_t color_key = {-1, -1, -1};
     int s = texture_load_from_file(&tile_texture, image_path, color_key, 0, 0, 1);
-    if (s) return s;
+    if (s) {
+        texture_release(&tile_texture);
+        return s;
+    }
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 4; j++) {
             texture_add_sprite(&tile_texture, j*8, i*8, 8, 8); //todo ver si las dimensiones estan bien

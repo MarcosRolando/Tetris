@@ -16,9 +16,13 @@ use raw_tty::IntoRawMode;
 fn main() {
     unsafe {
         let mut view_unit = ViewUnit { viewer: std::ptr::null_mut() };
-        view_unit::viewUnit_init(&mut view_unit);
-        view_unit::viewUnit_render(&view_unit);
-        view_unit::viewUnit_release(&mut view_unit);
+        let s = view_unit::viewUnit_init(&mut view_unit);
+        if s == 0 {
+            loop {
+                view_unit::viewUnit_render(&view_unit);
+            }
+            view_unit::viewUnit_release(&mut view_unit);
+        }
     }
 }
     /*

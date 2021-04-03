@@ -8,6 +8,7 @@ int GUI_init(GUI_t* this) {
     int s = window_init(&this->screen);
     if (s) return s;
     s = textureRepository_init(&this->texture_repo, window_get_renderer(&this->screen));
+    if (s) window_release(&this->screen);
     return s;
 }
 

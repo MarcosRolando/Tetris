@@ -75,6 +75,7 @@ int window_init(Window_t* this) {
     int s = _create_window(this);
     if (s) return s;
     s = _create_renderer(this);
+    if (s) SDL_DestroyWindow(this->window);
     return s;
 }
 
