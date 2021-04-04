@@ -13,26 +13,28 @@ use crate::model::pieces::piece::{Piece, Position};
 
 #[derive(Clone, Copy, Hash)]
 enum PieceTypeID {
-    Hero,
-    Smashboy,
-    Teewee,
-    OrangeRicky,
-    BlueRicky,
-    ClevelandZ,
-    RhodeIslandZ,
+    I,
+    O,
+    T,
+    L,
+    J,
+    Z,
+    S,
 }
 
 /* Returns a random PieceTypeID value, for selecting the next piece */
 impl Distribution<PieceTypeID> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> PieceTypeID {
-        match rng.gen_range(0..=6) {
-            0 => PieceTypeID::Hero,
-            1 => PieceTypeID::Smashboy,
-            2 => PieceTypeID::Teewee,
-            3 => PieceTypeID::OrangeRicky,
-            4 => PieceTypeID::BlueRicky,
-            5 => PieceTypeID::ClevelandZ,
-            _ => PieceTypeID::RhodeIslandZ,
+        let n = rng.gen_range(0..56);
+        match rng.gen_range(0..=56) { //The following adhere to the Tetrominoes weights in the classic NES Tetris
+                                            // See https://meatfighter.com/nintendotetrisai/?a=b#The_Mechanics_of_Nintendo_Tetris
+            0..=6 => PieceTypeID::I,
+            7..=14 => PieceTypeID::O,
+            15..=23 => PieceTypeID::T,
+            24..=30 => PieceTypeID::L,
+            31..=38 => PieceTypeID::J,
+            39..=46 => PieceTypeID::Z,
+            _ => PieceTypeID::S,
         }
     }
 }
@@ -48,13 +50,13 @@ impl PieceFactory {
     pub fn new(starting_position: Position) -> Piece<dyn PieceType> {
         let piece_type: PieceTypeID = random();
         match piece_type {
-            PieceTypeID::Hero => Piece::new(starting_position, Box::new(IPiece {})),
-            PieceTypeID::OrangeRicky => Piece::new(starting_position, Box::new(LPiece {})),
-            PieceTypeID::BlueRicky => Piece::new(starting_position, Box::new(JPiece {})),
-            PieceTypeID::Teewee => Piece::new(starting_position, Box::new(TPiece {})),
-            PieceTypeID::ClevelandZ => Piece::new(starting_position, Box::new(ZPiece {})),
-            PieceTypeID::RhodeIslandZ => Piece::new(starting_position, Box::new(SPiece {})),
-            PieceTypeID::Smashboy => Piece::new(starting_position, Box::new(OPiece {})),
+            PieceTypeID::I => Piece::new(starting_position, Box::new(IPiece {})),
+            PieceTypeID::L => Piece::new(starting_position, Box::new(LPiece {})),
+            PieceTypeID::J => Piece::new(starting_position, Box::new(JPiece {})),
+            PieceTypeID::T => Piece::new(starting_position, Box::new(TPiece {})),
+            PieceTypeID::Z => Piece::new(starting_position, Box::new(ZPiece {})),
+            PieceTypeID::S => Piece::new(starting_position, Box::new(SPiece {})),
+            PieceTypeID::O => Piece::new(starting_position, Box::new(OPiece {})),
         }
     }
 }
