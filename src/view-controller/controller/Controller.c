@@ -16,12 +16,16 @@ Input_t controller_read_event(Controller_t* this, Window_t* screen) {
         if (!window_handle_event(screen, &event)) {
             if (event.key.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
-                    case SDLK_RIGHT:
+                    case SDLK_d:
                         return INPUT_RIGHT;
-                    case SDLK_LEFT:
+                    case SDLK_a:
                         return INPUT_LEFT;
-                    case SDLK_DOWN:
+                    case SDLK_s:
                         return INPUT_DOWN;
+                    case SDLK_q:
+                        return INPUT_R_LEFT;
+                    case SDLK_e:
+                        return INPUT_R_RIGHT;
                 }
             }
         }

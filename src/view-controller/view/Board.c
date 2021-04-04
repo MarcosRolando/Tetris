@@ -18,7 +18,7 @@ void board_render(const Board_t* this, const GameState_t* game_state) {
         for (int j = 0; j < BOARD_WIDTH; j++) {
             if (game_state->board_config[i][j] != PIECETILE_NONE) { //todo implementar la seleccion de color de acuerdo al tipo de pieza
                 texture_render(texture,(96+j*8)*SCREEN_SCALE, (192-i*8)*SCREEN_SCALE, 0, 0, SCREEN_SCALE);
-                //Classic NES tetris leaves one pixel next to the lateral borders and two pixels next to the base
+                //Classic NES Tetris leaves one pixel next to the lateral borders and two pixels next to the base
                 //The index*8 is because the tiles are 8*8 pixels
             }
         }

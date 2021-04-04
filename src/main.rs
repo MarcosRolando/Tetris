@@ -9,7 +9,9 @@ use std::sync::mpsc::{Receiver, TryRecvError};
 use std::sync::mpsc;
 use std::io::Read;
 use raw_tty::IntoRawMode;
-use crate::game_engine::{GameState, PieceTile_t, GameEngine_t, gameEngine_render, gameEngine_release, gameEngine_init, gameEngine_read_event, INPUT_DOWN, INPUT_RIGHT, INPUT_LEFT};
+use crate::game_engine::{GameState, PieceTile_t, GameEngine_t, gameEngine_render, gameEngine_release,
+                         gameEngine_init, gameEngine_read_event, INPUT_DOWN, INPUT_RIGHT, INPUT_LEFT,
+                         INPUT_R_RIGHT, INPUT_R_LEFT};
 
 fn main() {
     unsafe {
@@ -34,6 +36,10 @@ fn main() {
                 game.move_piece(Movement::Right);
             } else if e == INPUT_LEFT {
                 game.move_piece(Movement::Left);
+            } else if e == INPUT_R_RIGHT {
+                game.rotate_piece(Rotation::Right);
+            } else if e == INPUT_R_LEFT {
+                game.rotate_piece(Rotations::Left);
             }
             game.update((now - start).as_secs_f32());
             let game_state = game.get_state();

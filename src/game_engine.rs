@@ -44,7 +44,9 @@ pub type GameState_t = GameState;
 pub const INPUT_DOWN: Input = 0;
 pub const INPUT_RIGHT: Input = 1;
 pub const INPUT_LEFT: Input = 2;
-pub const INPUT_NONE: Input = 3;
+pub const INPUT_R_RIGHT: Input = 3;
+pub const INPUT_R_LEFT: Input = 4;
+pub const INPUT_NONE: Input = 5;
 pub type Input = ::std::os::raw::c_uint;
 pub use self::Input as Input_t;
 #[repr(C)]

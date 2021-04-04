@@ -32,6 +32,8 @@ typedef enum Input {
     INPUT_DOWN,
     INPUT_RIGHT,
     INPUT_LEFT,
+    INPUT_R_RIGHT, //rotate right
+    INPUT_R_LEFT, //rotate left
     INPUT_NONE,
 } Input_t;
 
