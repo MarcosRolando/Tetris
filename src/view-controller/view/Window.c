@@ -23,8 +23,7 @@ static int _create_window(Window_t* this) {
 }
 
 static int _create_renderer(Window_t* this) {
-    this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED
-                                               | SDL_RENDERER_PRESENTVSYNC);
+    this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
     if (this->renderer == NULL) {
         fprintf(stderr, "Renderer could not be created! Graphics Error: %s\n", SDL_GetError());
         return SDL_RENDERER_ERROR;

@@ -119,12 +119,20 @@ pub trait PieceType {
     fn get_left_positions(&self, position: &Position) -> PieceTiles;
 }
 
+/* In order to recreate the exact feeling of the classis NES Tetris I have to recreate the exact
+    timings, which in the original code are given in frames assuming a framerate of 60 FPS.
+    It is way easier to just cap the game at 60 fps and use everything in frames, both for coding and for
+    understanding, so that is the route I took. This means that most of the source code you are reading
+    here it's the exact same logic they used! Each frame is a game update.
+ */
 pub struct Piece<T: PieceType + ?Sized> {
     position: Position,
     piece_type: Box<T>,
     orientation: Orientation,
-    descent_time: f32,
-    elapsed_time: f32,
+    autorepeat_x: i32, //a counter for dealing with the horizontal movement of the piece
+    autorepeat_y: i32, //a counter for dealing with the vertical drop of the piece
+    drop_speed: u32, //the amount of frames it takes to descend one tile
+    fall_timer: u32, //the current amount of frames passed
 }
 
 impl<T: PieceType + ?Sized> Piece<T> {
@@ -137,8 +145,10 @@ impl<T: PieceType + ?Sized> Piece<T> {
             position,
             piece_type,
             orientation: Orientation::Default,
-            descent_time: 18.0 / 60.0, //The first number is the frame velocity (see https://tetris.wiki/Tetris_(NES,_Nintendo))
-            elapsed_time: 0.0,
+            autorepeat_x: 0, //todo
+            autorepeat_y: -96, //We will be increasing this value by one per update so that it takes 1.6 seconds to start falling after spawning (see https://tetris.wiki/Tetris_(NES,_Nintendo))
+            drop_speed: 8, //The drop speed in frames (see https://tetris.wiki/Tetris_(NES,_Nintendo))
+            fall_timer: 0,
         };
         piece
     }
@@ -153,18 +163,22 @@ impl<T: PieceType + ?Sized> Piece<T> {
         self.piece_type.get_positions(self.orientation, &self.position)
     }
 
-    /* Changes the time it takes for the piece to descend */
+    /* Changes the time it takes for the piece to descend */ //todo cambiar a frames en vez de segundos
     pub fn change_descent_time(&mut self, descent_time: f32) {
-        self.descent_time = descent_time;
+        //self.descent_time = descent_time;
     }
 
-    /* If the time elpased is greater than the time it takes it to descend then descend, otherwise
-    just update the time elapsed */
-    pub fn try_to_descend(&mut self, delta_t: f32) {
-        self.elapsed_time += delta_t;
-        if self.elapsed_time >= self.descent_time {
-            self.elapsed_time -= self.descent_time;
-            self.move_to(Movement::Down);
+    /* If the frames elpased is greater than the frames it takes it to descend then descend, otherwise
+    just update the frames elapsed */
+    pub fn try_to_descend(&mut self) {
+        if self.autorepeat_y < 0 {
+            self.autorepeat_y += 1;
+        } else {
+            self.fall_timer += 1;
+            if self.fall_timer >= self.drop_speed {
+                self.fall_timer = 0;
+                self.move_to(Movement::Down);
+            }
         }
     }
 

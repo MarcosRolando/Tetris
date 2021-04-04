@@ -33,8 +33,8 @@ impl Game {
     }
 
     /* Updates the game state */
-    pub fn update(&mut self, delta_t: f32) {
-        self.current_piece.try_to_descend(delta_t);
+    pub fn update(&mut self) {
+        self.current_piece.try_to_descend();
         if self.board.update_board(&self.current_piece.get_positions()) {
             self.current_piece = PieceFactory::new(STARTING_POSITION);
         }
