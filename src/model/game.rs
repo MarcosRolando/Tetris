@@ -5,7 +5,7 @@ use crate::model::board::{Board, BOARD_HEIGHT, BOARD_WIDTH, BOARD_CEILING};
 use crate::game_engine::{GameState_t, PIECETILE_HERO};
 
 const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT as isize - 3,
-                                            column: BOARD_WIDTH as isize / 2}; //todo ver bien el tema del spawn
+                                            column: 5}; //Classic NES Tetris uses this exact position for tetrominoes spawn
 
 
 #[derive(Clone, Copy, PartialEq)]

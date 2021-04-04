@@ -39,7 +39,7 @@ fn main() {
             } else if e == INPUT_R_RIGHT {
                 game.rotate_piece(Rotation::Right);
             } else if e == INPUT_R_LEFT {
-                game.rotate_piece(Rotations::Left);
+                game.rotate_piece(Rotation::Left);
             }
             game.update((now - start).as_secs_f32());
             let game_state = game.get_state();

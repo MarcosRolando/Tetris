@@ -5,8 +5,12 @@ use crate::game_engine::{PieceTile_t, PIECETILE_HERO, PIECETILE_NONE};
 /* This represents the Tetris board, which in classic NES Tetris is 10x20 Tiles*/
 
 pub const BOARD_WIDTH: usize = 10;
-pub const BOARD_HEIGHT: usize = 25; //+1 row for the base and +4 rows for the ceiling, none of them
-                                    //are visible to the player
+pub const BOARD_HEIGHT: usize = 23; //+1 row for the base and +2 rows for the ceiling, none of them
+                                    //are visible to the player. Classic NES tetris only uses the 2 extra hidden
+                                    // always Free top rows for initial rotation possibilities,
+                                    //while I also use an extra hidden always Taken bottom row for avoiding
+                                    //having to check bounds, leaving a nicer code
+
 pub const BOARD_BASE: usize = 1; //first playable row
 pub const BOARD_CEILING: usize = 20; //last playable row
 
