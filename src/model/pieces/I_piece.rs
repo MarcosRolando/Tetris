@@ -9,9 +9,9 @@ Default Orientation
 
  */
 
-pub struct Hero {}
+pub struct IPiece {}
 
-impl PieceType for Hero {
+impl PieceType for IPiece {
     fn get_default_positions(&self, position: &Position) -> PieceTiles {
         [   *position,
             Position{column:position.column+1,..*position},

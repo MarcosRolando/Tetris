@@ -10,9 +10,9 @@ Default Orientation
 
  */
 
-pub struct OrangeRicky {}
+pub struct LPiece {}
 
-impl PieceType for OrangeRicky {
+impl PieceType for LPiece {
     /*
     PRIVATE
     */

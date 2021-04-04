@@ -1,6 +1,6 @@
 use crate::model::game::TileState;
 use crate::model::pieces::piece::{Position, PieceTiles};
-use crate::game_engine::{PieceTile_t, PIECETILE_HERO, PIECETILE_NONE};
+use crate::game_engine::{PieceTile_t, PIECETILE_I, PIECETILE_NONE};
 
 /* This represents the Tetris board, which in classic NES Tetris is 10x20 Tiles*/
 
@@ -146,7 +146,7 @@ impl From<&Board> for [[PieceTile_t; 10usize]; 20usize] {
         for i in BOARD_BASE..(BOARD_CEILING + 1) {
             for j in 0..BOARD_WIDTH {
                 match game_board.board[i][j] {
-                    TileState::Taken => {state_board[i-1][j] = PIECETILE_HERO;},
+                    TileState::Taken => {state_board[i-1][j] = PIECETILE_I;},
                     TileState::Free => (), //todo cambiar el tilestate para que en realidad sea que tipo de pieza guarda o en su defecto que no guarda ninguan
                 }
             }

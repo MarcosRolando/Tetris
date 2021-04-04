@@ -1,23 +1,23 @@
 use crate::model::pieces::piece::{PieceType, Position, PieceTiles};
 
-/* This is the inverted Z piece */
+/* This is the Z piece */
 /* This piece position is fixed on the upper center corner (Default Orientation) */
 /*
 Default Orientation
 
-  x *
-* *
+* x
+  * *
 
  */
 
-pub struct RhodeIslandZ {}
+pub struct ZPiece {}
 
-impl PieceType for RhodeIslandZ {
+impl PieceType for ZPiece {
     fn get_default_positions(&self, position: &Position) -> PieceTiles {
         [   *position,
-            Position{column:position.column-1,row:position.row-1},
+            Position{column:position.column+1,row:position.row-1},
             Position{row:position.row-1,..*position},
-            Position{column:position.column+1,..*position},
+            Position{column:position.column-1,..*position},
         ]
     }
 
@@ -25,15 +25,16 @@ impl PieceType for RhodeIslandZ {
         self.get_default_positions(position)
     }
 
+    /* Classic Tetris right rotation is the same as the left rotation */
     fn get_right_positions(&self, position: &Position) -> PieceTiles {
         self.get_left_positions(position)
     }
 
     fn get_left_positions(&self, position: &Position) -> PieceTiles {
         [   *position,
-            Position{row:position.row+1,..*position},
-            Position{column:position.column+1,row:position.row-1},
+            Position{row:position.row-1,..*position},
             Position{column:position.column+1,..*position},
+            Position{row:position.row+1,column:position.column+1},
         ]
     }
 }

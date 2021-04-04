@@ -1,11 +1,11 @@
 use super::{
-    blue_ricky::BlueRicky,
-    orange_ricky::OrangeRicky,
-    hero::Hero,
-    teewee::Teewee,
-    smashboy::Smashboy,
-    rhode_island_z::RhodeIslandZ,
-    cleveland_z::ClevelandZ,
+    J_piece::JPiece,
+    L_piece::LPiece,
+    I_piece::IPiece,
+    T_piece::TPiece,
+    O_piece::OPiece,
+    S_piece::SPiece,
+    Z_piece::ZPiece,
 };
 use rand::{distributions::{Distribution, Standard}, Rng, random};
 use super::piece::PieceType;
@@ -48,13 +48,13 @@ impl PieceFactory {
     pub fn new(starting_position: Position) -> Piece<dyn PieceType> {
         let piece_type: PieceTypeID = random();
         match piece_type {
-            PieceTypeID::Hero => Piece::new(starting_position, Box::new(Hero{})),
-            PieceTypeID::OrangeRicky => Piece::new(starting_position, Box::new(OrangeRicky{})),
-            PieceTypeID::BlueRicky => Piece::new(starting_position, Box::new(BlueRicky{})),
-            PieceTypeID::Teewee => Piece::new(starting_position, Box::new(Teewee{})),
-            PieceTypeID::ClevelandZ => Piece::new(starting_position, Box::new(ClevelandZ{})),
-            PieceTypeID::RhodeIslandZ => Piece::new(starting_position, Box::new(RhodeIslandZ{})),
-            PieceTypeID::Smashboy => Piece::new(starting_position, Box::new(Smashboy{})),
+            PieceTypeID::Hero => Piece::new(starting_position, Box::new(IPiece {})),
+            PieceTypeID::OrangeRicky => Piece::new(starting_position, Box::new(LPiece {})),
+            PieceTypeID::BlueRicky => Piece::new(starting_position, Box::new(JPiece {})),
+            PieceTypeID::Teewee => Piece::new(starting_position, Box::new(TPiece {})),
+            PieceTypeID::ClevelandZ => Piece::new(starting_position, Box::new(ZPiece {})),
+            PieceTypeID::RhodeIslandZ => Piece::new(starting_position, Box::new(SPiece {})),
+            PieceTypeID::Smashboy => Piece::new(starting_position, Box::new(OPiece {})),
         }
     }
 }

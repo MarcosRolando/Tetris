@@ -1,9 +1,9 @@
 pub mod piece;
-pub mod hero;
-pub mod orange_ricky;
-pub mod blue_ricky;
-pub mod cleveland_z;
-pub mod rhode_island_z;
-pub mod teewee;
-pub mod smashboy;
+pub mod I_piece;
+pub mod L_piece;
+pub mod J_piece;
+pub mod Z_piece;
+pub mod S_piece;
+pub mod T_piece;
+pub mod O_piece;
 pub mod piece_factory;

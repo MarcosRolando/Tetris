@@ -13,13 +13,13 @@
  * the input of the player to the model */
 
 typedef enum PieceTile {
-    PIECETILE_HERO,
-    PIECETILE_SMASHBOY,
-    PIECETILE_TEEWEE,
-    PIECETILE_ORANGE_RICKY,
-    PIECETILE_BLUE_RICKY,
-    PIECETILE_CLEVELAND_Z,
-    PIECETILE_RHODE_ISLAND_Z,
+    PIECETILE_I,
+    PIECETILE_O,
+    PIECETILE_T,
+    PIECETILE_L,
+    PIECETILE_J,
+    PIECETILE_Z,
+    PIECETILE_S,
     PIECETILE_NONE
 } PieceTile_t;
 

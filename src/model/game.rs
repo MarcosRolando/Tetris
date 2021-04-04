@@ -1,8 +1,8 @@
 use crate::model::pieces::piece::{Piece, Rotation, Movement, Position};
 use crate::model::pieces::piece::PieceType;
 use crate::model::pieces::piece_factory::PieceFactory;
-use crate::model::board::{Board, BOARD_HEIGHT, BOARD_WIDTH, BOARD_CEILING};
-use crate::game_engine::{GameState_t, PIECETILE_HERO};
+use crate::model::board::{Board, BOARD_HEIGHT, BOARD_CEILING};
+use crate::game_engine::{GameState_t, PIECETILE_I};
 
 const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT as isize - 3,
                                             column: 5}; //Classic NES Tetris uses this exact position for tetrominoes spawn
@@ -62,7 +62,7 @@ impl Game {
         for position in &self.current_piece.get_positions() { // The current piece position todo emprolijar este codigo
             let p: Position<usize> = From::from(*position);
             if p.row <= BOARD_CEILING {
-                game_state.board_config[p.row-1][p.column] = PIECETILE_HERO;
+                game_state.board_config[p.row-1][p.column] = PIECETILE_I;
             }
         }
         game_state

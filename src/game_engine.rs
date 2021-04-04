@@ -2,13 +2,13 @@
 
 pub const BOARD_WIDTH: u32 = 10;
 pub const BOARD_HEIGHT: u32 = 20;
-pub const PIECETILE_HERO: PieceTile = 0;
-pub const PIECETILE_SMASHBOY: PieceTile = 1;
-pub const PIECETILE_TEEWEE: PieceTile = 2;
-pub const PIECETILE_ORANGE_RICKY: PieceTile = 3;
-pub const PIECETILE_BLUE_RICKY: PieceTile = 4;
-pub const PIECETILE_CLEVELAND_Z: PieceTile = 5;
-pub const PIECETILE_RHODE_ISLAND_Z: PieceTile = 6;
+pub const PIECETILE_I: PieceTile = 0;
+pub const PIECETILE_O: PieceTile = 1;
+pub const PIECETILE_T: PieceTile = 2;
+pub const PIECETILE_L: PieceTile = 3;
+pub const PIECETILE_J: PieceTile = 4;
+pub const PIECETILE_Z: PieceTile = 5;
+pub const PIECETILE_S: PieceTile = 6;
 pub const PIECETILE_NONE: PieceTile = 7;
 pub type PieceTile = ::std::os::raw::c_uint;
 pub use self::PieceTile as PieceTile_t;
