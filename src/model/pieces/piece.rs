@@ -6,6 +6,7 @@ the most natural and convenient way
 use crate::game_engine::{Input_t, INPUT_HOLD_DOWN, INPUT_NONE, INPUT_HOLD_LEFT, INPUT_HOLD_RIGHT,
                          INPUT_RELEASE_DOWN, INPUT_RELEASE_RIGHT, INPUT_RELEASE_LEFT, INPUT_ROTATE_RIGHT,
                         INPUT_ROTATE_LEFT};
+use crate::model::pieces::piece::Movement::Right;
 
 #[derive(Copy, Clone, PartialEq)]
 pub struct Position<T=isize> {
@@ -27,28 +28,17 @@ pub enum Orientation {
     Left, /*90 degree rotation*/
 }
 
-#[derive(Copy, Clone, PartialEq)]
-pub enum Rotation {
-    Right,
-    Left,
-}
-
-impl Rotation {
-    /* Returns the opposite rotation */
-    pub fn get_opposite(r: Self) -> Self {
-        match r {
-            Self::Right => Self::Left,
-            Self::Left => Self::Right,
-        }
-    }
-}
-
+/* I originally separated rotation and cardinal movement, but in the end grouping them together
+    allowed a nicer code so I went that route
+ */
 #[derive(Copy, Clone, PartialEq)]
 pub enum Movement {
     Right,
     Left,
     Down,
     Up,
+    RightRotation,
+    LeftRotation,
 }
 
 impl Movement {
@@ -59,6 +49,8 @@ impl Movement {
             Self::Left => Self::Right,
             Self::Down => Self::Up,
             Self::Up => Self::Down, //Though this case should never occur under normal Tetris rules!
+            Self::RightRotation => Self::LeftRotation,
+            Self::LeftRotation => Self::RightRotation,
         }
     }
 }
@@ -71,10 +63,11 @@ impl Orientation {
     /* Given the current Orientation value and the Right or Left Orientation transformation applied it
     returns the next Orientation value
      */
-    pub fn change(&self, rotation: Rotation) -> Self {
+    pub fn change(&self, rotation: Movement) -> Self {
         match rotation {
-            Rotation::Right => self._change_right(),
-            Rotation::Left => self._change_left(),
+            Movement::RightRotation => self._change_right(),
+            Movement::LeftRotation => self._change_left(),
+            _ => Self::Default, //The other movements are not rotations, so this case should never happen either way
         }
     }
 
@@ -150,7 +143,7 @@ impl<T: PieceType + ?Sized> Piece<T> {
             position,
             piece_type,
             orientation: Orientation::Default,
-            autorepeat_x: 0, //todo
+            autorepeat_x: 0,
             autorepeat_y: 0,
             drop_speed: 48, //The drop speed in frames (see https://tetris.wiki/Tetris_(NES,_Nintendo))
             fall_timer: 0,
@@ -160,11 +153,6 @@ impl<T: PieceType + ?Sized> Piece<T> {
             piece.autorepeat_y = -96 //We will be increasing this value by one per update so that it takes 1.6 seconds to start falling after starting the game (see https://tetris.wiki/Tetris_(NES,_Nintendo))
         }
         piece
-    }
-
-    /* Rotates the piece based on the Rotation given */
-    pub fn rotate(&mut self, rotation: Rotation) {
-        self.orientation = self.orientation.change(rotation);
     }
 
     /* Returns the tiles in the board that the piece is ocupying */
@@ -181,18 +169,14 @@ impl<T: PieceType + ?Sized> Piece<T> {
         Movement if the conditions to move are met, otherwise it returns None
      */
     pub fn process_input(&mut self, input: Input_t) -> Option<Movement> {
-        let hold_input_result = self._process_hold_input(input);
-        if hold_input_result.0 {
-           if hold_input_result.1 != Movement::Up {
-               return Some(hold_input_result.1);
-           }
-           return None;
-        } else if self._process_release_input(input) { //todo agregar el de rotacion
-            return None;
-        } else if self._process_rotatation_input(input).0 {
-            return
+        match self._process_pressed_input(input) {
+            Ok(result) => return result,
+            _ => (),
         }
-        return self._process_no_input(input); //we received no input from the player
+        if self._process_release_input(input) {
+            return None;
+        }
+        return self._process_no_input(input); //If we arrived here it means we received INPUT_NONE
     }
 
     /* If the frames elpased is greater than the frames it takes it to descend then descend, otherwise
@@ -209,13 +193,17 @@ impl<T: PieceType + ?Sized> Piece<T> {
         }
     }
 
-    /* Moves the piece according to the given movement */
+    /* Moves the piece according to the given movement. While move would have been a better method
+        name it is unfortunately a reserved keywoard */
     pub fn move_to(&mut self, movement: Movement) {
         match movement {
             Movement::Right => self.position.column += 1,
             Movement::Left => self.position.column -= 1,
             Movement::Down => self.position.row -= 1,
-            Movement::Up => self.position.row += 1, //Though this case should never occur under normal Tetris rules!
+            Movement::Up => self.position.row += 1, //Though this case should never occur under normal Tetris rules, we just use it to correct an invalid one!
+            Movement::RightRotation | Movement::LeftRotation => {
+                self.orientation = self.orientation.change(movement);
+            },
         }
     }
 
@@ -239,31 +227,33 @@ impl<T: PieceType + ?Sized> Piece<T> {
                     return Some(self.holding);
                 }
             },
-            _ => (), //We don't care about the up case because it is not valid anyway
+            _ => (), //We don't care about the Movement::Up case because it is not valid anyway
         }
         return None;
     }
 
-    /* Returns true in the first element of the tuple if it handled the input, false otherwise.
-        The second element of the tuple indicates if there is a movement to perform (using Up
-        as a no movement). It should only be checked if the boolean was true, otherwise it will
-        always be Up so there is no point in checking it
+    /* Returns Ok if it handled the input, and Some movement if there is a movement to be made.
+        If there is no moevement to be made it retuns None. If it didn't handle the input it returns void
      */
-    fn _process_hold_input(&mut self, input: Input_t) -> (bool, Movement) {
+    fn _process_pressed_input(&mut self, input: Input_t) -> Result<Option<Movement>, ()> {
         if input == INPUT_HOLD_DOWN { //Unfortunately I can't use match here because it actually matches the data type and not the value of the data
             if self.autorepeat_y < 0 {
                 self.autorepeat_y = 0;
             }
             self.holding = Movement::Down;
-            (true, Movement::Up)
+            Ok(None)
         } else if input == INPUT_HOLD_RIGHT {
             self.holding = Movement::Right;
-            (true, Movement::Right)
+            Ok(Some(Movement::Right))
         }  else if input == INPUT_HOLD_LEFT {
             self.holding = Movement::Left;
-            (true, Movement::Left)
+            Ok(Some(Movement::Left))
+        } else if input == INPUT_ROTATE_RIGHT {
+            Ok(Some(Movement::RightRotation))
+        } else if input == INPUT_ROTATE_LEFT {
+            Ok(Some(Movement::LeftRotation))
         } else {
-            (false, Movement::Up)
+            Err(())
         }
     }
 
@@ -279,20 +269,6 @@ impl<T: PieceType + ?Sized> Piece<T> {
             true
         } else {
             false
-        }
-    }
-
-    /* Returns true in the first element of the tuple if it handled the input, false otherwise.
-        The second element of the tuple indicates if there is a rotation to perform.
-        It should only be checked if the boolean was true, otherwise the rotation given is not valid
-     */
-    fn _process_rotation_input(&mut self, input: Input_t) -> (bool, Rotation) {
-        if input == INPUT_ROTATE_RIGHT {
-            (true, Rotation::Right)
-        } else if input == INPUT_ROTATE_LEFT {
-            (true, Rotation::Left)
-        } else {
-            (false, Rotation::Right)
         }
     }
 }

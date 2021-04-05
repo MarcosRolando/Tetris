@@ -2,7 +2,7 @@ mod game_engine;
 mod model;
 
 use crate::model::game::Game;
-use crate::model::pieces::piece::{Movement, Rotation};
+use crate::model::pieces::piece::{Movement};
 use std::thread;
 use std::time::{Duration, Instant};
 use crate::game_engine::{GameState, PieceTile_t, GameEngine_t, gameEngine_render, gameEngine_release,

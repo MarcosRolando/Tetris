@@ -1,4 +1,4 @@
-use crate::model::pieces::piece::{Piece, Rotation, Movement, Position};
+use crate::model::pieces::piece::{Piece, Movement, Position};
 use crate::model::pieces::piece::PieceType;
 use crate::model::pieces::piece_factory::PieceFactory;
 use crate::model::board::{Board, BOARD_HEIGHT, BOARD_CEILING};
@@ -51,14 +51,6 @@ impl Game {
         self.current_piece.move_to(movement);
         if !self.board.positions_are_valid(&self.current_piece.get_positions()) {
             self.current_piece.move_to(Movement::get_opposite(movement)); //todo con esta logica yo nunca colisiono para abajo cuando la muevo yo a mano, VER SI ESO ES ASI EN EL TETRIS
-        }
-    }
-
-    /* Rotates the piece based on the Rotation given */
-    pub fn rotate_piece(&mut self, rotation: Rotation) {
-        self.current_piece.rotate(rotation);
-        if !self.board.positions_are_valid(&self.current_piece.get_positions()) {
-            self.current_piece.rotate(Rotation::get_opposite(rotation));
         }
     }
 
