@@ -49,18 +49,18 @@ impl Game {
     /* Moves the piece based on the Movement given */
     pub fn move_piece(&mut self, movement: Movement) {
         self.current_piece.move_to(movement);
-        if !self.board.positions_are_valid(&self.current_piece.get_positions()) {
-            self.current_piece.move_to(Movement::get_opposite(movement)); //todo con esta logica yo nunca colisiono para abajo cuando la muevo yo a mano, VER SI ESO ES ASI EN EL TETRIS
+        if  movement != Movement::Down && !self.board.positions_are_valid(&self.current_piece.get_positions()) {
+            self.current_piece.move_to(Movement::get_opposite(movement));
         }
     }
 
     /* Returns a GameState_t which will be used by the SDL view-controller module to render the current frame */
     pub fn get_state(&self) -> GameState_t {
         let mut game_state = GameState_t {board_config: From::from(&self.board)};
-        for position in &self.current_piece.get_positions() { // The current piece position todo emprolijar este codigo
+        for position in &self.current_piece.get_positions() {
             let p: Position<usize> = From::from(*position);
             if p.row <= BOARD_CEILING {
-                game_state.board_config[p.row-1][p.column] = PIECETILE_I;
+                game_state.board_config[p.row-1][p.column] = PIECETILE_I; //todo devolver cada tipo de pieza segun corresponda
             }
         }
         game_state
