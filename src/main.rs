@@ -30,6 +30,7 @@ fn main() {
             gameEngine_render(&engine, &game_state);
             now = Instant::now();
             update_duration = (now - start).as_secs_f32();
+            println!("{}", update_duration*1000.0);
             if FRAME_TIME > update_duration {
                 thread::sleep(Duration::from_secs_f32(FRAME_TIME - update_duration));
             }

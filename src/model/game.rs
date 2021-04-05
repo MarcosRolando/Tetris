@@ -38,7 +38,8 @@ impl Game {
             Some(movement) => self.move_piece(movement),
             None => self.current_piece.try_to_descend(),
         }
-        if self.board.update_board(&self.current_piece.get_positions()) {
+        if self.board.update_board(&self.current_piece.get_positions(),
+                                   &self.current_piece.get_center_position()) {
             self.current_piece = PieceFactory::new(STARTING_POSITION, false);
             if !self.board.positions_are_valid(&self.current_piece.get_positions()) {
                 panic!("You lost!"); //terminar decente el juego. Dato: el Classic NES Tetris termina cuando no puede spawnear la pieza, no si te pasas del tablero!
@@ -65,8 +66,9 @@ impl Game {
         }
         game_state
     }
-
+/*
     pub fn print(&self) {
         self.board.print(&self.current_piece.get_positions());
     }
+*/
 }

@@ -15,7 +15,8 @@ pub const BOARD_BASE: usize = 1; //first playable row
 pub const BOARD_CEILING: usize = 20; //last playable row
 
 pub struct Board {
-    board: [[TileState; BOARD_WIDTH]; BOARD_HEIGHT],
+    board: Vec<Vec<TileState>>,
+    // board: [[TileState; BOARD_WIDTH]; BOARD_HEIGHT],
 }
 
 impl Board {
@@ -24,11 +25,11 @@ impl Board {
      */
 
     pub fn new() -> Self {
-        let mut b = Board {board: [[TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT]}; //An array of arrays (Rust doesn't have matrices) of size 10x20
-        b.board[0] = [TileState::Taken; BOARD_WIDTH];
+        let mut b = Board {board: vec![vec![TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT]}; //An array of arrays (Rust doesn't have matrices) of size 10x20
+        b.board[0] = vec![TileState::Taken; BOARD_WIDTH];
         b
     }
-
+/*
     pub fn print(&self, positions: &PieceTiles) {
         print!("\x1B[2J\x1B[1;1H\r"); //clears the screen
         let mut board = self.board;
@@ -46,9 +47,9 @@ impl Board {
             print!("\n\r");
         }
     }
-
+*/
     /* Removes the completed lines, returns true if the the current piece collided, false otherwise */
-    pub fn update_board(&mut self, positions: &PieceTiles) -> bool {
+    pub fn update_board(&mut self, positions: &PieceTiles, center_position: &Position) -> bool {
         return if self._check_collision(positions) {
             for position in positions {
                 let p: Position<usize> = From::from(*position);
@@ -56,7 +57,7 @@ impl Board {
                     self.board[p.row + 1][p.column] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
                 }
             }
-            self._check_for_lines_removal();
+            self._check_for_lines_removal((center_position.row + 1) as usize);
             true
         } else {
             false
@@ -79,49 +80,38 @@ impl Board {
     PRIVATE
      */
 
-    fn _check_for_lines_removal(&mut self) {
-        let mut row_number = BOARD_BASE;
-        let mut lines_to_remove = 0;
-        for row in self.board.iter().skip(1) { //This way we skip the BASE
-            let mut empty_line_tiles = 0; //If we find a fully empty line then we are done checking
-            self._process_line(row, &mut lines_to_remove, &mut empty_line_tiles);
-            if empty_line_tiles == BOARD_WIDTH {
-                return;
-            }
-            if ( (lines_to_remove > 0) && (empty_line_tiles > 0) ) || (lines_to_remove == 4) ||
-                ( (lines_to_remove > 0) && (row_number == BOARD_CEILING) ) {
-                return self._remove_lines(row_number - lines_to_remove, lines_to_remove);
-            }
-            row_number += 1;
+    fn _check_for_lines_removal(&mut self, piece_row: usize) {
+        let mut rows_to_remove = Vec::new();
+        self._get_rows_to_remove(&mut rows_to_remove, piece_row);
+        let mut i = 0; //We count the amount of rows deleted to decrease the index value
+        for row in rows_to_remove {
+            self.board.remove(row - i);
+            self.board.insert(BOARD_HEIGHT - 1, vec![TileState::Free; BOARD_WIDTH]);
+            i += 1;
         }
     }
 
-    fn _process_line(&self, row: &[TileState; 10], lines_to_remove: &mut usize,
-                     empty_line_tiles: &mut usize) {
-        let mut found_a_taken_tile = false;
-        *lines_to_remove += 1; //We assume the current row/line is fully taken
-        for tile in row {
-            if *tile == TileState::Free {
-                *empty_line_tiles += 1;
-            } else {
-                found_a_taken_tile = true;
+    fn _get_rows_to_remove(&self, rows_to_remove: &mut Vec<usize>, piece_row: usize) {
+        let initial_row = std::cmp::max(piece_row - 1, 1);
+        let final_row = std::cmp::min(piece_row + 2, BOARD_CEILING);
+        let mut curr_row = initial_row;
+        for row in self.board[initial_row..=final_row].iter() { //Because of the center of the pieces, these rows are the only ones we need to check
+            let mut line_completed = true; //We assume the current line is completed
+            for tile in row {
+                if *tile == TileState::Free {
+                    line_completed = false; //It turns out it wasn't completed
+                    break;
+                }
             }
-            if found_a_taken_tile && (*empty_line_tiles > 0) {
-                *lines_to_remove -= 1; //If it turns out it's not then we cancel the operation
-                break;
+            if line_completed {
+                rows_to_remove.push(curr_row);
             }
-        }
-    }
-
-    fn _remove_lines(&mut self, first_line: usize, lines_to_remove: usize) {
-        let offset = first_line + lines_to_remove;
-        for i in offset..(BOARD_HEIGHT - 1) {
-            self.board[i - lines_to_remove] = self.board[i];
+            curr_row += 1;
         }
     }
 
     /* Checks if the piece has collided with the board and if so, sets the tiles as taken
-        If there was a collision then it return true, otherwise returns false */
+        If there was a collision then it returns true, otherwise returns false */
     fn _check_collision(&self, positions: &PieceTiles) -> bool {
         for position in positions {
             if self._is_tile_taken(position) {

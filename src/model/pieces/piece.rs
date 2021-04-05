@@ -155,6 +155,11 @@ impl<T: PieceType + ?Sized> Piece<T> {
         piece
     }
 
+    /* Returns the center position of the piece */
+    pub fn get_center_position(&self) -> Position {
+        self.position
+    }
+
     /* Returns the tiles in the board that the piece is ocupying */
     pub fn get_positions(&self) -> PieceTiles {
         self.piece_type.get_positions(self.orientation, &self.position)
