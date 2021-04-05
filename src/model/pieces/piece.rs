@@ -3,6 +3,10 @@
 type to be able to access the board array, and casting Position to Position<usize> is
 the most natural and convenient way
  */
+use crate::game_engine::{Input_t, INPUT_HOLD_DOWN, INPUT_NONE, INPUT_HOLD_LEFT, INPUT_HOLD_RIGHT,
+                         INPUT_RELEASE_DOWN, INPUT_RELEASE_RIGHT, INPUT_RELEASE_LEFT, INPUT_ROTATE_RIGHT,
+                        INPUT_ROTATE_LEFT};
+
 #[derive(Copy, Clone, PartialEq)]
 pub struct Position<T=isize> {
     pub row: T,
@@ -133,6 +137,7 @@ pub struct Piece<T: PieceType + ?Sized> {
     autorepeat_y: i32, //a counter for dealing with the vertical drop of the piece
     drop_speed: u32, //the amount of frames it takes to descend one tile
     fall_timer: u32, //the current amount of frames passed
+    holding: Movement, //stores the current key the player is holding down, we use the Up movement to represent no holding
 }
 
 impl<T: PieceType + ?Sized> Piece<T> {
@@ -140,16 +145,20 @@ impl<T: PieceType + ?Sized> Piece<T> {
     PUBLIC
      */
 
-    pub fn new(position: Position, piece_type: Box<T>) -> Self {
-        let piece = Piece {
+    pub fn new(position: Position, piece_type: Box<T>, is_first_piece: bool) -> Self {
+        let mut piece = Piece {
             position,
             piece_type,
             orientation: Orientation::Default,
             autorepeat_x: 0, //todo
-            autorepeat_y: -96, //We will be increasing this value by one per update so that it takes 1.6 seconds to start falling after spawning (see https://tetris.wiki/Tetris_(NES,_Nintendo))
-            drop_speed: 8, //The drop speed in frames (see https://tetris.wiki/Tetris_(NES,_Nintendo))
+            autorepeat_y: 0,
+            drop_speed: 48, //The drop speed in frames (see https://tetris.wiki/Tetris_(NES,_Nintendo))
             fall_timer: 0,
+            holding: Movement::Up, //Up would be the no holding value since it is not a valid player movement anyway
         };
+        if is_first_piece {
+            piece.autorepeat_y = -96 //We will be increasing this value by one per update so that it takes 1.6 seconds to start falling after starting the game (see https://tetris.wiki/Tetris_(NES,_Nintendo))
+        }
         piece
     }
 
@@ -166,6 +175,24 @@ impl<T: PieceType + ?Sized> Piece<T> {
     /* Changes the time it takes for the piece to descend */ //todo cambiar a frames en vez de segundos
     pub fn change_descent_time(&mut self, descent_time: f32) {
         //self.descent_time = descent_time;
+    }
+
+    /* Receives the player input and updates the behaviour of the piece as necessary. Returns Some
+        Movement if the conditions to move are met, otherwise it returns None
+     */
+    pub fn process_input(&mut self, input: Input_t) -> Option<Movement> {
+        let hold_input_result = self._process_hold_input(input);
+        if hold_input_result.0 {
+           if hold_input_result.1 != Movement::Up {
+               return Some(hold_input_result.1);
+           }
+           return None;
+        } else if self._process_release_input(input) { //todo agregar el de rotacion
+            return None;
+        } else if self._process_rotatation_input(input).0 {
+            return
+        }
+        return self._process_no_input(input); //we received no input from the player
     }
 
     /* If the frames elpased is greater than the frames it takes it to descend then descend, otherwise
@@ -189,6 +216,83 @@ impl<T: PieceType + ?Sized> Piece<T> {
             Movement::Left => self.position.column -= 1,
             Movement::Down => self.position.row -= 1,
             Movement::Up => self.position.row += 1, //Though this case should never occur under normal Tetris rules!
+        }
+    }
+
+    /*
+    PRIVATE
+     */
+
+    fn _process_no_input(&mut self, input: Input_t) -> Option<Movement> {
+        match self.holding {
+            Movement::Down => {
+                self.autorepeat_y += 1;
+                if self.autorepeat_y == 3 { //This the same check the Classic NES Tetris uses (see https://tetris.wiki/Tetris_(NES,_Nintendo))
+                    self.autorepeat_y = 1;
+                    return Some(Movement::Down);
+                }
+            },
+            Movement::Right | Movement::Left => {
+                self.autorepeat_x += 1;
+                if self.autorepeat_x == 16 { //16 is the number of frames Classic NES Tetris uses for initial horizontal DAS (see https://tetris.wiki/Tetris_(NES,_Nintendo))
+                    self.autorepeat_x = 10;
+                    return Some(self.holding);
+                }
+            },
+            _ => (), //We don't care about the up case because it is not valid anyway
+        }
+        return None;
+    }
+
+    /* Returns true in the first element of the tuple if it handled the input, false otherwise.
+        The second element of the tuple indicates if there is a movement to perform (using Up
+        as a no movement). It should only be checked if the boolean was true, otherwise it will
+        always be Up so there is no point in checking it
+     */
+    fn _process_hold_input(&mut self, input: Input_t) -> (bool, Movement) {
+        if input == INPUT_HOLD_DOWN { //Unfortunately I can't use match here because it actually matches the data type and not the value of the data
+            if self.autorepeat_y < 0 {
+                self.autorepeat_y = 0;
+            }
+            self.holding = Movement::Down;
+            (true, Movement::Up)
+        } else if input == INPUT_HOLD_RIGHT {
+            self.holding = Movement::Right;
+            (true, Movement::Right)
+        }  else if input == INPUT_HOLD_LEFT {
+            self.holding = Movement::Left;
+            (true, Movement::Left)
+        } else {
+            (false, Movement::Up)
+        }
+    }
+
+    /* Returns true if it handled the input, false otherwise */
+    fn _process_release_input(&mut self, input: Input_t) -> bool {
+        if input == INPUT_RELEASE_DOWN { //Unfortunately I can't use match here because it actually matches the data type and not the value of the data
+            self.holding = Movement::Up;
+            self.autorepeat_y = 0;
+            true
+        } else if input == INPUT_RELEASE_RIGHT || input == INPUT_RELEASE_LEFT {
+            self.holding = Movement::Up;
+            self.autorepeat_x = 0;
+            true
+        } else {
+            false
+        }
+    }
+
+    /* Returns true in the first element of the tuple if it handled the input, false otherwise.
+        The second element of the tuple indicates if there is a rotation to perform.
+        It should only be checked if the boolean was true, otherwise the rotation given is not valid
+     */
+    fn _process_rotation_input(&mut self, input: Input_t) -> (bool, Rotation) {
+        if input == INPUT_ROTATE_RIGHT {
+            (true, Rotation::Right)
+        } else if input == INPUT_ROTATE_LEFT {
+            (true, Rotation::Left)
+        } else {
+            (false, Rotation::Right)
         }
     }
 }

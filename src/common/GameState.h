@@ -20,7 +20,7 @@ typedef enum PieceTile {
     PIECETILE_J,
     PIECETILE_Z,
     PIECETILE_S,
-    PIECETILE_NONE
+    PIECETILE_NONE,
 } PieceTile_t;
 
 typedef struct GameState {
@@ -29,11 +29,14 @@ typedef struct GameState {
 } GameState_t;
 
 typedef enum Input {
-    INPUT_DOWN,
-    INPUT_RIGHT,
-    INPUT_LEFT,
-    INPUT_R_RIGHT, //rotate right
-    INPUT_R_LEFT, //rotate left
+    INPUT_HOLD_DOWN,
+    INPUT_HOLD_RIGHT,
+    INPUT_HOLD_LEFT,
+    INPUT_RELEASE_DOWN,
+    INPUT_RELEASE_RIGHT,
+    INPUT_RELEASE_LEFT,
+    INPUT_ROTATE_RIGHT,
+    INPUT_ROTATE_LEFT,
     INPUT_NONE,
 } Input_t;
 

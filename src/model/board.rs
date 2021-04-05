@@ -52,10 +52,8 @@ impl Board {
         return if self._check_collision(positions) {
             for position in positions {
                 let p: Position<usize> = From::from(*position);
-                if (p.row + 1) <= BOARD_CEILING {
+                if (p.row + 1) <= BOARD_CEILING { //The classic NES Tetris doesn't store the tiles of a piece that lock on the upper 2 hidden rows, it esentially truncates them (see https://tetris.wiki/Tetris_(NES,_Nintendo))
                     self.board[p.row + 1][p.column] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
-                } else {
-                    panic!("You lost!"); //todo properly end the game
                 }
             }
             self._check_for_lines_removal();

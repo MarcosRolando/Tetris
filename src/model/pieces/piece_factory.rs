@@ -47,16 +47,16 @@ impl PieceFactory {
      */
 
     /* Returns a random new piece */
-    pub fn new(starting_position: Position) -> Piece<dyn PieceType> {
+    pub fn new(starting_position: Position, is_first_piece: bool) -> Piece<dyn PieceType> {
         let piece_type: PieceTypeID = random();
         match piece_type {
-            PieceTypeID::I => Piece::new(starting_position, Box::new(IPiece {})),
-            PieceTypeID::L => Piece::new(starting_position, Box::new(LPiece {})),
-            PieceTypeID::J => Piece::new(starting_position, Box::new(JPiece {})),
-            PieceTypeID::T => Piece::new(starting_position, Box::new(TPiece {})),
-            PieceTypeID::Z => Piece::new(starting_position, Box::new(ZPiece {})),
-            PieceTypeID::S => Piece::new(starting_position, Box::new(SPiece {})),
-            PieceTypeID::O => Piece::new(starting_position, Box::new(OPiece {})),
+            PieceTypeID::I => Piece::new(starting_position, Box::new(IPiece {}), is_first_piece),
+            PieceTypeID::L => Piece::new(starting_position, Box::new(LPiece {}), is_first_piece),
+            PieceTypeID::J => Piece::new(starting_position, Box::new(JPiece {}), is_first_piece),
+            PieceTypeID::T => Piece::new(starting_position, Box::new(TPiece {}), is_first_piece),
+            PieceTypeID::Z => Piece::new(starting_position, Box::new(ZPiece {}), is_first_piece),
+            PieceTypeID::S => Piece::new(starting_position, Box::new(SPiece {}), is_first_piece),
+            PieceTypeID::O => Piece::new(starting_position, Box::new(OPiece {}), is_first_piece),
         }
     }
 }

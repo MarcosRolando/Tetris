@@ -2,7 +2,7 @@ use crate::model::pieces::piece::{Piece, Rotation, Movement, Position};
 use crate::model::pieces::piece::PieceType;
 use crate::model::pieces::piece_factory::PieceFactory;
 use crate::model::board::{Board, BOARD_HEIGHT, BOARD_CEILING};
-use crate::game_engine::{GameState_t, PIECETILE_I};
+use crate::game_engine::{GameState_t, PIECETILE_I, Input_t};
 
 const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT as isize - 3,
                                             column: 5}; //Classic NES Tetris uses this exact position for tetrominoes spawn
@@ -27,16 +27,22 @@ impl Game {
     pub fn new_default() -> Game {
         let game = Game {
             board: Board::new(),
-            current_piece: PieceFactory::new(STARTING_POSITION),
+            current_piece: PieceFactory::new(STARTING_POSITION, true),
         };
         game
     }
 
     /* Updates the game state */
-    pub fn update(&mut self) {
-        self.current_piece.try_to_descend();
+    pub fn update(&mut self, player_input: Input_t) {
+        match self.current_piece.process_input(player_input) {
+            Some(movement) => self.move_piece(movement),
+            None => self.current_piece.try_to_descend(),
+        }
         if self.board.update_board(&self.current_piece.get_positions()) {
-            self.current_piece = PieceFactory::new(STARTING_POSITION);
+            self.current_piece = PieceFactory::new(STARTING_POSITION, false);
+            if !self.board.positions_are_valid(&self.current_piece.get_positions()) {
+                panic!("You lost!"); //terminar decente el juego. Dato: el Classic NES Tetris termina cuando no puede spawnear la pieza, no si te pasas del tablero!
+            }
         }
     }
 
@@ -44,7 +50,7 @@ impl Game {
     pub fn move_piece(&mut self, movement: Movement) {
         self.current_piece.move_to(movement);
         if !self.board.positions_are_valid(&self.current_piece.get_positions()) {
-            self.current_piece.move_to(Movement::get_opposite(movement));
+            self.current_piece.move_to(Movement::get_opposite(movement)); //todo con esta logica yo nunca colisiono para abajo cuando la muevo yo a mano, VER SI ESO ES ASI EN EL TETRIS
         }
     }
 

@@ -6,8 +6,7 @@ use crate::model::pieces::piece::{Movement, Rotation};
 use std::thread;
 use std::time::{Duration, Instant};
 use crate::game_engine::{GameState, PieceTile_t, GameEngine_t, gameEngine_render, gameEngine_release,
-                         gameEngine_init, gameEngine_read_event, INPUT_DOWN, INPUT_RIGHT, INPUT_LEFT,
-                         INPUT_R_RIGHT, INPUT_R_LEFT};
+                         gameEngine_init, gameEngine_read_event};
 
 fn main() {
     unsafe {
@@ -25,18 +24,7 @@ fn main() {
         if s != 0 { panic!("Error in gameEngine_init!"); }
         loop {
             let e = gameEngine_read_event(&engine);
-            if e == INPUT_DOWN {
-                game.move_piece(Movement::Down); //todo por algun motivo si uso match chequea el tipo de dato y no el dato en si! VER!!
-            } else if e == INPUT_RIGHT {
-                game.move_piece(Movement::Right);
-            } else if e == INPUT_LEFT {
-                game.move_piece(Movement::Left);
-            } else if e == INPUT_R_RIGHT {
-                game.rotate_piece(Rotation::Right);
-            } else if e == INPUT_R_LEFT {
-                game.rotate_piece(Rotation::Left);
-            }
-            game.update();
+            game.update(e);
             let game_state = game.get_state();
             //game.print();
             gameEngine_render(&engine, &game_state);
