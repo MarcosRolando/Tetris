@@ -130,7 +130,7 @@ impl Board {
 
 impl From<&Board> for [[PieceTile_t; 10usize]; 20usize] {
     fn from(game_board: &Board) -> Self {
-        let mut state_board: Self = [[PIECETILE_NONE; 10usize]; 20usize]; //todo arreglar que esta funcion me esta matando el juego
+        let mut state_board: Self = [[PIECETILE_NONE; 10usize]; 20usize];
         for i in BOARD_BASE..(BOARD_CEILING + 1) {
             for j in 0..BOARD_WIDTH {
                 match game_board.board[i][j] {
