@@ -66,9 +66,4 @@ impl Game {
         }
         game_state
     }
-/*
-    pub fn print(&self) {
-        self.board.print(&self.current_piece.get_positions());
-    }
-*/
 }

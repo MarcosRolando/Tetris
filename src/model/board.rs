@@ -16,7 +16,6 @@ pub const BOARD_CEILING: usize = 20; //last playable row
 
 pub struct Board {
     board: Vec<Vec<TileState>>,
-    // board: [[TileState; BOARD_WIDTH]; BOARD_HEIGHT],
 }
 
 impl Board {
@@ -25,29 +24,11 @@ impl Board {
      */
 
     pub fn new() -> Self {
-        let mut b = Board {board: vec![vec![TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT]}; //An array of arrays (Rust doesn't have matrices) of size 10x20
+        let mut b = Board {board: vec![vec![TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT]}; //An vector of vectors (Rust doesn't have matrices) of size 10x20
         b.board[0] = vec![TileState::Taken; BOARD_WIDTH];
         b
     }
-/*
-    pub fn print(&self, positions: &PieceTiles) {
-        print!("\x1B[2J\x1B[1;1H\r"); //clears the screen
-        let mut board = self.board;
-        for position in positions {
-            let p: Position<usize> = From::from(*position);
-            board[p.row][p.column] = TileState::Taken;
-        }
-        for row in board.iter().rev().skip(4) {
-            for tile in row {
-                match tile {
-                    TileState::Free => print!("   "),
-                    TileState::Taken => print!(" + "),
-                }
-            }
-            print!("\n\r");
-        }
-    }
-*/
+
     /* Removes the completed lines, returns true if the the current piece collided, false otherwise */
     pub fn update_board(&mut self, positions: &PieceTiles, center_position: &Position) -> bool {
         return if self._check_collision(positions) {

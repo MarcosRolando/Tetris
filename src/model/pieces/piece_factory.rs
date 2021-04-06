@@ -25,7 +25,6 @@ enum PieceTypeID {
 /* Returns a random PieceTypeID value, for selecting the next piece */
 impl Distribution<PieceTypeID> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> PieceTypeID {
-        let n = rng.gen_range(0..56);
         match rng.gen_range(0..=56) { //The following adhere to the Tetrominoes weights in the classic NES Tetris
                                             // See https://meatfighter.com/nintendotetrisai/?a=b#The_Mechanics_of_Nintendo_Tetris
             0..=6 => PieceTypeID::I,

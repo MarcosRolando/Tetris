@@ -137,5 +137,6 @@ void gameEngine_release(GameEngine_t* this) {
     window_release(this->screen);
     free(this->gui);
     free(this->screen);
+    free(this->controller);
     _close_SDL(this);
 }

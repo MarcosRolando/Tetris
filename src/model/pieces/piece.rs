@@ -3,10 +3,9 @@
 type to be able to access the board array, and casting Position to Position<usize> is
 the most natural and convenient way
  */
-use crate::game_engine::{Input_t, INPUT_HOLD_DOWN, INPUT_NONE, INPUT_HOLD_LEFT, INPUT_HOLD_RIGHT,
+use crate::game_engine::{Input_t, INPUT_HOLD_DOWN, INPUT_HOLD_LEFT, INPUT_HOLD_RIGHT,
                          INPUT_RELEASE_DOWN, INPUT_RELEASE_RIGHT, INPUT_RELEASE_LEFT, INPUT_ROTATE_RIGHT,
                         INPUT_ROTATE_LEFT};
-use crate::model::pieces::piece::Movement::Right;
 
 #[derive(Copy, Clone, PartialEq)]
 pub struct Position<T=isize> {
@@ -181,7 +180,7 @@ impl<T: PieceType + ?Sized> Piece<T> {
         if self._process_release_input(input) {
             return None;
         }
-        return self._process_no_input(input); //If we arrived here it means we received INPUT_NONE
+        return self._process_no_input(); //If we arrived here it means we received INPUT_NONE
     }
 
     /* If the frames elpased is greater than the frames it takes it to descend then descend, otherwise
@@ -216,7 +215,7 @@ impl<T: PieceType + ?Sized> Piece<T> {
     PRIVATE
      */
 
-    fn _process_no_input(&mut self, input: Input_t) -> Option<Movement> {
+    fn _process_no_input(&mut self) -> Option<Movement> {
         match self.holding {
             Movement::Down => {
                 self.autorepeat_y += 1;
