@@ -121,9 +121,9 @@ pub trait PieceType {
     understanding, so that is the route I took. This means that most of the source code you are reading
     here it's the exact same logic they used! Each frame is a game update.
  */
-pub struct Piece<T: PieceType + ?Sized> {
+pub struct Piece{
     position: Position,
-    piece_type: Box<T>,
+    piece_type: Box<dyn PieceType>,
     orientation: Orientation,
     autorepeat_x: i32, //a counter for dealing with the horizontal movement of the piece
     autorepeat_y: i32, //a counter for dealing with the vertical drop of the piece
@@ -132,12 +132,12 @@ pub struct Piece<T: PieceType + ?Sized> {
     holding: Movement, //stores the current key the player is holding down, we use the Up movement to represent no holding
 }
 
-impl<T: PieceType + ?Sized> Piece<T> {
+impl Piece {
     /*
     PUBLIC
      */
 
-    pub fn new(position: Position, piece_type: Box<T>, is_first_piece: bool) -> Self {
+    pub fn new(position: Position, piece_type: Box<dyn PieceType>, is_first_piece: bool) -> Self {
         let mut piece = Piece {
             position,
             piece_type,

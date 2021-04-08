@@ -1,7 +1,7 @@
 mod game_engine;
 mod model;
 
-use crate::model::game::Game;
+use crate::model::game::game::Game;
 use std::thread;
 use std::time::{Duration, Instant};
 use crate::game_engine::{GameEngine_t};

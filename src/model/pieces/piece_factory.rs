@@ -46,7 +46,7 @@ impl PieceFactory {
      */
 
     /* Returns a random new piece */
-    pub fn new(starting_position: Position, is_first_piece: bool) -> Piece<dyn PieceType> {
+    pub fn new(starting_position: Position, is_first_piece: bool) -> Piece {
         let piece_type: PieceTypeID = random();
         match piece_type {
             PieceTypeID::I => Piece::new(starting_position, Box::new(IPiece {}), is_first_piece),

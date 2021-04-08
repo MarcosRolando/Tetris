@@ -3,8 +3,10 @@ use crate::model::pieces::piece::PieceType;
 use crate::model::pieces::piece_factory::PieceFactory;
 use crate::model::board::{Board, BOARD_HEIGHT, BOARD_CEILING};
 use crate::game_engine::{GameState_t, PIECETILE_I, Input_t};
+use crate::model::game::game_state::GameState;
+use crate::model::game::playing::Playing;
 
-const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT as isize - 3,
+pub (super) const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT as isize - 3,
                                             column: 5}; //Classic NES Tetris uses this exact position for tetrominoes spawn
 
 
@@ -16,7 +18,8 @@ pub enum TileState {
 
 pub struct Game {
     board: Board,
-    current_piece: Piece<dyn PieceType>,
+    current_piece: Piece,
+    state: Box<dyn GameState>,
 }
 
 impl Game {
@@ -24,35 +27,18 @@ impl Game {
     PUBLIC
      */
 
-    pub fn new_default() -> Game {
-        let game = Game {
+    pub fn new_default() -> Self {
+        let mut game = Game {
             board: Board::new(),
             current_piece: PieceFactory::new(STARTING_POSITION, true),
+            state: Box::new(Playing {}), //board and current_piece are not yet created so we can't intialize the Playing state here
         };
         game
     }
 
     /* Updates the game state */
     pub fn update(&mut self, player_input: Input_t) {
-        match self.current_piece.process_input(player_input) {
-            Some(movement) => self.move_piece(movement),
-            None => self.current_piece.try_to_descend(),
-        }
-        if self.board.update_board(&self.current_piece.get_positions(),
-                                   &self.current_piece.get_center_position()) {
-            self.current_piece = PieceFactory::new(STARTING_POSITION, false);
-            if !self.board.positions_are_valid(&self.current_piece.get_positions()) {
-                panic!("You lost!"); //terminar decente el juego. Dato: el Classic NES Tetris termina cuando no puede spawnear la pieza, no si te pasas del tablero!
-            }
-        }
-    }
-
-    /* Moves the piece based on the Movement given */
-    pub fn move_piece(&mut self, movement: Movement) {
-        self.current_piece.move_to(movement);
-        if  movement != Movement::Down && !self.board.positions_are_valid(&self.current_piece.get_positions()) {
-            self.current_piece.move_to(Movement::get_opposite(movement));
-        }
+        self.state.update(&mut self.board, &mut self.current_piece, player_input);
     }
 
     /* Returns a GameState_t which will be used by the SDL view-controller module to render the current frame */
