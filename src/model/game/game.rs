@@ -38,18 +38,16 @@ impl Game {
 
     /* Updates the game state */
     pub fn update(&mut self, player_input: Input_t) {
-        self.state.update(&mut self.board, &mut self.current_piece, player_input);
+        match self.state.update(&mut self.board, &mut self.current_piece, player_input) {
+            Some(next_state) => self.state = next_state,
+            None => (),
+        }
     }
 
     /* Returns a GameState_t which will be used by the SDL view-controller module to render the current frame */
     pub fn get_state(&self) -> GameState_t {
         let mut game_state = GameState_t {board_config: From::from(&self.board)};
-        for position in &self.current_piece.get_positions() {
-            let p: Position<usize> = From::from(*position);
-            if p.row <= BOARD_CEILING {
-                game_state.board_config[p.row-1][p.column] = PIECETILE_I; //todo devolver cada tipo de pieza segun corresponda
-            }
-        }
+        self.state.get_piece_state(&self.current_piece, &mut game_state);
         game_state
     }
 }

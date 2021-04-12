@@ -16,6 +16,7 @@ pub const BOARD_CEILING: usize = 20; //last playable row
 
 pub struct Board {
     board: Vec<Vec<TileState>>,
+    lines_to_remove: Vec<usize>,
 }
 
 impl Board {
@@ -24,12 +25,15 @@ impl Board {
      */
 
     pub fn new() -> Self {
-        let mut b = Board {board: vec![vec![TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT]}; //An vector of vectors (Rust doesn't have matrices) of size 10x20
+        let mut b = Board {
+            board: vec![vec![TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT], //An vector of vectors (Rust doesn't have matrices) of size 10x20
+            lines_to_remove: Vec::new(),
+        };
         b.board[0] = vec![TileState::Taken; BOARD_WIDTH];
         b
     }
 
-    /* Removes the completed lines, returns true if the the current piece collided, false otherwise */
+    /* Returns true if the the current piece collided, false otherwise */
     pub fn update_board(&mut self, positions: &PieceTiles, center_position: &Position) -> bool {
         return if self._check_collision(positions) {
             for position in positions {
@@ -38,10 +42,19 @@ impl Board {
                     self.board[p.row + 1][p.column] = TileState::Taken; //row + 1 because the piece doesn't actually overlap
                 }
             }
-            self._check_for_lines_removal((center_position.row + 1) as usize);
             true
         } else {
             false
+        }
+    }
+
+    /* Deletes 2 tiles from the current completed lines. If it is called when no lines have been
+        completed then it doesn't do anything
+     */
+    pub fn clear_some_tiles(&mut self, j: usize) {
+        for i in &self.lines_to_remove {
+            self.board[*i][4 - j] = TileState::Free;
+            self.board[*i][5 + j] = TileState::Free; //This way we clear tiles from the center to the sides
         }
     }
 
@@ -57,22 +70,25 @@ impl Board {
         true
     }
 
-    /*
-    PRIVATE
-     */
-
-    fn _check_for_lines_removal(&mut self, piece_row: usize) {
-        let mut rows_to_remove = Vec::new();
-        self._get_rows_to_remove(&mut rows_to_remove, piece_row);
+    /* Removes the current completed lines. This function will be called after the line clearing
+       animation is completed.
+    */
+    pub fn remove_completed_lines(&mut self) {
+        //self.check_for_lines_to_remove(piece_row);
         let mut i = 0; //We count the amount of rows deleted to decrease the index value
-        for row in rows_to_remove {
+        for row in &self.lines_to_remove {
             self.board.remove(row - i);
             self.board.insert(BOARD_HEIGHT - 1, vec![TileState::Free; BOARD_WIDTH]);
             i += 1;
         }
+        self.lines_to_remove.clear();
     }
 
-    fn _get_rows_to_remove(&self, rows_to_remove: &mut Vec<usize>, piece_row: usize) {
+    /* Checks if the are lines to remove and if so adds them to the list. This function should
+        be called after every piece collision. If there are lines to remove then it returns true,
+        otherwise it returns false
+     */
+    pub fn check_for_lines_to_remove(&mut self, piece_row: usize) -> bool {
         let initial_row = std::cmp::max(piece_row - 1, 1);
         let final_row = std::cmp::min(piece_row + 2, BOARD_CEILING);
         let mut curr_row = initial_row;
@@ -85,13 +101,18 @@ impl Board {
                 }
             }
             if line_completed {
-                rows_to_remove.push(curr_row);
+                self.lines_to_remove.push(curr_row);
             }
             curr_row += 1;
         }
+        !self.lines_to_remove.is_empty()
     }
 
-    /* Checks if the piece has collided with the board and if so, sets the tiles as taken
+    /*
+    PRIVATE
+     */
+
+    /* Checks if the piece has collided with the board
         If there was a collision then it returns true, otherwise returns false */
     fn _check_collision(&self, positions: &PieceTiles) -> bool {
         for position in positions {
