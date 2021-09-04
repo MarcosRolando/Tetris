@@ -4,7 +4,6 @@ project(tetris)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -Wconversion -Werror -pedantic -pedantic-errors -O0 -ggdb -DDEBUG -fno-inline -lm -pthread")
 
 find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
 
 add_library(gameEngine src/view-controller/view/Window.c src/view-controller/view/Window.h src/common/GameEngine.c
         src/view-controller/view/textures/Texture.c src/view-controller/view/textures/Texture.h
@@ -16,4 +15,4 @@ add_library(gameEngine src/view-controller/view/Window.c src/view-controller/vie
         src/view-controller/view/GUI.h src/view-controller/view/Board.c src/view-controller/view/Board.h
         src/common/GameState.h src/view-controller/controller/Controller.c src/view-controller/controller/Controller.h)
 
-target_link_libraries(gameEngine SDL2 SDL2_image SDL2_ttf SDL2_mixer)
+target_link_libraries(gameEngine PUBLIC SDL2::SDL2)
