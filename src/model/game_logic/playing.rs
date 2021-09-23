@@ -1,10 +1,10 @@
-use crate::model::game::game_state::GameState;
+use crate::model::game_logic::game_state::GameState;
 use crate::model::board::{Board, BOARD_CEILING};
-use crate::model::pieces::piece::{Piece, PieceType, Movement, Position};
+use crate::model::pieces::piece::{Piece, Movement, Position};
 use crate::model::pieces::piece_factory::PieceFactory;
 use crate::game_engine::{Input_t, GameState_t, PIECETILE_I};
-use crate::model::game::game::STARTING_POSITION;
-use crate::model::game::line_clearing_animation::LineClearingAnimation;
+use crate::model::game_logic::game::STARTING_POSITION;
+use crate::model::game_logic::line_clearing_animation::LineClearingAnimation;
 
 pub struct Playing {}
 
@@ -28,12 +28,11 @@ impl GameState for Playing {
             Some(movement) => self._move_piece(board, current_piece, movement),
             None => current_piece.try_to_descend(),
         }
-        if board.update_board(&current_piece.get_positions(),
-                                   &current_piece.get_center_position()) {
+        if board.update_board(&current_piece.get_positions()) {
             return if board.check_for_lines_to_remove(current_piece.get_center_position().row as usize + 1) {
                 Some(Box::new(LineClearingAnimation::new()))
             } else {
-                *current_piece = PieceFactory::new(STARTING_POSITION, false);
+                *current_piece = PieceFactory::new_piece(STARTING_POSITION, false);
                 if !board.positions_are_valid(&current_piece.get_positions()) {
                     panic!("You lost!"); //todo terminar decente el juego. Dato: el Classic NES Tetris termina cuando no puede spawnear la pieza, no si te pasas del tablero!
                 }

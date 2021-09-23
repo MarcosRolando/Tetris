@@ -1,9 +1,9 @@
-use crate::model::game::game_state::GameState;
+use crate::model::game_logic::game_state::GameState;
 use crate::model::board::Board;
 use crate::model::pieces::piece::Piece;
 use crate::model::pieces::piece_factory::PieceFactory;
-use crate::model::game::game::STARTING_POSITION;
-use crate::model::game::playing::Playing;
+use crate::model::game_logic::game::STARTING_POSITION;
+use crate::model::game_logic::playing::Playing;
 use crate::game_engine::GameState_t;
 
 pub struct LineClearingAnimation {
@@ -23,15 +23,15 @@ impl LineClearingAnimation {
 }
 
 impl GameState for LineClearingAnimation {
-    fn update(&mut self, board: &mut Board, current_piece: &mut Piece, player_input: u32) -> Option<Box<dyn GameState>> {
+    fn update(&mut self, board: &mut Board, current_piece: &mut Piece, _: u32) -> Option<Box<dyn GameState>> {
         if self.curr_frame % 4 == 0 {
             board.clear_some_tiles(self.column_counter);
             self.column_counter += 1;
         }
         self.curr_frame += 1;
-        return if self.column_counter == 5 {
+        if self.column_counter == 5 {
             board.remove_completed_lines();
-            *current_piece = PieceFactory::new(STARTING_POSITION, false);
+            *current_piece = PieceFactory::new_piece(STARTING_POSITION, false);
             Some(Box::new(Playing {}))
         } else {
             None

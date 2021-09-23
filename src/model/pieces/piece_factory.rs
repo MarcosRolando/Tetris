@@ -1,14 +1,13 @@
 use super::{
-    J_piece::JPiece,
-    L_piece::LPiece,
-    I_piece::IPiece,
-    T_piece::TPiece,
-    O_piece::OPiece,
-    S_piece::SPiece,
-    Z_piece::ZPiece,
+    j_piece::JPiece,
+    l_piece::LPiece,
+    i_piece::IPiece,
+    t_piece::TPiece,
+    o_piece::OPiece,
+    s_piece::SPiece,
+    z_piece::ZPiece,
 };
 use rand::{distributions::{Distribution, Standard}, Rng, random};
-use super::piece::PieceType;
 use crate::model::pieces::piece::{Piece, Position};
 
 #[derive(Clone, Copy, Hash)]
@@ -46,7 +45,7 @@ impl PieceFactory {
      */
 
     /* Returns a random new piece */
-    pub fn new(starting_position: Position, is_first_piece: bool) -> Piece {
+    pub fn new_piece(starting_position: Position, is_first_piece: bool) -> Piece {
         let piece_type: PieceTypeID = random();
         match piece_type {
             PieceTypeID::I => Piece::new(starting_position, Box::new(IPiece {}), is_first_piece),

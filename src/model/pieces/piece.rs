@@ -164,23 +164,17 @@ impl Piece {
         self.piece_type.get_positions(self.orientation, &self.position)
     }
 
-    /* Changes the time it takes for the piece to descend */ //todo cambiar a frames en vez de segundos
-    pub fn change_descent_time(&mut self, descent_time: f32) {
-        //self.descent_time = descent_time;
-    }
-
     /* Receives the player input and updates the behaviour of the piece as necessary. Returns Some
         Movement if the conditions to move are met, otherwise it returns None
      */
     pub fn process_input(&mut self, input: Input_t) -> Option<Movement> {
-        match self._process_pressed_input(input) {
-            Ok(result) => return result,
-            _ => (),
+        if let Ok(result) = self._process_pressed_input(input) {
+            result
+        } else if self._process_release_input(input) {
+            None
+        } else {
+            self._process_no_input() //If we arrived here it means we received INPUT_NONE
         }
-        if self._process_release_input(input) {
-            return None;
-        }
-        return self._process_no_input(); //If we arrived here it means we received INPUT_NONE
     }
 
     /* If the frames elpased is greater than the frames it takes it to descend then descend, otherwise
@@ -233,7 +227,7 @@ impl Piece {
             },
             _ => (), //We don't care about the Movement::Up case because it is not valid anyway
         }
-        return None;
+        None
     }
 
     /* Returns Ok if it handled the input, and Some movement if there is a movement to be made.

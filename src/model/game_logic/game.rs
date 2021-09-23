@@ -1,10 +1,9 @@
-use crate::model::pieces::piece::{Piece, Movement, Position};
-use crate::model::pieces::piece::PieceType;
+use crate::model::pieces::piece::{Piece, Position};
 use crate::model::pieces::piece_factory::PieceFactory;
-use crate::model::board::{Board, BOARD_HEIGHT, BOARD_CEILING};
-use crate::game_engine::{GameState_t, PIECETILE_I, Input_t};
-use crate::model::game::game_state::GameState;
-use crate::model::game::playing::Playing;
+use crate::model::board::{Board, BOARD_HEIGHT};
+use crate::game_engine::{GameState_t, Input_t};
+use crate::model::game_logic::game_state::GameState;
+use crate::model::game_logic::playing::Playing;
 
 pub (super) const STARTING_POSITION: Position = Position {row: BOARD_HEIGHT as isize - 3,
                                             column: 5}; //Classic NES Tetris uses this exact position for tetrominoes spawn
@@ -28,19 +27,17 @@ impl Game {
      */
 
     pub fn new_default() -> Self {
-        let mut game = Game {
+        Game {
             board: Board::new(),
-            current_piece: PieceFactory::new(STARTING_POSITION, true),
+            current_piece: PieceFactory::new_piece(STARTING_POSITION, true),
             state: Box::new(Playing {}), //board and current_piece are not yet created so we can't intialize the Playing state here
-        };
-        game
+        }
     }
 
     /* Updates the game state */
     pub fn update(&mut self, player_input: Input_t) {
-        match self.state.update(&mut self.board, &mut self.current_piece, player_input) {
-            Some(next_state) => self.state = next_state,
-            None => (),
+        if let Some(next_state) = self.state.update(&mut self.board, &mut self.current_piece, player_input) {
+           self.state = next_state;
         }
     }
 

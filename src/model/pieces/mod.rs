@@ -1,9 +1,9 @@
 pub mod piece;
-pub mod I_piece;
-pub mod L_piece;
-pub mod J_piece;
-pub mod Z_piece;
-pub mod S_piece;
-pub mod T_piece;
-pub mod O_piece;
+pub mod i_piece;
+pub mod l_piece;
+pub mod j_piece;
+pub mod z_piece;
+pub mod s_piece;
+pub mod t_piece;
+pub mod o_piece;
 pub mod piece_factory;

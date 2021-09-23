@@ -1,4 +1,4 @@
-use crate::model::game::game::TileState;
+use crate::model::game_logic::game::TileState;
 use crate::model::pieces::piece::{Position, PieceTiles};
 use crate::game_engine::{PieceTile_t, PIECETILE_I, PIECETILE_NONE};
 
@@ -19,23 +19,29 @@ pub struct Board {
     lines_to_remove: Vec<usize>,
 }
 
+impl Default for Board {
+    fn default() -> Self {
+        let mut b = Board {
+            board: vec![vec![TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT], //A vector of vectors (Rust doesn't have matrices) of size 10x20
+            lines_to_remove: Vec::new(),
+        };
+        b.board[0] = vec![TileState::Taken; BOARD_WIDTH];
+        b
+    }
+}
+
 impl Board {
     /*
     PUBLIC
      */
 
     pub fn new() -> Self {
-        let mut b = Board {
-            board: vec![vec![TileState::Free; BOARD_WIDTH]; BOARD_HEIGHT], //An vector of vectors (Rust doesn't have matrices) of size 10x20
-            lines_to_remove: Vec::new(),
-        };
-        b.board[0] = vec![TileState::Taken; BOARD_WIDTH];
-        b
+        Board::default()
     }
 
     /* Returns true if the the current piece collided, false otherwise */
-    pub fn update_board(&mut self, positions: &PieceTiles, center_position: &Position) -> bool {
-        return if self._check_collision(positions) {
+    pub fn update_board(&mut self, positions: &PieceTiles) -> bool {
+        if self._check_collision(positions) {
             for position in positions {
                 let p: Position<usize> = From::from(*position);
                 if (p.row + 1) <= BOARD_CEILING { //The classic NES Tetris doesn't store the tiles of a piece that lock on the upper 2 hidden rows, it esentially truncates them (see https://tetris.wiki/Tetris_(NES,_Nintendo))
@@ -60,11 +66,11 @@ impl Board {
 
     pub fn positions_are_valid(&self, positions: &PieceTiles) -> bool {
         for p in positions {
-            if (p.row < BOARD_BASE as isize) || (p.row > (BOARD_HEIGHT - 1) as isize) || (p.column < 0) ||
-                (p.column > (BOARD_WIDTH as isize - 1)) {
-                return false;
-            } else if self.board[p.row as usize][p.column as usize] == TileState::Taken {
-                return false;
+            if (p.row < BOARD_BASE as isize) 
+                || (p.row > (BOARD_HEIGHT - 1) as isize) 
+                || (p.column < 0) || (p.column > (BOARD_WIDTH as isize - 1)) 
+                || (self.board[p.row as usize][p.column as usize] == TileState::Taken) {
+                return false; //TODO refactorizar esto
             }
         }
         true
@@ -75,11 +81,9 @@ impl Board {
     */
     pub fn remove_completed_lines(&mut self) {
         //self.check_for_lines_to_remove(piece_row);
-        let mut i = 0; //We count the amount of rows deleted to decrease the index value
-        for row in &self.lines_to_remove {
+        for (i, row) in self.lines_to_remove.iter().enumerate() {
             self.board.remove(row - i);
             self.board.insert(BOARD_HEIGHT - 1, vec![TileState::Free; BOARD_WIDTH]);
-            i += 1;
         }
         self.lines_to_remove.clear();
     }
